@@ -1,0 +1,91 @@
+{
+  "updatedAt": "2026-01-09T10:01:25.668Z",
+  "createdAt": "2026-01-09T09:48:40.283Z",
+  "id": "oM8FKG77fXxVoN8Z",
+  "name": "Import Workflows from GitHub",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "646f4690-e876-413b-9adc-f4580ae32d22",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/haytamnajim/n8n-projects.git",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-projects",
+          "mode": "list",
+          "cachedResultName": "n8n-projects",
+          "cachedResultUrl": "https://github.com/haytamnajim/n8n-projects"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f6a23228-8f8f-413b-bd85-6edb761d3881",
+      "name": "List files",
+      "webhookId": "de190276-320a-485c-8d80-7b2f4fbbfd98",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "CZwhN7wlXkEJQ9cF",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "List files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "3ceb230c-732e-4d5c-83e7-cedf5b7c35c5",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-09T09:48:40.298Z",
+      "createdAt": "2026-01-09T09:48:40.298Z",
+      "role": "workflow:owner",
+      "workflowId": "oM8FKG77fXxVoN8Z",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

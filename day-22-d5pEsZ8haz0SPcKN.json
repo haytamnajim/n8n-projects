@@ -1,0 +1,188 @@
+{
+  "updatedAt": "2026-01-05T11:20:51.086Z",
+  "createdAt": "2025-12-29T10:12:19.694Z",
+  "id": "d5pEsZ8haz0SPcKN",
+  "name": "day 22",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "712ca630-c278-4072-a800-b63eabb64e65",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "path": "b508cf45-74c6-4e22-bddd-8e95b9db8b69",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "514ad8de-eb42-4bac-97e9-a7b05928e13f",
+      "name": "Webhook",
+      "webhookId": "b508cf45-74c6-4e22-bddd-8e95b9db8b69"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nlet results = [];\n\nitems.forEach(item => {\n    const fullText = item.json.text;\n\n    // تقسيم النص اعتماداً على \"Rule\" أو \"القاعدة\" متبوعين برقم\n    const ruleSections = fullText.split(/(?=(?:Rule|القاعدة)\\s+\\d+)/i);\n\n    ruleSections.forEach(section => {\n        if (section.trim().length > 0) {\n\n            // استخراج رقم القاعدة سواء كانت مكتوبة بالعربية أو الإنجليزية\n            const match = section.match(/(?:Rule|القاعدة)\\s+(\\d+)/i);\n            const ruleNum = match ? parseInt(match[1], 10) : null;\n\n            results.push({\n                json: {\n                    content: section.trim(),\n                    metadata: {\n                        ruleNumber: ruleNum,\n                        source: \"Règles du golf - PDF\"\n                    }\n                }\n            });\n        }\n    });\n});\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "a65e203c-440b-4234-b61b-ef8500c540e6",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "golf-rules",
+          "mode": "list",
+          "cachedResultName": "golf-rules"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "4181f9e3-4283-4c32-8dbf-e9d1e0d2bd06",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "FekHvkBQYtmbdLET",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        560,
+        208
+      ],
+      "id": "dfc4f266-6aaa-4019-955b-27b3b0ae2f99",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        208
+      ],
+      "id": "b175ed11-6a0b-4223-9773-383090586c11",
+      "name": "Default Data Loader"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "88d6462e-bc16-41f2-9e2d-0699b90612f7",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-29T10:12:19.705Z",
+      "createdAt": "2025-12-29T10:12:19.705Z",
+      "role": "workflow:owner",
+      "workflowId": "d5pEsZ8haz0SPcKN",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

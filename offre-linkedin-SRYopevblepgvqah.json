@@ -1,0 +1,300 @@
+{
+  "updatedAt": "2025-12-24T15:33:43.268Z",
+  "createdAt": "2025-12-16T09:55:11.619Z",
+  "id": "SRYopevblepgvqah",
+  "name": "Offre-Linkedin",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "d4581ea1-3b71-420a-870c-2e45b7839b88",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a8296018-da06-47f0-8207-7d4b2ebe02df",
+      "name": "Webhook",
+      "webhookId": "d4581ea1-3b71-420a-870c-2e45b7839b88"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.affinda.com/v3/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer aff_1fae97c09562e09133c2e3e0889c45059c318919"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "workspace",
+              "value": "HESmzUNo"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "wait",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        240,
+        0
+      ],
+      "id": "9afb7c72-e9b5-4fb8-afdd-bfd78a4affee",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"personal_details\": {\n    \"full_name\": \"{{ $json.data.candidateName.parsed.firstName.raw }} {{ $json.data.candidateName.parsed.familyName.raw }}\",\n    \"contact\": {\n      \"email\": \"{{ $json.data.email[0].raw }}\",\n      \"phone\": \"{{ $json.data.phoneNumber[0].raw }}\",\n      \"website\": \"{{ $json.data.website[3].raw }}\",\n      \"address\": \"{{ $json.data.location.raw }}\"\n    }\n  },\n  \"professional_profile\": {\n    \"career_objective\": \"{{ $json.data.objective.raw }}\",\n    \"professional_summary\": \"{{ $json.data.summary.raw }}\"\n  },\n  \"academic_background\": {{ $json.data.education }},\n  \"skills\": {{ $json.data.skill }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "c9644fb3-c370-4e1f-9004-627da0154400",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "https://www.linkedin.com/jobs/search/?currentJobId=4342651614&f_TPR=r86400&f_WT=3&geoId=102787409&keywords=Informatique&origin=JOB_SEARCH_PAGE_JOB_FILTER&refresh=true",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -208,
+        -336
+      ],
+      "id": "f54296ff-6d61-4b79-a218-5c546bfef788",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.data;\n\n// استخراج البيانات باستخدام Regex متقدم\nconst results = {\n    title: html.match(/<h1[^>]*>([\\s\\S]*?)<\\/h1>/)?.[1]?.trim() || \"غير محدد\",\n    company: html.match(/<a class=\"topcard__org-name-link\"[^>]*>([\\s\\S]*?)<\\/a>/)?.[1]?.trim() || \"غير محدد\",\n    location: html.match(/<span class=\"topcard__flavor--bullet\">([\\s\\S]*?)<\\/span>/)?.[1]?.trim() || \"غير محدد\",\n    description: html.match(/<div class=\"description__text[^>]*>([\\s\\S]*?)<\\/div>/)?.[1]?.replace(/<[^>]*>?/gm, '').trim() || \"لا يوجد وصف\",\n    apply_link: html.match(/href=\"([^\"]*?jobs\\/view[^\"]*?)\"/)?.[1] || \"الرابط غير متاح\"\n};\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -336
+      ],
+      "id": "e3ee8aee-2510-45a5-9a66-a66ee862bd7e",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "2rJKkhh7vjpX7pvjg",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Jobs Scraper | Remove Duplicate Jobs | Pay Per Result (cheap_scraper/linkedin-job-scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/2rJKkhh7vjpX7pvjg/input"
+        },
+        "customBody": "{\n  \"startUrls\": [\n    {\n      \"url\": \"https://www.linkedin.com/jobs/search/?keywords=Developer&location=Morocco\"\n    }\n  ],\n  \"limit\": 5,\n  \"proxy\": {\n    \"useApifyProxy\": true\n  }\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        656,
+        0
+      ],
+      "id": "8183b66a-c922-4144-ba41-9bcc4693a13a",
+      "name": "Run an Actor and get dataset",
+      "credentials": {
+        "apifyApi": {
+          "id": "1eg9FhQbsp7QPTRV",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8b9d281f-3088-4edc-9ae7-78b2066f1a26",
+              "name": "personal_details",
+              "value": "={\n  \"Candidat\": \"{{ $('Edit Fields').item.json.personal_details.full_name }}\",\n  \"Email_Candidat\": \"{{ $('Edit Fields').item.json.personal_details.contact.email }}\",\n  \"Titre_Offre\": \"{{ $json.jobTitle }}\",\n  \"Entreprise\": \"{{ $json.companyName }}\",\n  \"Lieu\": \"{{ $json.location }}\",\n  \"Lien_Offre\": \"{{ $json.jobUrl }}\",\n  \"Description_Nettoyée\": \"{{ $json.jobDescription.substring(0, 500) }}...\"\n}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        864,
+        0
+      ],
+      "id": "0ec947ca-2de0-44c5-bb04-b4e914284326",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n{{ $('Edit Fields').item.json.personal_details.full_name }}\nمسمى الوظيفة: {{ $('Run an Actor and get dataset').item.json.jobTitle }}\n\nالموقع: {{ $('Run an Actor and get dataset').item.json.location }}\n\nوصف الوظيفة: {{ $('Run an Actor and get dataset').item.json.jobDescription }}",
+        "options": {
+          "systemMessage": "tu as un expert en generation de cv d'apre les inforation que yu as generer un cv dans une page ne pas faire plusieur page convenable a ats "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1072,
+        0
+      ],
+      "id": "62791432-f9a0-4bf9-84d9-a15f11c57639",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        944,
+        208
+      ],
+      "id": "3016c905-a7ad-4e5c-9fdd-406b3de1c18a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Run an Actor and get dataset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run an Actor and get dataset": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "a9f76a18-b536-4f38-9003-6dd2c55696f1",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-16T09:55:11.649Z",
+      "createdAt": "2025-12-16T09:55:11.649Z",
+      "role": "workflow:owner",
+      "workflowId": "SRYopevblepgvqah",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

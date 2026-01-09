@@ -1,0 +1,203 @@
+{
+  "updatedAt": "2025-12-19T14:11:52.279Z",
+  "createdAt": "2025-12-18T11:24:58.857Z",
+  "id": "bnwwubloxKtKWiV5",
+  "name": "day 20",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f3959269-92de-4c61-ba8c-2a278dcb11e6",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "80bc5c57-8c39-49d6-96ca-37e22d7e5ebc",
+      "name": "Webhook",
+      "webhookId": "f3959269-92de-4c61-ba8c-2a278dcb11e6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.flowiseai.com/api/v1/prediction/bb29073d-1ca4-4861-ab99-24851a32d69b",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "question",
+              "value": "={{ $json.body.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "28ecd86c-4a4f-4ca6-ba42-d981317b0b02",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        0
+      ],
+      "id": "cbe6c7c0-43e3-4bd1-8d0a-ffa1fb8d0bb0",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "be095900-05d4-4e31-8155-7208f47b2c2c",
+  "activeVersionId": "be095900-05d4-4e31-8155-7208f47b2c2c",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-18T11:24:58.883Z",
+      "createdAt": "2025-12-18T11:24:58.883Z",
+      "role": "workflow:owner",
+      "workflowId": "bnwwubloxKtKWiV5",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2025-12-19T14:11:52.299Z",
+    "createdAt": "2025-12-19T14:11:52.299Z",
+    "versionId": "be095900-05d4-4e31-8155-7208f47b2c2c",
+    "workflowId": "bnwwubloxKtKWiV5",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "f3959269-92de-4c61-ba8c-2a278dcb11e6",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "80bc5c57-8c39-49d6-96ca-37e22d7e5ebc",
+        "name": "Webhook",
+        "webhookId": "f3959269-92de-4c61-ba8c-2a278dcb11e6"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://cloud.flowiseai.com/api/v1/prediction/bb29073d-1ca4-4861-ab99-24851a32d69b",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "question",
+                "value": "={{ $json.body.message }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          208,
+          0
+        ],
+        "id": "28ecd86c-4a4f-4ca6-ba42-d981317b0b02",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "={{ $json.text }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          416,
+          0
+        ],
+        "id": "cbe6c7c0-43e3-4bd1-8d0a-ffa1fb8d0bb0",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "HAITAM NAJIM",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "tags": []
+}

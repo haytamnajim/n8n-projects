@@ -1,0 +1,814 @@
+{
+  "updatedAt": "2025-12-20T16:34:38.726Z",
+  "createdAt": "2025-12-20T16:34:38.726Z",
+  "id": "RCYdLrfoFoaJabCI",
+  "name": "OnboardPro — BackEnd",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "992fd118-98e0-41c2-b967-824bf4b823ab",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1616,
+        -384
+      ],
+      "id": "a963dbef-ef79-4b89-9bd5-992c18faf399",
+      "name": "Webhook",
+      "webhookId": "992fd118-98e0-41c2-b967-824bf4b823ab"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "profiles",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "email",
+              "keyValue": "={{ $json.body.record.email }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        -384
+      ],
+      "id": "3a16536e-28c0-44fe-bc82-3a7b640b6b1e",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rxfkRhKECJjcZoUi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "onboarding_task_templates",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "job_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.job_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2064,
+        -384
+      ],
+      "id": "f422f520-1656-4e02-aa57-9d563794b1cc",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rxfkRhKECJjcZoUi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert HR and Onboarding Specialist. Your task is to generate a highly personalized and structured \"First Week (5-Day) Onboarding Plan\" for a new employee based exclusively on the provided Job Description (JD) and Role Title. The plan must be focused on rapid integration and setting the employee up for success in their first 90 days.\n\nThe Job Description : \n{{ $json.body.record.description }}\n\nThe output MUST be a strict JSON array of objects. Each object in the array represents one task row to be inserted into the employee_onboarding_plans table.\n\nUse the following array structure ONLY. Do not include any introductory or explanatory text outside of the JSON array.\n\n[\n  {\n    \"title\": \"...\",\n    \"description\": \"...\",\n    \"category\": \"equipment\" | \"meetings\" | \"documentation\" | \"training\" | \"compliance\" | \"other\",\n    \"default_order\": [an integer value 1-15 based on the improtance of each task ],\n    \"job_id\": \"{{ $json.body.record.job_id }}\"\n  },\n  {\n    // ... next task object\n  }\n]",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        2736,
+        -384
+      ],
+      "id": "4d64f4f1-82e9-4a82-8491-814e7eeb740c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2744,
+        -160
+      ],
+      "id": "2e09f429-ba9a-44e8-ba00-9838a39d2cac",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "[\n  {\n    \"title\": \"...\",\n    \"description\": \"\",\n    \"category\": \"\",\n    \"default_order\": \"\",\n    \"job_id\": \"\"\n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2872,
+        -160
+      ],
+      "id": "dcacda42-f85b-41a7-8ff8-82c3adff67e1",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        3088,
+        -384
+      ],
+      "id": "bd3c44dd-fdf5-47ef-b585-92b79998fc84",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "tableId": "onboarding_task_templates",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "job_id",
+              "fieldValue": "={{ $json.job_id }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.description }}"
+            },
+            {
+              "fieldId": "default_order",
+              "fieldValue": "={{ $json.default_order }}"
+            },
+            {
+              "fieldId": "category",
+              "fieldValue": "={{ $json.category }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3312,
+        -384
+      ],
+      "id": "f07a5ccd-3dac-4cc1-84d1-b38be0529fad",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rxfkRhKECJjcZoUi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "jobs"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2512,
+        -384
+      ],
+      "id": "07ba17c4-86ce-4651-a501-8211bba9a345",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rxfkRhKECJjcZoUi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "80942124-8689-41d6-bccd-c28cf0f34ff1",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2288,
+        -384
+      ],
+      "id": "bb5bf67b-e786-4107-b719-1a191dfa4974",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "feec34ef-e1e3-4cb1-9ad5-392ed0e84786",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1616,
+        480
+      ],
+      "id": "8f2071f0-61dd-4410-8f0f-5c358e5e3043",
+      "name": "Webhook1",
+      "webhookId": "feec34ef-e1e3-4cb1-9ad5-392ed0e84786"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert HR and Onboarding Specialist. Your task is to generate a highly personalized and structured \"First Week (5-Day) Onboarding Plan\" for a new employee based exclusively on the provided Job Description (JD) and Role Title. The plan must be focused on rapid integration and setting the employee up for success in their first 90 days.\n\nThe Job Description : \n{{ $json.body.record.description }}\n\nThe output MUST be a strict JSON array of objects. Each object in the array represents one task row to be inserted into the employee_onboarding_plans table.\n\nUse the following array structure ONLY. Do not include any introductory or explanatory text outside of the JSON array.\n\n[\n  {\n    \"title\": \"...\",\n    \"description\": \"...\",\n    \"category\": \"equipment\" | \"meetings\" | \"documentation\" | \"training\" | \"compliance\" | \"other\",\n    \"default_order\": [an integer value 1-15 based on the improtance of each task ],\n    \"job_id\": \"{{ $json.body.record.job_id }}\"\n  },\n  {\n    // ... next task object\n  }\n]",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        2064,
+        480
+      ],
+      "id": "5f318d67-fcd2-45d2-8037-049065b64927",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2072,
+        704
+      ],
+      "id": "eee96c5b-78a0-4d57-9a4a-d317aced1eae",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "[\n  {\n    \"title\": \"...\",\n    \"description\": \"\",\n    \"category\": \"\",\n    \"default_order\": \"\",\n    \"job_id\": \"\"\n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2200,
+        704
+      ],
+      "id": "7ad37049-09b8-426f-bd97-80d39fef411f",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2416,
+        480
+      ],
+      "id": "7a1e937e-7d9b-42b1-a836-ce7fefa448d2",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "tableId": "onboarding_task_templates",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
+            },
+            {
+              "fieldId": "job_id",
+              "fieldValue": "={{ $json.job_id }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.description }}"
+            },
+            {
+              "fieldId": "default_order",
+              "fieldValue": "={{ $json.default_order }}"
+            },
+            {
+              "fieldId": "category",
+              "fieldValue": "={{ $json.category }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        480
+      ],
+      "id": "4f6c1462-bb11-4f04-a3e6-e0771c80ac32",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rxfkRhKECJjcZoUi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "jobs"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        480
+      ],
+      "id": "ea025066-1ba0-4491-8001-43cc8d7f3f73",
+      "name": "Get many rows2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rxfkRhKECJjcZoUi",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Read from webhook body\nconst firstName = $json.body.first_name;\nconst lastName = $json.body.last_name;\n\n// Validation\nif (!firstName || !lastName) {\n  throw new Error(\"first_name or last_name is missing from the input JSON\");\n}\n\n// Domain\nconst domain = \"company.com\";\n\n// Generate email\nconst email = `${firstName}.${lastName}@${domain}`.toLowerCase();\n\n// Function to generate random secure password\nfunction generatePassword(length = 12) {\n  const chars = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=\";\n  let pass = \"\";\n  for (let i = 0; i < length; i++) {\n    pass += chars.charAt(Math.floor(Math.random() * chars.length));\n  }\n  return pass;\n}\n\n// Generate password\nconst password = generatePassword(12);\n\n// Function to generate a unique user ID (e.g., \"USR-8fj39dk2\")\nfunction generateUserId() {\n  const randomStr = Math.random().toString(36).substring(2, 10);\n  return `USR-${randomStr}`.toUpperCase();  // Optional: remove .toUpperCase() if not desired\n}\n\n// Generate user ID\nconst userId = generateUserId();\n\n// Return everything\nreturn [\n  {\n    json: {\n      email,\n      password,\n      userId\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1840,
+        48
+      ],
+      "id": "c40411dc-1800-4963-99fb-5c18a5c92339",
+      "name": "Generate Professionnel email"
+    },
+    {
+      "parameters": {
+        "model": "nvidia/nemotron-nano-9b-v2:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        2296,
+        168
+      ],
+      "id": "d24e3d97-df9c-4a79-ab93-c01e35616baa",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "CoP2qdxrPcA7lFAB",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "2NTCsbKkQxCxYbE8/6742e6"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2424,
+        168
+      ],
+      "id": "69404b48-b091-4ef6-aa30-f0621aee072c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2885c737-f189-4826-8f6a-ccd437796dff",
+              "name": "Email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "9a7e2cee-fa94-485a-84af-6c903f168ecb",
+              "name": "Password",
+              "value": "={{ $json.password }}",
+              "type": "string"
+            },
+            {
+              "id": "bbb42f1c-786a-4c98-81c7-2914f8d2f4fd",
+              "name": "UserId",
+              "value": "={{ $json.userId }}",
+              "type": "string"
+            },
+            {
+              "id": "3cb2122d-8459-4231-84ce-eb2f88f70aaa",
+              "name": "FirstName",
+              "value": "={{ $('Webhook2').item.json.body.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "8d1281ae-18ec-43a8-8557-85c09630949e",
+              "name": "LastName",
+              "value": "={{ $('Webhook2').item.json.body.last_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2064,
+        48
+      ],
+      "id": "62dff54d-028d-4d61-8c5b-099fc051b3f3",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1) Read raw AI output\nlet raw = $json.output || \"\";\n\n// 2) Clean escaped characters\nraw = raw\n  .replace(/\\\\n/g, \"\\n\")\n  .replace(/\\\\\\\\n/g, \"\\n\");\n\n// 3) Split into paragraphs using real line breaks\nlet paragraphs = raw\n  .split(/\\n+/)\n  .map(p => p.trim())\n  .filter(p => p.length > 0);\n\n// 4) Convert each paragraph into HTML <p> blocks\nlet htmlBody = paragraphs.map(p => `<p>${p}</p>`).join(\"\\n\");\n\n// 5) Extract subject or default\nlet subject = \"Welcome to the Company!\";\nconst match = raw.match(/Subject:\\s*(.*?)\\n/i);\nif (match) {\n  subject = match[1].trim();\n}\n\n// 6) Return HTML email\nreturn [\n  {\n    json: {\n      subject,\n      htmlEmail: htmlBody\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        48
+      ],
+      "id": "13b4c5d6-50f2-4a73-bd01-26d49472caea",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "sendTo": "=akoumssioussama@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.htmlEmail }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2864,
+        48
+      ],
+      "id": "8ce5affc-8a47-4244-ba4b-88d3f76b4b2d",
+      "name": "Send a message",
+      "webhookId": "37907b5b-8975-4fb8-a803-e670966ab2ec",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "5eb97417-e448-46f5-9142-f49b100e1bef",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        1616,
+        48
+      ],
+      "id": "5aff8cd0-0e36-481a-8d66-993164b72476",
+      "name": "Webhook2",
+      "webhookId": "5eb97417-e448-46f5-9142-f49b100e1bef"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an HR assistant. Write a warm, professional welcome email formatted exactly as if it were being sent from Gmail.\n\n\n\nThe email must include:\n\nSubject: Welcome to ACME Technologies, {{ $json.FirstName }}!\n\nDear {{ $json.FirstName }},\n\nWelcome message…\n\nEmployee login details:\nEmail: {{ $json.Email }}\nUser ID: {{ $json.UserId }}\nTemporary Password: {{ $json.Password }}\n\n\nIMPORTANT RULES:\n- Do NOT output \\n or \\n\\n.\n- Do NOT use escape characters (\\, \\\", or \\\\).\n- Do NOT output the email as JSON or code.\n- The email must appear exactly as plain text with real paragraph spacing.\n- Use real line breaks (press ENTER).\n- Output ONLY the email text.\n\nClosing message…\n\nBest regards,\nACME Technologies HR Team\n",
+        "options": {
+          "systemMessage": "=You are an HR assistant."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        2288,
+        -56
+      ],
+      "id": "9300eacb-79cf-4b92-aef7-85070afb9aa8",
+      "name": "AI Agent2"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Get many rows2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Professionnel email": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Generate Professionnel email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "e8c8dde7-e73d-4176-9335-f57d9f6e3501",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-20T16:34:38.765Z",
+      "createdAt": "2025-12-20T16:34:38.765Z",
+      "role": "workflow:owner",
+      "workflowId": "RCYdLrfoFoaJabCI",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

@@ -1,0 +1,276 @@
+{
+  "updatedAt": "2025-12-18T09:37:56.868Z",
+  "createdAt": "2025-12-16T15:40:39.297Z",
+  "id": "jP2RI8Lp1fYFoOu8",
+  "name": "Generator-Cv",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d80ef2ee-9cc9-4b6e-8ac7-eef1d933c6fb",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        112
+      ],
+      "id": "26304ee9-ebb3-4adf-b171-d65b514606de",
+      "name": "Webhook",
+      "webhookId": "d80ef2ee-9cc9-4b6e-8ac7-eef1d933c6fb"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Valider que les champs critiques ne sont pas vides (sans 'resume')\n// Le 'resume' (ملخص) n'est plus obligatoire.\nif (!$json.prenom || !$json.nom || !$json.email) {\n    throw new Error(\"Manque des informations critiques (Prénom, Nom, Email) pour générer le CV.\");\n}\n\n// S'assurer que les tableaux sont bien des tableaux et éviter les erreurs\n$json.experiences = Array.isArray($json.experiences) ? $json.experiences : [];\n$json.education = Array.isArray($json.education) ? $json.education : [];\n$json.competences = Array.isArray($json.competences) ? $json.competences : [];\n$json.langues = Array.isArray($json.langues) ? $json.langues : []; \n\nreturn [$item];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        432
+      ],
+      "id": "80af3ae7-05e3-40a9-b805-20c831a356b9",
+      "name": "Préparer & Valider"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app03rZBi2aZ5xTGX",
+          "mode": "list",
+          "cachedResultName": "CV Generator",
+          "cachedResultUrl": "https://airtable.com/app03rZBi2aZ5xTGX"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblloVWh5k1F1ymYd",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/app03rZBi2aZ5xTGX/tblloVWh5k1F1ymYd"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Nom",
+              "displayName": "Nom",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Données_CV",
+              "displayName": "Données_CV",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        224,
+        432
+      ],
+      "id": "eb4da59e-479e-4d19-8259-28a2fe6a7077",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Nb63VgJ9zOxTVAa4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Tu es un expert en recrutement et en rédaction de CV professionnels modernes.\n\nTa mission est de générer un CV clair, professionnel et bien structuré à partir des informations fournies par l’utilisateur.\n\nRègles importantes :\n- N’invente aucune information\n- Reformule et améliore le contenu pour le rendre professionnel\n- Utilise un langage clair et fluide\n- Corrige les fautes si elles existent\n- Ignore les sections vides\n- Optimise le CV pour les recruteurs (ATS-friendly)\n- Structure le CV avec des titres clairs\n\nFormat de sortie : MARKDOWN\n\n=====================\nINFORMATIONS CANDIDAT\n=====================\n\nNom complet :\n{{$json.fullName}}\n\nEmail :\n{{$json.email}}\n\nTéléphone :\n{{$json.phone}}\n\nLocalisation :\n{{$json.location}}\n\nPoste recherché :\n{{$json.jobTitle}}\n\nRésumé professionnel :\n{{$json.summary}}\n\nExpériences professionnelles :\n{{$json.experiences}}\n\nFormation :\n{{$json.education}}\n\nCompétences :\n{{$json.skills}}\n\nLangues :\n{{$json.languages}}\n\n=====================\nRÉSULTAT ATTENDU\n=====================\nUn CV professionnel, bien rédigé, structuré avec les sections suivantes si disponibles :\n- En-tête (Nom, contact)\n- Profil professionnel\n- Expériences professionnelles\n- Formation\n- Compétences\n- Langues\n",
+        "options": {
+          "systemMessage": "Tu es un agent d’intelligence artificielle spécialisé dans la rédaction de CV professionnels.\n\nTu agis comme un expert en recrutement, ressources humaines et optimisation de CV pour les systèmes de tri automatique (ATS).\n\nTon rôle est de :\n- Analyser les informations reçues depuis un formulaire\n- Structurer les données de manière logique\n- Reformuler le contenu pour le rendre professionnel et cohérent\n- Corriger les fautes d’orthographe et de grammaire\n- Mettre en valeur l’expérience et les compétences sans jamais inventer d’informations\n- Produire un CV clair, lisible et prêt à être utilisé par un recruteur\n\nContraintes strictes :\n- Ne jamais inventer d’informations\n- Ne jamais ajouter de données non fournies\n- Ignorer toute section vide ou incomplète\n- Respecter le format demandé par l’utilisateur\n- Utiliser un ton professionnel et neutre\n- Le CV doit tenir sur UNE SEULE PAGE\n\nFormat de sortie obligatoire :\n- Le résultat doit être UNIQUEMENT en HTML\n- Utiliser une structure HTML propre et sémantique\n- Utiliser du CSS inline ou dans une balise <style>\n- Le CV doit être optimisé pour l’impression et l’export en PDF (format A4)\n- Aucune explication, aucun texte hors HTML ne doit être retourné\n\nLe résultat final doit être un CV HTML professionnel, structuré, d’une seule page, optimisé pour le recrutement et prêt à être converti en PDF.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        432,
+        0
+      ],
+      "id": "b06a2b75-7148-46aa-a520-79a0cfd73c45",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"fullName\": \"={{$json.prenom}} {{$json.nom}}\",\n  \"email\": \"={{$json.email}}\",\n  \"phone\": \"={{$json.telephone}}\",\n  \"location\": \"={{$json.localisation}}\",\n  \"jobTitle\": \"={{$json.poste}}\",\n  \"summary\": \"={{$json.resume}}\",\n  \"experiences\": \"={{$json.experiences}}\",\n  \"education\": \"={{$json.education}}\",\n  \"skills\": \"={{$json.competences}}\",\n  \"languages\": \"={{$json.langues}}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        96
+      ],
+      "id": "7607391a-2606-49c9-b4b8-35d9b3ecbc71",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "html_content": "={{ $json.html }}"
+      },
+      "type": "n8n-nodes-htmlcsstopdf.htmlcsstopdf",
+      "typeVersion": 1,
+      "position": [
+        992,
+        0
+      ],
+      "id": "15588522-3a9e-4cea-ba00-48d7317c9917",
+      "name": "HTML to PDF",
+      "credentials": {
+        "htmlcsstopdfApi": {
+          "id": "AIUPVcQr9w5tcGZu",
+          "name": "HTML to PDF account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        400,
+        304
+      ],
+      "id": "04c41dae-72cd-43d8-8fe9-0dab085a6605",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer & Valider": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "4449a34d-70cd-4858-a891-8651bb389210",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-16T15:40:39.324Z",
+      "createdAt": "2025-12-16T15:40:39.324Z",
+      "role": "workflow:owner",
+      "workflowId": "jP2RI8Lp1fYFoOu8",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

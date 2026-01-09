@@ -1,0 +1,907 @@
+{
+  "updatedAt": "2025-12-18T09:07:27.000Z",
+  "createdAt": "2025-12-17T16:22:26.989Z",
+  "id": "PbLdZ7jqWR8SL48e",
+  "name": "ULTIMATE LINKEDIN POST",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "aa2b12d6-afd1-4b1f-b245-6e3e55d86b45",
+      "name": "Pick One",
+      "type": "n8n-nodes-base.limit",
+      "position": [
+        1072,
+        192
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 3) Création du post Linkedin",
+        "height": 476,
+        "width": 844,
+        "color": 3
+      },
+      "id": "5e483d24-ec16-4080-b2fb-33b0915952b4",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        1360
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1TjaklFcBGSokoBYSyxT5xASgwLBzUpN8_XDI2Ow0IzE",
+          "mode": "list",
+          "cachedResultName": "LinkedIn_Posts_Generator_Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TjaklFcBGSokoBYSyxT5xASgwLBzUpN8_XDI2Ow0IzE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1892622595,
+          "mode": "list",
+          "cachedResultName": "Calendrier_Editorial",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1TjaklFcBGSokoBYSyxT5xASgwLBzUpN8_XDI2Ow0IzE/edit#gid=1892622595"
+        },
+        "options": {}
+      },
+      "id": "0474b698-ccce-47e0-b7f4-f7930e597a1d",
+      "name": "Get Ready Posts",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        832,
+        192
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {
+        "person": "rBxbEv1ziJ",
+        "text": "={{ $json.text }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {
+          "visibility": "PUBLIC"
+        }
+      },
+      "id": "64ae6119-a661-4115-92b7-2691a5bdab53",
+      "name": "Publish Post",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        1440,
+        832
+      ],
+      "typeVersion": 1,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "yohann.kheloufii@outlook.fr",
+        "subject": "[action required] LinkedIn post approval is needed",
+        "message": "={{ $json.linkedin_post }}",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Do you approve the post?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "yes"
+                  },
+                  {
+                    "option": "no - I'll add my change requests below"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Change requests",
+              "fieldType": "textarea",
+              "placeholder": "Add your change requests here"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        1360
+      ],
+      "id": "cf4f2608-1348-40b8-a99d-a339c0196723",
+      "name": "Gmail",
+      "webhookId": "1b16f0aa-aa5f-431f-8e85-247f4e981d6c",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "298e856c-87fa-4751-a235-eabed33f0f43",
+              "leftValue": "={{ $json.data['Do you approve the post?'] }}",
+              "rightValue": "yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        1376
+      ],
+      "id": "f4cb8cdc-2978-49b2-8b10-7c1af7ffce86",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"modified_post\": \"\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        976,
+        1856
+      ],
+      "id": "b2aa8f47-7c56-422f-be8c-42295ad13165",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a593cd1a-0603-4b52-9d1f-2f2f717651ff",
+              "name": "linkedin_post",
+              "value": "={{ $('Basic LLM Chain1').item.json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        1344
+      ],
+      "id": "5ea5bc73-9019-4749-b218-2fba008057b2",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2075dc4-d6b0-46d9-aad8-247c054432ec",
+              "name": "text",
+              "value": "={{ $json.output.modified_post }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        1696
+      ],
+      "id": "7d799fff-16a8-47f1-85e3-4c30258a1e5a",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "content": "# Edit the post",
+        "height": 80,
+        "width": 480
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        928,
+        1600
+      ],
+      "id": "b83c060b-55ef-49f1-a5fc-487f1105d092",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.images[0].url }}",
+        "options": {}
+      },
+      "id": "22153fd2-567f-45ff-898d-75315e1fb3ce",
+      "name": "Get File image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        640,
+        880
+      ],
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://queue.fal.run/fal-ai/nano-banana/requests/{{ $json.request_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "8797442f-9539-4e7a-b89b-26368be01a09",
+      "name": "Get Url image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        464,
+        880
+      ],
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://queue.fal.run/fal-ai/nano-banana/requests/{{ $('Create Image').item.json.request_id }}/status ",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "527996bf-1fc1-4589-81df-93389ea960d9",
+      "name": "Get status",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        976,
+        608
+      ],
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "id": "748a7a42-3f76-4105-8087-469fa2d1cad9",
+      "name": "Wait 60 sec.",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        816,
+        608
+      ],
+      "webhookId": "351bd496-a9cc-445c-86f6-a56189df0028",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "383d112e-2cc6-4dd4-8985-f09ce0bd1781",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "COMPLETED"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ad0d542a-db62-4c5d-b711-ba46f9213a86",
+      "name": "Completed?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1152,
+        608
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "name": "={{ $now.format('yyyyLLddHHmmss') }}-{{ $json.images[0].file_name }}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "root",
+          "mode": "list",
+          "cachedResultName": "/ (Root folder)",
+          "cachedResultUrl": "https://drive.google.com/drive"
+        },
+        "options": {}
+      },
+      "id": "e448da90-27d3-4e4e-b57e-0056b06e2d80",
+      "name": "Upload Image",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        816,
+        880
+      ],
+      "typeVersion": 3,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c713d31f-9abd-496a-ac79-e8e2efe60aa0",
+              "name": "Prompt",
+              "type": "string",
+              "value": "={{ $('Get Ready Posts').item.json['Prompt idea'] }}"
+            },
+            {
+              "id": "58fb5e76-6576-4d16-8b25-b931c7935c01",
+              "name": "=Article",
+              "type": "string",
+              "value": "={{ $('Get Ready Posts').item.json['Article Url'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "41bac987-7849-40ff-932f-76e909e739e2",
+      "name": "Set data",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        448,
+        608
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/nano-banana",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"prompt\": \"Create a photorealistic cinematic image that visually represents the following theme: {{$json.Prompt}}. Use a modern real-world setting, soft natural lighting, and realistic human proportions. Avoid sci-fi, cyberpunk, or overly futuristic aesthetics. Style inspiration: Apple commercial, editorial photography, minimal composition, and natural depth of field. Include subtle visual storytelling elements related to the topic. Aspect ratio 16:9, high detail, no text overlay.\"\n}",
+        "options": {}
+      },
+      "id": "d4b37ab6-b096-445c-bb0a-3075e34c4a21",
+      "name": "Create Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        624,
+        608
+      ],
+      "typeVersion": 4.2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "# 1) Récupération des idées de contenu\n",
+        "height": 352,
+        "width": 704
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        544,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "61f2d0af-7787-4970-9933-817ad431f855",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create a LinkedIn post in French based on the following idea and article.\n\n<instructions>\n- Use the text provided in {{ $('Set data').item.json.Prompt }} as the main topic or idea for the post.\n- Use the link provided in {{ $('Get Ready Posts').item.json['Article Url'] }} as the reference source. Read and summarize the key points from it.\n- The post must be engaging and written for professionals and business owners interested in AI, automation, and productivity.\n- Do not use markdown formatting (LinkedIn doesn’t support bold, headers, etc.). Use clear line breaks instead.\n- Start with a strong hook: 2 short sentences that mention AI or automation and capture attention.\n- Then, summarize the key insights from the article in 2–3 short paragraphs.\n- Explain in one sentence why this topic matters for SMBs or entrepreneurs.\n- End with a simple call to action (e.g., “Et toi, qu’en penses-tu ?” or “Tu veux que je te montre comment l’appliquer à ton business ?”).\n- Include the article link at the end of the post under its summary.\n</instructions>\n\n<content>\nTopic: {{ $('Set data').item.json.Prompt }}\nArticle:{{ $('Set data').item.json.Article }} \n</content>\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        144,
+        1536
+      ],
+      "id": "b2ecc01e-9b50-421c-a795-4495e0b7dff8",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Rewrite the following LinkedIn post in French to match the tone, rhythm, and storytelling style of the example post below.\n\n<instructions>\n- Keep the text plain (no markdown, no bold, no emojis, no *).\n- Follow the structure, tone, and sentence flow of the example post.\n- Maintain the same language level and voice consistency (if the example post is conversational, make this one conversational too).\n- Adapt the pacing: short impactful sentences, good breathing rhythm, natural flow.\n- Ensure the rewritten post sounds organic for LinkedIn (human, authentic, not AI-generated).\n- Keep the content faithful to the original message, but improve clarity and emotional connection if needed.\n</instructions>\n\n<ExamplePost>\n{{ $('Writing style').item.json.your_style }}\n</ExamplePost>\n\n<OriginalPost>\n{{ $json.text }}\n</OriginalPost>\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        464,
+        1520
+      ],
+      "id": "2550cbb4-c270-4cd4-91f2-4e768ff37e5c",
+      "name": "Basic LLM Chain2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-search-preview",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-search-preview"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        1712
+      ],
+      "id": "e3bf23a2-141a-4aa7-af4f-b6034a93dc87",
+      "name": "OpenAI Chat Model1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-search-preview",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-search-preview"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        1712
+      ],
+      "id": "ff1a2612-59c6-470b-a8f9-2302cb80554d",
+      "name": "OpenAI Chat Model2"
+    },
+    {
+      "parameters": {
+        "content": "# 2) Création de l'image du post",
+        "height": 796,
+        "width": 924,
+        "color": 6
+      },
+      "id": "a42245cc-d040-4f75-bcb6-8f800ccba78c",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        384,
+        448
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 4) Approbation du post AVANT Publication",
+        "height": 892,
+        "width": 892,
+        "color": 5
+      },
+      "id": "e9549d9a-c9a6-426b-8505-20dabdf73793",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        848,
+        1232
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 5) PUBLICATION",
+        "height": 460,
+        "width": 284,
+        "color": 4
+      },
+      "id": "67d6e1bc-aeb7-4ae4-811c-2ef2966aebfe",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1360,
+        624
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3474133c-bf58-4e48-aa50-bcebd919dc5b",
+              "name": "your_style",
+              "value": "=J’ai créé l’automatisation de rêve pour générer plus de leads… sans dépenser un centime et je te la donne\n\nC’est le genre de système que j’aurais rêvé d’avoir quand j’ai commencé.\n\nUn de mes clients m’a dit :\n\n“Je veux plus de leads, mais je ne peux pas me permettre d’outils à 100€/mois.”\n\nChallenge accepté. \n\nJ’ai sorti mon arme secrète : n8n.\n\nObjectif : scraper des emails d’entreprises ciblées depuis Google Maps\nContraintes : zéro API payante, zéro outil tiers\nRésultat : une machine à leads 100% gratuite et autonome\n\n🔍 Comment ça marche ?\n\nTu entres une liste de requêtes : ex. “agence immobilière Lyon”, “ostéopathe Paris”\n\nLe workflow va chercher tous les sites référencés sur Google Maps\n\nIl récupère le HTML de chaque site\n\nIl extrait les emails automatiquement grâce à du code JavaScript intégré\n\nIl envoie tout dans un Google Sheet prêt à l’emploi\n\n- Tu te retrouves avec une liste propre d’emails qualifiés à contacter\n- Sans toucher une ligne de code, sans rien payer\n\n🔥 Idéal pour :\n\n- Freelances en prospection\n- Petites agences qui veulent scaler\n- Solopreneurs fatigués des outils trop chers\n\nEt le meilleur dans tout ça ?\n\nTu peux adapter le workflow à ta sauce : ajouter d'autres données, affiner les regex, ou connecter directement à ton CRM.\n\n💡 Tu veux voir le ebook complet + template ? Commente \"LEADS\" et je t’envoie la le template prêt à l’emploi + instruction. \n\nPS : assure toi d'etre connecter a moi\n\nTu veux que je t’aide à le personnaliser ? Envoie-moi un message. 👇\n\nEt si tu trouves ça utile, fais tourner : \n❤️ Like\n🔁 Partage\n💬 Tag un pote qui fait de la prospection manuelle 😅",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        896
+      ],
+      "id": "a6c44ded-d509-4995-b6bb-870aed5c4696",
+      "name": "Writing style"
+    },
+    {
+      "parameters": {
+        "content": "# Style d'écriture",
+        "height": 340,
+        "width": 190,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        64,
+        752
+      ],
+      "id": "40e04900-1a4d-4af2-9a8d-f7500cf8d6b6",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 3,
+              "triggerAtHour": 14
+            }
+          ]
+        }
+      },
+      "id": "e78dd4eb-bbf3-4052-990b-9a5c1ab0b2cb",
+      "name": "8h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        608,
+        192
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Apply the modification requests on the following LinkedIn post. Besides applying the reqested modifications, return the same linkedin post.\n\nLinkedIn post:\n```\n{{ $('Edit Fields1').item.json.linkedin_post }}\n```\n\nChange requests:\n{{ $json.data['Change requests'] }}",
+        "hasOutputParser": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        944,
+        1712
+      ],
+      "id": "cb2c209a-0295-40ad-ae92-95795123a79a",
+      "name": "Modification_post",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "connections": {
+    "Pick One": {
+      "main": [
+        [
+          {
+            "node": "Writing style",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Ready Posts": {
+      "main": [
+        [
+          {
+            "node": "Pick One",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Publish Post",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Modification_post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Modification_post",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get File image": {
+      "main": [
+        [
+          {
+            "node": "Upload Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Url image": {
+      "main": [
+        [
+          {
+            "node": "Get File image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get status": {
+      "main": [
+        [
+          {
+            "node": "Completed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 60 sec.": {
+      "main": [
+        [
+          {
+            "node": "Get status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Completed?": {
+      "main": [
+        [
+          {
+            "node": "Get Url image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 60 sec.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set data": {
+      "main": [
+        [
+          {
+            "node": "Create Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Image": {
+      "main": [
+        [
+          {
+            "node": "Wait 60 sec.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain2",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Modification_post",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Writing style": {
+      "main": [
+        [
+          {
+            "node": "Set data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8h": {
+      "main": [
+        [
+          {
+            "node": "Get Ready Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modification_post": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "14678303-0133-41a1-8e61-aeb21cabc0b6",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-17T16:22:27.026Z",
+      "createdAt": "2025-12-17T16:22:27.026Z",
+      "role": "workflow:owner",
+      "workflowId": "PbLdZ7jqWR8SL48e",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

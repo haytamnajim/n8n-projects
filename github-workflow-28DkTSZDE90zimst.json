@@ -1,198 +1,11 @@
 {
-  "updatedAt": "2026-01-08T15:40:37.294Z",
+  "updatedAt": "2026-01-09T12:16:44.752Z",
   "createdAt": "2025-12-18T10:30:42.122Z",
   "id": "28DkTSZDE90zimst",
   "name": "GITHUB WORKFLOW",
   "active": false,
   "isArchived": false,
   "nodes": [
-    {
-      "parameters": {
-        "authentication": "oAuth2",
-        "resource": "file",
-        "operation": "get",
-        "owner": {
-          "__rl": true,
-          "value": "https://github.com/abde0112/n8n_bkv2.git",
-          "mode": "url"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n_bkv2",
-          "mode": "list",
-          "cachedResultName": "n8n_bkv2",
-          "cachedResultUrl": "https://github.com/abde0112/n8n_bkv2"
-        },
-        "filePath": "={{ $json.path }}",
-        "additionalParameters": {}
-      },
-      "id": "b11647d3-6cfc-4870-ae17-e5f9e074923d",
-      "name": "Get file content from GitHub",
-      "type": "n8n-nodes-base.github",
-      "position": [
-        1120,
-        1024
-      ],
-      "typeVersion": 1,
-      "alwaysOutputData": true,
-      "webhookId": "5dc0673d-a547-4626-959d-73f26ced1001",
-      "credentials": {
-        "githubOAuth2Api": {
-          "id": "CZwhN7wlXkEJQ9cF",
-          "name": "GitHub account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "fromJson",
-        "options": {}
-      },
-      "id": "ccba300b-10a8-4a53-88e8-74fe488955f7",
-      "name": "Convert files to JSON",
-      "type": "n8n-nodes-base.extractFromFile",
-      "position": [
-        1344,
-        1024
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "operation": "create",
-        "workflowObject": "={{ JSON.stringify($json.data) }}",
-        "requestOptions": {}
-      },
-      "id": "41753995-8284-4ee4-bb14-ad125090ea9a",
-      "name": "Restore n8n Workflows",
-      "type": "n8n-nodes-base.n8n",
-      "position": [
-        1552,
-        1024
-      ],
-      "typeVersion": 1,
-      "credentials": {
-        "n8nApi": {
-          "id": "CpTvkEMsUgoWqY4c",
-          "name": "n8n account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "authentication": "oAuth2",
-        "resource": "file",
-        "operation": "get",
-        "owner": {
-          "__rl": true,
-          "value": "https://github.com/abde0112/n8n_bkv2.git",
-          "mode": "url"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n_bkv2",
-          "mode": "list",
-          "cachedResultName": "n8n_bkv2",
-          "cachedResultUrl": "https://github.com/abde0112/n8n_bkv2"
-        },
-        "filePath": "=ai-e-commerce-orchestrator-XRxfBhKfbvSIQXyF.json",
-        "additionalParameters": {}
-      },
-      "id": "844fea4d-2947-40d5-b4c4-2d40a56abb2b",
-      "name": "GITHUB",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        1120,
-        1280
-      ],
-      "alwaysOutputData": true,
-      "webhookId": "ca56f9b2-15af-4829-a784-05c3325f70eb",
-      "credentials": {
-        "githubOAuth2Api": {
-          "id": "CZwhN7wlXkEJQ9cF",
-          "name": "GitHub account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "6cf546c5-5737-4dbd-851b-17d68e0a3780",
-              "name": "repo.owner",
-              "type": "string",
-              "value": "abde0112"
-            },
-            {
-              "id": "452efa28-2dc6-4ea3-a7a2-c35d100d0382",
-              "name": "repo.name",
-              "type": "string",
-              "value": "N8N_BK"
-            },
-            {
-              "id": "81c4dc54-86bf-4432-a23f-22c7ea831e74",
-              "name": "repo.path",
-              "type": "string",
-              "value": ""
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "0a560c02-fd07-4100-a98b-9448c31e0343",
-      "name": "Globals1",
-      "type": "n8n-nodes-base.set",
-      "position": [
-        224,
-        1280
-      ],
-      "typeVersion": 3.4
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "path",
-        "options": {}
-      },
-      "id": "f80cdbf7-1b4c-4f16-ac30-d570825dec46",
-      "name": "Split the result1",
-      "type": "n8n-nodes-base.splitOut",
-      "position": [
-        848,
-        1280
-      ],
-      "typeVersion": 1
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "operation": "list",
-        "owner": {
-          "__rl": true,
-          "value": "https://github.com/abde0112/n8n_bkv2.git",
-          "mode": "url"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "n8n_bkv2",
-          "mode": "list",
-          "cachedResultName": "n8n_bkv2",
-          "cachedResultUrl": "https://github.com/abde0112/n8n_bkv2"
-        },
-        "filePath": "={{ $json.repo.path }}"
-      },
-      "id": "c96dc3b8-c2d7-4755-89d9-d3a77251ba70",
-      "name": "List files from repository [GITHUB]1",
-      "type": "n8n-nodes-base.github",
-      "typeVersion": 1,
-      "position": [
-        432,
-        1280
-      ],
-      "alwaysOutputData": true,
-      "webhookId": "ca56f9b2-15af-4829-a784-05c3325f70eb"
-    },
     {
       "parameters": {
         "options": {}
@@ -444,7 +257,8 @@
       "parameters": {
         "content": "## Set and format date/time\nThose nodes are responsible for setting a current date and time in format `dd-MM-yyyy/H:mm`. Date and time are used to compose commit messages in GitHub, for example: `backup-12-07-2023/14:18`.",
         "height": 339.42690909090965,
-        "width": 585.4045090909088
+        "width": 585.4045090909088,
+        "color": 3
       },
       "id": "23e473a5-dd48-42fc-9ad3-f2722ab338ee",
       "name": "Sticky Note1",
@@ -459,7 +273,8 @@
       "parameters": {
         "content": "## Make a list of existing files\nReturn a list of existing files (backups) in GitHub repository. Data returned by those nodes is used by \"IF\" node (later in workflow) to check whether the backup files should be created or updated.",
         "height": 339.42690909090965,
-        "width": 389.89265454545443
+        "width": 389.89265454545443,
+        "color": 5
       },
       "id": "c47539c4-244b-4d96-900a-cc9707513f1d",
       "name": "Sticky Note2",
@@ -489,7 +304,8 @@
       "parameters": {
         "content": "## Upload backup\nSplit JSON files into batches of 1, check if they were uploaded to repository before. If yes (true), upload the new version of the file. Otherwise (false) create the file in repository.",
         "height": 731.633426614796,
-        "width": 703.8733020263451
+        "width": 703.8733020263451,
+        "color": 6
       },
       "id": "7062e13a-42b0-428b-92d3-b9affe3ec8a1",
       "name": "Sticky Note4",
@@ -497,21 +313,6 @@
       "typeVersion": 1,
       "position": [
         1648,
-        64
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## ⚠️ Note\n\n1. Complete video guide for this workflow is available [on my YouTube](https://www.youtube.com/watch?v=dNuVuoPD0Jo). \n2. Remember to add your credentials and configure GitHub nodes (covered in the video guide).\n3. If you like this workflow, please subscribe to [my YouTube channel](https://www.youtube.com/@workfloows) and/or [my newsletter](https://workfloows.com/).\n\n**Thank you for your support!**",
-        "height": 234.82946582693546,
-        "width": 508.8662091091177
-      },
-      "id": "2c865d11-54fe-49e3-8204-0a18203fa821",
-      "name": "Sticky Note5",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        32,
         64
       ]
     },
@@ -551,95 +352,9 @@
       ],
       "id": "32be2e84-3985-4fa2-bb31-70957ee99463",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "content": "Upload\n",
-        "height": 544,
-        "width": 1840
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        64,
-        960
-      ],
-      "typeVersion": 1,
-      "id": "07773157-37c0-4a8f-953c-1509efbb0df6",
-      "name": "Sticky Note6"
     }
   ],
   "connections": {
-    "Get file content from GitHub": {
-      "main": [
-        [
-          {
-            "node": "Convert files to JSON",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Convert files to JSON": {
-      "main": [
-        [
-          {
-            "node": "Restore n8n Workflows",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "GITHUB": {
-      "main": [
-        [
-          {
-            "node": "Convert files to JSON",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Globals1": {
-      "main": [
-        [
-          {
-            "node": "List files from repository [GITHUB]1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split the result1": {
-      "main": [
-        [
-          {
-            "node": "GITHUB",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Get file content from GitHub",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "List files from repository [GITHUB]1": {
-      "main": [
-        [
-          {
-            "node": "Split the result1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Set date": {
       "main": [
         [
@@ -788,7 +503,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "631c2136-f2da-49f4-ac2b-587d9f0719d7",
+  "versionId": "4ea1e7ed-2ee9-426d-950b-347f8525b92a",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

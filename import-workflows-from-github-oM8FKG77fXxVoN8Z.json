@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-09T10:01:25.668Z",
+  "updatedAt": "2026-01-09T11:57:49.787Z",
   "createdAt": "2026-01-09T09:48:40.283Z",
   "id": "oM8FKG77fXxVoN8Z",
   "name": "Import Workflows from GitHub",
@@ -50,6 +50,167 @@
           "name": "GitHub account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a110913d-e36c-4c99-a0c2-707fa1115fb1",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": ".json",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "52bd1e91-2883-4ad7-a425-3f2601773b67",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "workflowObject": "={{ $json.json }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        80
+      ],
+      "id": "29802d6e-67e7-4a57-b8ca-aa571c8941e8",
+      "name": "Create a workflow",
+      "credentials": {
+        "n8nApi": {
+          "id": "CpTvkEMsUgoWqY4c",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/haytamnajim/n8n-projects.git",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-projects",
+          "mode": "list",
+          "cachedResultName": "n8n-projects",
+          "cachedResultUrl": "https://github.com/haytamnajim/n8n-projects"
+        },
+        "filePath": "={{ $('List files').item.json.path }}",
+        "additionalParameters": {}
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        -144
+      ],
+      "id": "f5cf0299-3266-4ee3-8041-19e65c5306b0",
+      "name": "Get a file",
+      "webhookId": "c1dc4b47-71a9-4417-85a5-248822a8b0a3",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "CZwhN7wlXkEJQ9cF",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "binaryPropertyName": "=data",
+        "destinationKey": "json",
+        "options": {
+          "keepSource": "json"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        896,
+        -96
+      ],
+      "id": "3eef7805-7ad3-4dda-a646-60b5282e38bc",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9a5e4643-9dc9-45c4-8dcb-17c7ce439be0",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "={{ $node[\"Get many workflows\"].json.map(w => w.name).join(\",\") }}",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1104,
+        -96
+      ],
+      "id": "f941e8b9-8be5-42a1-8362-56c29bf9fc77",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -320
+      ],
+      "id": "49545c35-744f-4a3c-b0de-fee331a34c74",
+      "name": "Get many workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "CpTvkEMsUgoWqY4c",
+          "name": "n8n account"
+        }
+      }
     }
   ],
   "connections": {
@@ -63,6 +224,71 @@
           }
         ]
       ]
+    },
+    "List files": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a workflow": {
+      "main": [
+        []
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Create a workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many workflows": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -74,7 +300,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "3ceb230c-732e-4d5c-83e7-cedf5b7c35c5",
+  "versionId": "4d903cb6-336c-4fae-af48-92c0ed461286",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

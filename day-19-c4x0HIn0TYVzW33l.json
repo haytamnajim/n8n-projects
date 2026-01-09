@@ -1,0 +1,96 @@
+{
+  "updatedAt": "2025-12-16T14:59:58.744Z",
+  "createdAt": "2025-12-15T10:46:37.710Z",
+  "id": "c4x0HIn0TYVzW33l",
+  "name": "day 19",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "airtableTokenApi",
+        "baseId": {
+          "__rl": true,
+          "value": "https://airtable.com/appLD1jresAvcyok4/tblqlEdbVe7Lx6Mei/viwPKX7eCkX2fFy6h?blocks=hide",
+          "mode": "url"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "https://airtable.com/appLD1jresAvcyok4/tblqlEdbVe7Lx6Mei/viwPKX7eCkX2fFy6h?blocks=hide",
+          "mode": "url"
+        },
+        "triggerField": "Name",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9460626f-d620-466f-8c8e-121d0dd564b9",
+      "name": "Airtable Trigger",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "Nb63VgJ9zOxTVAa4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// هذا الكود يتأكد من أننا نرسل فقط إذا تغير حقل Status\nconst statusChanged = $json.current.Status !== $json.old.Status;\n\n// إذا لم يتغير حقل Status، نقوم بإلغاء إخراج العناصر\nif (!statusChanged) {\n  return []; // إرجاع مصفوفة فارغة لوقف المعالجة\n}\n\n// إذا تغير، نقوم بتمرير البيانات التي نحتاجها (Airtable ID و Notion ID والقيمة الجديدة)\nreturn [\n  {\n    json: {\n      Airtable_ID: $json.current.id,\n      // يجب أن يتطابق هذا مع اسم الحقل تماماً في Airtable\n      Notion_ID: $json.current['Notion ID'], \n      Status: $json.current.Status\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1ecd0c53-f5c9-4760-a32a-b8181b8b04d7",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "connections": {
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "b576fa89-b018-4e61-aaa7-b2bac7d7e8c7",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-15T10:46:37.739Z",
+      "createdAt": "2025-12-15T10:46:37.739Z",
+      "role": "workflow:owner",
+      "workflowId": "c4x0HIn0TYVzW33l",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

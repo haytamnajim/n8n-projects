@@ -1,0 +1,367 @@
+{
+  "updatedAt": "2025-12-26T11:30:42.715Z",
+  "createdAt": "2025-12-26T10:36:41.865Z",
+  "id": "MCJaQJBetPxdvYDm",
+  "name": "Alerte API expirée",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ed1813e0-4597-487f-aea2-e9284d6c320c",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1MR3T9N6h77snwfmdCma_BNKrUNS8nshwUgkGl1Bf8Fs",
+          "mode": "list",
+          "cachedResultName": "API_Expiration_Monitor",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MR3T9N6h77snwfmdCma_BNKrUNS8nshwUgkGl1Bf8Fs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MR3T9N6h77snwfmdCma_BNKrUNS8nshwUgkGl1Bf8Fs/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4874f5b4-66ba-4a25-a624-e1399952d18c",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "6b1b0ba0-8d4e-49ed-8cec-885c839d1cfa",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        592,
+        96
+      ],
+      "id": "d621eae4-a001-49ce-9ec5-21ffacc8c0cf"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.endpoint }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "8b47de74-fdd3-4ecb-beb9-68b5d1b661d2",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const now = new Date();\n\n// 🔹 récupérer expires_at depuis Google Sheets\nconst expiresAtRaw = $node[\"Get row(s) in sheet\"].json.expires_at;\n\nif (!expiresAtRaw) {\n  throw new Error('expires_at est manquant');\n}\n\nconst expiresAt = new Date(expiresAtRaw);\n\nif (isNaN(expiresAt.getTime())) {\n  throw new Error('expires_at invalide: ' + expiresAtRaw);\n}\n\nconst diffMs = expiresAt - now;\nconst daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));\n\nconst expired = daysLeft <= 0;\nconst almostExpired = daysLeft > 0 && daysLeft <= 7;\n\nreturn {\n  api_name: $node[\"Get row(s) in sheet\"].json.api_name,\n  endpoint: $node[\"Get row(s) in sheet\"].json.endpoint,\n  expires_at: expiresAt.toISOString(),\n  days_left: daysLeft,\n  expired,\n  almost_expired: almostExpired,\n  owner: $node[\"Get row(s) in sheet\"].json.owner\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "a82f41a4-cccc-4081-913f-45d2c74ed589",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1b66e231-192a-4be9-8203-6a19273a6257",
+              "leftValue": "={{$json.expired}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a59e0f82-278a-42ea-9860-7f283d30efd4",
+              "leftValue": "={{$json.almost_expired}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1040,
+        -96
+      ],
+      "id": "c4b658e8-58f5-440e-b96b-5a6fbed06dab",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.owner }}",
+        "subject": "=🚨 Alerte API expirée – {{$json.api_name}}",
+        "message": "=<h2>🚨 Alerte API</h2>  <p><strong>API :</strong> {{$json.api_name}}</p> <p><strong>Endpoint :</strong> {{$json.endpoint}}</p>  <p><strong>Date d’expiration :</strong> {{$json.expires_at}}</p> <p><strong>Jours restants :</strong> {{$json.days_left}}</p>  <p><strong>Statut :</strong><br> - Expirée : {{$json.expired}} <br> - Bientôt expirée : {{$json.almost_expired}} </p>  <p style=\"color:red;\"><strong>⚠️ Action requise immédiatement.</strong></p>  <hr> <p>Envoyé automatiquement par n8n</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        -192
+      ],
+      "id": "00706cab-694f-4d07-8633-a670ed057c5d",
+      "name": "Send a message",
+      "webhookId": "4f5e5cc0-b7e7-42dd-8aec-0b98a8cb7404",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json.owner}}",
+        "subject": "=⏳ API bientôt expirée – {{$json.api_name}}",
+        "message": "=<h2>⏳ Alerte – API bientôt expirée</h2>  <p>Bonjour,</p>  <p>L’API suivante arrivera bientôt à expiration :</p>  <ul>   <li><strong>API :</strong> {{$json.api_name}}</li>   <li><strong>Endpoint :</strong> {{$json.endpoint}}</li>   <li><strong>Date d’expiration :</strong> {{$json.expires_at}}</li>   <li><strong>Jours restants :</strong> {{$json.days_left}}</li> </ul>  <p style=\"color:#d97706;\"> ⚠️ Merci de prévoir le renouvellement avant expiration. </p>  <hr> <p>Notification automatique – n8n</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "4def6d89-6f00-473e-a56f-856daec641f8",
+      "name": "Send a message1",
+      "webhookId": "8818beb9-9284-42df-9de5-0480353ae647",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 368,
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1216,
+        -224
+      ],
+      "typeVersion": 1,
+      "id": "90f8a437-7394-495f-b1ee-67d9ccd22039",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 144,
+        "width": 560,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        608,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "792e7e5c-c2ab-4101-a9c4-774a324f6118",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 144,
+        "width": 576,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -16,
+        -16
+      ],
+      "typeVersion": 1,
+      "id": "e927376b-62b7-4c5e-b738-faf4b29f3b7a",
+      "name": "Sticky Note2"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "df291050-924a-43b2-b4c8-81cda948872c",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-26T10:36:41.881Z",
+      "createdAt": "2025-12-26T10:36:41.881Z",
+      "role": "workflow:owner",
+      "workflowId": "MCJaQJBetPxdvYDm",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

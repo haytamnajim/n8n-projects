@@ -1,0 +1,175 @@
+{
+  "updatedAt": "2025-12-12T14:54:12.663Z",
+  "createdAt": "2025-12-12T14:16:33.806Z",
+  "id": "FmMgspdKmFBxXmAA",
+  "name": "day 18",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1345f16c-3141-4643-9fdc-60a685438271",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "88b48e0a-bc94-4a3a-b853-35978e694d1c",
+              "name": "scientificName",
+              "value": "Canis lupus familiaris",
+              "type": "string"
+            },
+            {
+              "id": "c8a60e4c-f648-4fa7-b29c-45dd018e2444",
+              "name": "City",
+              "value": "paris",
+              "type": "string"
+            },
+            {
+              "id": "2429a80a-56a1-4c3d-9ff8-4e3b2f657dd2",
+              "name": "price",
+              "value": 1.2,
+              "type": "number"
+            },
+            {
+              "id": "7d6f0a9f-a500-4aac-a1d1-08555b6d0d0f",
+              "name": "category",
+              "value": "Mammal",
+              "type": "string"
+            },
+            {
+              "id": "1a77ddbe-bca5-4b80-bf1c-5f07b59c7bc9",
+              "name": "Date",
+              "value": "2025-01-10",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5833fbc5-207e-4f39-8fc4-4be1df4f96ce",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of items) {\n  // تطبيق دالة trim لإزالة المساحات البيضاء من scientificName\n  if (item.json.scientificName) {\n    item.json.scientificName = item.json.scientificName.trim();\n  }\n\n  // تطبيق دالة trim لإزالة المساحات البيضاء من City\n  if (item.json.City) {\n    item.json.City = item.json.City.trim();\n  }\n  \n  // يجب عليك أيضًا تطبيق تغيير حالة الأحرف (Case) على المدينة\n  // لكي تتوافق مع معايير تنظيف البيانات (Paris بدلاً من paris).\n  if (item.json.City) {\n    item.json.City = item.json.City.charAt(0).toUpperCase() + item.json.City.slice(1);\n  }\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "ffab05c7-f341-4518-80ea-ad9175a5f87f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of items) {\n  if (item.json.scientificName) {\n    // 1. استخدام المسافة (' ') كفاصل (Separator)\n    const nameParts = item.json.scientificName.split(' ');\n    \n    // 2. تعيين الجزء الأول كـ Genus (الجنس)\n    item.json.Genus = nameParts[0];\n\n    // 3. تعيين الجزء الثاني كـ Species (النوع)\n    // نحن هنا نجمع الجزأين الثاني والثالث للمثال (lupus familiaris)\n    // إذا كان الاسم ثلاثياً (ثلاث كلمات):\n    item.json.Species = nameParts.slice(1).join(' '); \n    \n    // 4. (اختياري) إزالة العمود الأصلي \n    // delete item.json.scientificName;\n  }\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "3b9faf3d-5da0-469c-b102-378f60c0be7c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of items) {\n  if (item.json.price) {\n    let priceValue = String(item.json.price);\n    \n    // 1. (Optionnel) Nettoyer l'espace blanc au cas où il y en aurait\n    priceValue = priceValue.trim();\n    \n    // 2. Étape de NETTOYAGE : Supprimer tous les caractères qui ne sont \n    // pas des chiffres (0-9) ou un point (.), comme les symboles de devise ($ ou €) \n    // ou les séparateurs de milliers (,).\n    // Exemple: Si priceValue était \"$1,200.50\", il devient \"1200.50\"\n    priceValue = priceValue.replace(/[^0-9.]/g, ''); \n    \n    // 3. Étape de CONVERSION : Transformer la chaîne de caractères propre \n    // en un nombre à virgule flottante (nombre décimal).\n    item.json.price_cleaned = parseFloat(priceValue);\n    \n    // 4. (Optionnel) Supprimer l'ancienne colonne 'price' si vous n'en avez plus besoin\n    // delete item.json.price;\n  }\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        0
+      ],
+      "id": "f22d1d57-2c81-4e96-8e78-16b3ed7b3a65",
+      "name": "Code in JavaScript2"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "1ff66d07-2111-4a69-8ee5-0b09e1eaba66",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-12T14:16:33.830Z",
+      "createdAt": "2025-12-12T14:16:33.830Z",
+      "role": "workflow:owner",
+      "workflowId": "FmMgspdKmFBxXmAA",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

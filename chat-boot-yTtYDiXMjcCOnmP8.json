@@ -1,0 +1,175 @@
+{
+  "updatedAt": "2025-12-16T11:40:17.680Z",
+  "createdAt": "2025-12-16T09:55:58.233Z",
+  "id": "yTtYDiXMjcCOnmP8",
+  "name": "chat-boot",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e9854803-b3a1-4d0c-a44b-b3f68485f496",
+      "name": "WhatsApp Trigger",
+      "webhookId": "8f11325d-1258-40c1-be7f-35eb2cd39ff8",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "WyySs3vHPBXKt4kq",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Tu es l’assistant officiel du site BOSS LUNA, une marque marocaine spécialisée dans les bijoux personnalisés en acier inoxydable premium.\n\nTon rôle est :\n- Répondre clairement et professionnellement aux questions des clients\n- Présenter les produits (bracelets et colliers personnalisés)\n- Expliquer la gravure (prénom, date, message)\n- Donner les délais de livraison (24h à 48h)\n- Rassurer sur la qualité (acier inoxydable hypoallergénique)\n- Aider à choisir un modèle (gourmette, bracelet œil, collier enveloppe, bracelet à prénom)\n- Répondre aux questions de la FAQ\n- Fournir les informations de contact si nécessaire\n\nRègles :\n- Ton ton doit être professionnel, chaleureux et rassurant\n- Réponds en français clair (tu peux simplifier si nécessaire)\n- Ne donne jamais d’informations inventées\n- Si une question n’est pas claire, demande une précision\n- Mets en avant la qualité premium et la personnalisation\n",
+        "options": {
+          "systemMessage": "Bonjour 👋  \nJe souhaite avoir des informations sur vos bijoux personnalisés.  un petit message pas longue \n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "4eecd12d-7d89-4ca7-8052-ae3d4b82ed46",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "e10f0360-d524-421f-8080-87c59687adef",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wk8cICr1MZMfMwZd",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "yTtYDiXMjcCOnmP8"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "bd4955e9-5015-4418-8245-710b8984551d",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "819809381211470",
+        "recipientPhoneNumber": "+212709048305",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        0
+      ],
+      "id": "202e3b39-bbd3-4bf5-b458-d0b392786ec8",
+      "name": "Send message",
+      "webhookId": "f0d4309a-8f16-427a-99c3-4f7ad1b882b4",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "ADkoXH7RaAtlynis",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "a89ef821-1407-4365-9c2d-887c827ba55c",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-16T09:55:58.246Z",
+      "createdAt": "2025-12-16T09:55:58.246Z",
+      "role": "workflow:owner",
+      "workflowId": "yTtYDiXMjcCOnmP8",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

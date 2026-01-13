@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-09T11:57:49.787Z",
+  "updatedAt": "2026-01-09T14:25:53.218Z",
   "createdAt": "2026-01-09T09:48:40.283Z",
   "id": "oM8FKG77fXxVoN8Z",
   "name": "Import Workflows from GitHub",
@@ -12,7 +12,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        0
+        -224
       ],
       "id": "646f4690-e876-413b-9adc-f4580ae32d22",
       "name": "When clicking ‘Execute workflow’"
@@ -38,8 +38,8 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        208,
-        0
+        224,
+        -224
       ],
       "id": "f6a23228-8f8f-413b-bd85-6edb761d3881",
       "name": "List files",
@@ -78,8 +78,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        416,
-        0
+        448,
+        -224
       ],
       "id": "52bd1e91-2883-4ad7-a425-3f2601773b67",
       "name": "Filter"
@@ -93,8 +93,8 @@
       "type": "n8n-nodes-base.n8n",
       "typeVersion": 1,
       "position": [
-        1360,
-        80
+        1344,
+        -224
       ],
       "id": "29802d6e-67e7-4a57-b8ca-aa571c8941e8",
       "name": "Create a workflow",
@@ -128,8 +128,8 @@
       "type": "n8n-nodes-base.github",
       "typeVersion": 1.1,
       "position": [
-        592,
-        -144
+        672,
+        -224
       ],
       "id": "f5cf0299-3266-4ee3-8041-19e65c5306b0",
       "name": "Get a file",
@@ -154,7 +154,7 @@
       "typeVersion": 1.1,
       "position": [
         896,
-        -96
+        -224
       ],
       "id": "3eef7805-7ad3-4dda-a646-60b5282e38bc",
       "name": "Extract from File"
@@ -186,31 +186,11 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        1104,
-        -96
+        1120,
+        -224
       ],
       "id": "f941e8b9-8be5-42a1-8362-56c29bf9fc77",
       "name": "Filter1"
-    },
-    {
-      "parameters": {
-        "filters": {},
-        "requestOptions": {}
-      },
-      "type": "n8n-nodes-base.n8n",
-      "typeVersion": 1,
-      "position": [
-        768,
-        -320
-      ],
-      "id": "49545c35-744f-4a3c-b0de-fee331a34c74",
-      "name": "Get many workflows",
-      "credentials": {
-        "n8nApi": {
-          "id": "CpTvkEMsUgoWqY4c",
-          "name": "n8n account"
-        }
-      }
     }
   ],
   "connections": {
@@ -284,11 +264,6 @@
           }
         ]
       ]
-    },
-    "Get many workflows": {
-      "main": [
-        []
-      ]
     }
   },
   "settings": {
@@ -300,7 +275,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4d903cb6-336c-4fae-af48-92c0ed461286",
+  "versionId": "205d2758-736c-4494-a6ba-1e366040ef54",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

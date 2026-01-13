@@ -1,0 +1,49 @@
+{
+  "updatedAt": "2026-01-13T09:12:54.000Z",
+  "createdAt": "2026-01-12T11:43:24.278Z",
+  "id": "m2tXW4k9Dm885Cy3",
+  "name": "My workflow 4",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "enterprise-ai-agent",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f6491bb5-0f0a-4443-880c-7126b92a994d",
+      "name": "Webhook",
+      "webhookId": "9bac8c4a-f7c8-43fd-a260-7a931680064a"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "b4966ab7-82a0-4362-a003-ce36bdf92735",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-12T11:43:24.296Z",
+      "createdAt": "2026-01-12T11:43:24.296Z",
+      "role": "workflow:owner",
+      "workflowId": "m2tXW4k9Dm885Cy3",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

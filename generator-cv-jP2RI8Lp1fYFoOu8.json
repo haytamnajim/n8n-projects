@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-18T09:37:56.868Z",
+  "updatedAt": "2026-01-13T15:47:10.075Z",
   "createdAt": "2025-12-16T15:40:39.297Z",
   "id": "jP2RI8Lp1fYFoOu8",
   "name": "Generator-Cv",
@@ -9,14 +9,15 @@
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "d80ef2ee-9cc9-4b6e-8ac7-eef1d933c6fb",
+        "path": "generer-cv",
+        "responseMode": "responseNode",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        0,
-        112
+        352,
+        128
       ],
       "id": "26304ee9-ebb3-4adf-b171-d65b514606de",
       "name": "Webhook",
@@ -24,165 +25,13 @@
     },
     {
       "parameters": {
-        "jsCode": "// Valider que les champs critiques ne sont pas vides (sans 'resume')\n// Le 'resume' (ملخص) n'est plus obligatoire.\nif (!$json.prenom || !$json.nom || !$json.email) {\n    throw new Error(\"Manque des informations critiques (Prénom, Nom, Email) pour générer le CV.\");\n}\n\n// S'assurer que les tableaux sont bien des tableaux et éviter les erreurs\n$json.experiences = Array.isArray($json.experiences) ? $json.experiences : [];\n$json.education = Array.isArray($json.education) ? $json.education : [];\n$json.competences = Array.isArray($json.competences) ? $json.competences : [];\n$json.langues = Array.isArray($json.langues) ? $json.langues : []; \n\nreturn [$item];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        0,
-        432
-      ],
-      "id": "80af3ae7-05e3-40a9-b805-20c831a356b9",
-      "name": "Préparer & Valider"
-    },
-    {
-      "parameters": {
-        "operation": "create",
-        "base": {
-          "__rl": true,
-          "value": "app03rZBi2aZ5xTGX",
-          "mode": "list",
-          "cachedResultName": "CV Generator",
-          "cachedResultUrl": "https://airtable.com/app03rZBi2aZ5xTGX"
-        },
-        "table": {
-          "__rl": true,
-          "value": "tblloVWh5k1F1ymYd",
-          "mode": "list",
-          "cachedResultName": "Table 1",
-          "cachedResultUrl": "https://airtable.com/app03rZBi2aZ5xTGX/tblloVWh5k1F1ymYd"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Name",
-              "displayName": "Name",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Nom",
-              "displayName": "Nom",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Email",
-              "displayName": "Email",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            },
-            {
-              "id": "Données_CV",
-              "displayName": "Données_CV",
-              "required": false,
-              "defaultMatch": false,
-              "canBeUsedToMatch": true,
-              "display": true,
-              "type": "string",
-              "readOnly": false,
-              "removed": false
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.airtable",
-      "typeVersion": 2.1,
-      "position": [
-        224,
-        432
-      ],
-      "id": "eb4da59e-479e-4d19-8259-28a2fe6a7077",
-      "name": "Create a record",
-      "credentials": {
-        "airtableTokenApi": {
-          "id": "Nb63VgJ9zOxTVAa4",
-          "name": "Airtable Personal Access Token account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Tu es un expert en recrutement et en rédaction de CV professionnels modernes.\n\nTa mission est de générer un CV clair, professionnel et bien structuré à partir des informations fournies par l’utilisateur.\n\nRègles importantes :\n- N’invente aucune information\n- Reformule et améliore le contenu pour le rendre professionnel\n- Utilise un langage clair et fluide\n- Corrige les fautes si elles existent\n- Ignore les sections vides\n- Optimise le CV pour les recruteurs (ATS-friendly)\n- Structure le CV avec des titres clairs\n\nFormat de sortie : MARKDOWN\n\n=====================\nINFORMATIONS CANDIDAT\n=====================\n\nNom complet :\n{{$json.fullName}}\n\nEmail :\n{{$json.email}}\n\nTéléphone :\n{{$json.phone}}\n\nLocalisation :\n{{$json.location}}\n\nPoste recherché :\n{{$json.jobTitle}}\n\nRésumé professionnel :\n{{$json.summary}}\n\nExpériences professionnelles :\n{{$json.experiences}}\n\nFormation :\n{{$json.education}}\n\nCompétences :\n{{$json.skills}}\n\nLangues :\n{{$json.languages}}\n\n=====================\nRÉSULTAT ATTENDU\n=====================\nUn CV professionnel, bien rédigé, structuré avec les sections suivantes si disponibles :\n- En-tête (Nom, contact)\n- Profil professionnel\n- Expériences professionnelles\n- Formation\n- Compétences\n- Langues\n",
-        "options": {
-          "systemMessage": "Tu es un agent d’intelligence artificielle spécialisé dans la rédaction de CV professionnels.\n\nTu agis comme un expert en recrutement, ressources humaines et optimisation de CV pour les systèmes de tri automatique (ATS).\n\nTon rôle est de :\n- Analyser les informations reçues depuis un formulaire\n- Structurer les données de manière logique\n- Reformuler le contenu pour le rendre professionnel et cohérent\n- Corriger les fautes d’orthographe et de grammaire\n- Mettre en valeur l’expérience et les compétences sans jamais inventer d’informations\n- Produire un CV clair, lisible et prêt à être utilisé par un recruteur\n\nContraintes strictes :\n- Ne jamais inventer d’informations\n- Ne jamais ajouter de données non fournies\n- Ignorer toute section vide ou incomplète\n- Respecter le format demandé par l’utilisateur\n- Utiliser un ton professionnel et neutre\n- Le CV doit tenir sur UNE SEULE PAGE\n\nFormat de sortie obligatoire :\n- Le résultat doit être UNIQUEMENT en HTML\n- Utiliser une structure HTML propre et sémantique\n- Utiliser du CSS inline ou dans une balise <style>\n- Le CV doit être optimisé pour l’impression et l’export en PDF (format A4)\n- Aucune explication, aucun texte hors HTML ne doit être retourné\n\nLe résultat final doit être un CV HTML professionnel, structuré, d’une seule page, optimisé pour le recrutement et prêt à être converti en PDF.\n"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3,
-      "position": [
-        432,
-        0
-      ],
-      "id": "b06a2b75-7148-46aa-a520-79a0cfd73c45",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "mode": "raw",
-        "jsonOutput": "{\n  \"fullName\": \"={{$json.prenom}} {{$json.nom}}\",\n  \"email\": \"={{$json.email}}\",\n  \"phone\": \"={{$json.telephone}}\",\n  \"location\": \"={{$json.localisation}}\",\n  \"jobTitle\": \"={{$json.poste}}\",\n  \"summary\": \"={{$json.resume}}\",\n  \"experiences\": \"={{$json.experiences}}\",\n  \"education\": \"={{$json.education}}\",\n  \"skills\": \"={{$json.competences}}\",\n  \"languages\": \"={{$json.langues}}\"\n}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        192,
-        96
-      ],
-      "id": "7607391a-2606-49c9-b4b8-35d9b3ecbc71",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "html_content": "={{ $json.html }}"
-      },
-      "type": "n8n-nodes-htmlcsstopdf.htmlcsstopdf",
-      "typeVersion": 1,
-      "position": [
-        992,
-        0
-      ],
-      "id": "15588522-3a9e-4cea-ba00-48d7317c9917",
-      "name": "HTML to PDF",
-      "credentials": {
-        "htmlcsstopdfApi": {
-          "id": "AIUPVcQr9w5tcGZu",
-          "name": "HTML to PDF account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.5-flash-lite",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        400,
-        304
+        656,
+        352
       ],
       "id": "04c41dae-72cd-43d8-8fe9-0dab085a6605",
       "name": "Google Gemini Chat Model",
@@ -192,6 +41,390 @@
           "name": "Google Gemini(PaLM) Api account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# ROLE\nTu es un expert en recrutement et rédacteur professionnel de CV. Ta mission est de transformer les données brutes suivantes en un CV élégant, percutant et optimisé pour le marché du travail.\n\n# DONNÉES DE L'UTILISATEUR\n- Prénom : {{ $json.body.prenom }}\n- Nom : {{ $json.body.nom }}\n- Email : {{ $json.body.email }}\n- Téléphone : {{ $json.body.telephone }}\n- Ville/Pays : {{ $json.body.localisation }}\n- Poste visé : {{ $json.body.poste }}\n\n# CONTENU DÉTAILLÉ\n- Résumé professionnel : {{ $json.body.resume }}\n- Expériences : {{ $json.body.experiences }}\n- Éducation : {{ $json.body.education }}\n- Compétences : {{ $json.body.competences }}\n- Langues : {{ $json.body.langues }}\n- Projets : {{ $json.body.projets }}\n\n# DIRECTIVES DE RÉDACTION\n1. Langue : Français exclusivement.\n2. Ton : Professionnel, dynamique et formel.\n3. Optimisation : Améliore la formulation des expériences et du résumé pour les rendre plus percutants (utilisation de verbes d'action).\n4. Structure Markdown : Utilise des titres (#, ##), des listes à puces (-) et du gras (**) pour les éléments clés.\n\n# FORMAT DE SORTIE\nGénère uniquement le contenu du CV en Markdown. Ne rajoute pas de phrases d'introduction ou de conclusion.",
+        "options": {
+          "systemMessage": "Tu es un expert en recrutement international et rédacteur de CV professionnel. Ta mission est de transformer les données brutes fournies par l'utilisateur en un CV d'élite, optimisé pour les recruteurs et les systèmes ATS.\n\nDirectives de rédaction :\n\nLangue : Rédige exclusivement en Français.\n\nContrainte de taille (CRUCIAL) : Le contenu généré doit être concis et percutant pour tenir sur une seule page A4. Évite les phrases trop longues et va droit à l'essentiel.\n\nStructure : Utilise un format Markdown clair avec les sections suivantes :\n\n# [Nom et Prénom]\n\n## Profil Professionnel (Accroche percutante et brève).\n\n## Contact (Email, Téléphone, Localisation).\n\n## Poste Recherché.\n\n## Expériences / Formations / Compétences (Si fournies).\n\nOptimisation : Améliore le style pour qu'il soit formel, persuasif et conforme aux standards professionnels modernes.\n\nFormatage : Utilise les gras (**) et les listes à puces (-) pour une lisibilité maximale.\n\nOutput : Retourne uniquement le texte du CV en Markdown, sans commentaires superflus."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        576,
+        128
+      ],
+      "id": "36eb9459-92f1-4d46-a138-c4527971c76d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.template }}",
+                    "rightValue": "modern",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "001e7752-9f08-4356-b0e2-605d43bb5369"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f8d9c495-5527-4239-a1ab-c45fc8724742",
+                    "leftValue": "={{ $('Webhook').item.json.body.template }}",
+                    "rightValue": "classic",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "caf30046-f4e4-440b-adc4-542d34879c3a",
+                    "leftValue": "={{ $('Webhook').item.json.body.template }}",
+                    "rightValue": "Créatif",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        928,
+        112
+      ],
+      "id": "901a2a23-998f-46ed-95f1-9c699bec6d96",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "html_content": "={{ $json.html }}",
+        "css_content": "body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; line-height: 1.6; color: #333; } .cv-header { text-align: center; border-bottom: 3px solid #0056b3; padding-bottom: 20px; margin-bottom: 20px; } h1 { color: #0056b3; margin: 0; text-transform: uppercase; } h2 { background: #f4f4f4; padding: 10px; border-left: 5px solid #0056b3; color: #333; font-size: 18px; } ul { list-style-type: none; padding: 0; } li { margin-bottom: 10px; padding-left: 15px; border-left: 2px solid #ddd; }",
+        "output_format": "file"
+      },
+      "type": "n8n-nodes-htmlcsstopdf.htmlcsstopdf",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        128
+      ],
+      "id": "394f8642-3648-4c88-b227-3ed06b2365ab",
+      "name": "HTML to PDF1",
+      "credentials": {
+        "htmlcsstopdfApi": {
+          "id": "AIUPVcQr9w5tcGZu",
+          "name": "HTML to PDF account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawAiOutput = items[0].json.output || \"\"; \nconst rawData = $node[\"Webhook\"].json.body; \n\n// وظيفة التنظيف الموحدة\nconst clean = (text) => {\n    return String(text || \"\")\n        .replace(/\\*\\*/g, '') // حذف Bold\n        .replace(/\\*/g, '')   // حذف Italic\n        .replace(/#/g, '')    // حذف العناوين\n        .trim();\n};\n\nconst aiOutput = clean(rawAiOutput);\n\nconst htmlContent = `\n<!DOCTYPE html>\n<html>\n<head>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');\n        body { font-family: 'Inter', sans-serif; padding: 40px; color: #333; line-height: 1.6; }\n        .header { border-bottom: 2px solid #3498db; padding-bottom: 15px; margin-bottom: 25px; }\n        .name { font-size: 28px; font-weight: bold; color: #2c3e50; }\n        h2 { font-size: 16px; color: #3498db; text-transform: uppercase; border-left: 4px solid #3498db; padding-left: 10px; background: #f9f9f9; margin-top: 20px; }\n        .content { font-size: 13px; white-space: pre-line; }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <div class=\"name\">${clean(rawData.prenom)} ${clean(rawData.nom)}</div>\n        <div style=\"color: #7f8c8d;\">📍 ${clean(rawData.localisation)} | 📧 ${clean(rawData.email)}</div>\n    </div>\n    <h2>Profil Professionnel</h2>\n    <div class=\"content\">${aiOutput}</div>\n    <h2>Compétences</h2>\n    <div class=\"content\">${clean(rawData.competences)}</div>\n</body>\n</html>\n`;\nreturn [{ json: { html: htmlContent } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        -64
+      ],
+      "id": "8c7c99db-ed4a-47d7-bc1f-d6a173e60bd9",
+      "name": "Modern"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawAiOutput = items[0].json.output || \"\"; \nconst rawData = $node[\"Webhook\"].json.body; \n\nconst clean = (text) => {\n    return String(text || \"\").replace(/[\\*\\#]/g, '').trim();\n};\n\nconst aiOutput = clean(rawAiOutput);\n\nconst htmlContent = `\n<!DOCTYPE html>\n<html>\n<head>\n    <style>\n        body { font-family: \"Times New Roman\", serif; padding: 50px; color: #000; line-height: 1.5; }\n        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 30px; }\n        h1 { font-size: 26pt; margin: 0; text-transform: uppercase; }\n        h2 { font-size: 14pt; text-transform: uppercase; border-bottom: 1px solid #000; margin-top: 25px; }\n        .content { font-size: 12pt; text-align: justify; white-space: pre-line; }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <h1>${clean(rawData.prenom)} ${clean(rawData.nom)}</h1>\n        <div>${clean(rawData.email)} | ${clean(rawData.telephone)}</div>\n    </div>\n    <h2>Résumé Professionnel</h2>\n    <div class=\"content\">${aiOutput}</div>\n    <h2>Expertise</h2>\n    <div class=\"content\">${clean(rawData.competences)}</div>\n</body>\n</html>\n`;\nreturn [{ json: { html: htmlContent } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        128
+      ],
+      "id": "ac0ae104-f21c-4ebc-a797-baf1debb1606",
+      "name": "Classic"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawAiOutput = items[0].json.output || \"\"; \nconst rawData = $node[\"Webhook\"].json.body; \n\nconst clean = (text) => {\n    return String(text || \"\").replace(/[\\*\\#]/g, '').trim();\n};\n\nconst aiOutput = clean(rawAiOutput);\n\nconst htmlContent = `\n<!DOCTYPE html>\n<html>\n<head>\n    <style>\n        body { font-family: sans-serif; margin: 0; display: flex; min-height: 100vh; }\n        .sidebar { width: 30%; background: #2c3e50; color: white; padding: 30px 20px; }\n        .main { width: 70%; padding: 40px; background: white; }\n        .sidebar h1 { font-size: 24px; margin: 0; text-transform: uppercase; }\n        h2 { color: #2c3e50; border-bottom: 2px solid #e74c3c; padding-bottom: 5px; text-transform: uppercase; font-size: 18px; }\n        .content { font-size: 13px; white-space: pre-line; color: #34495e; }\n    </style>\n</head>\n<body>\n    <div class=\"sidebar\">\n        <h1>${clean(rawData.prenom)}</h1>\n        <p>📧 ${clean(rawData.email)}</p>\n        <p>📱 ${clean(rawData.telephone)}</p>\n        <p>📍 ${clean(rawData.localisation)}</p>\n    </div>\n    <div class=\"main\">\n        <h2>À propos de moi</h2>\n        <div class=\"content\">${aiOutput}</div>\n        <h2>Compétences</h2>\n        <div class=\"content\">${clean(rawData.competences)}</div>\n    </div>\n</body>\n</html>\n`;\nreturn [{ json: { html: htmlContent } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1152,
+        320
+      ],
+      "id": "1b0d5eae-031c-45b9-b5c3-20f6fdafea94",
+      "name": "Créatif"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "resumes"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        128
+      ],
+      "id": "5a5df7b5-938c-4759-8636-d7b41c4b3206",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f319aa37-e751-46dd-93d0-49c011a00ccd",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "={{ $('Webhook').item.json.body.email }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1792,
+        128
+      ],
+      "id": "d6f4be6e-3694-40df-b299-c9aa98290255",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=\"pdf_url\": \"{{ $json.error ? null : 'https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/public/cv-bucket/' + $item(0).$node['Webhook'].json.body.nom + '.pdf' }}\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2544,
+        208
+      ],
+      "id": "87feeebd-1583-41e3-bf69-4ff274e1e07a",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "tableId": "resumes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "full_name",
+              "fieldValue": "={{ $('Webhook').item.json.body.prenom }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "fieldId": "template_type",
+              "fieldValue": "={{ $('Webhook').item.json.body.template }}"
+            },
+            {
+              "fieldId": "pdf_url",
+              "fieldValue": "=https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/public/cv-bucket/{{ $node[\"Webhook\"].json.body.nom }}.pdf"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        192
+      ],
+      "id": "4d55fe38-8b09-49cd-9f9a-9523ac626d59",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/cv-bucket/{{ $node[\"Webhook\"].json.body.nom }}.pdf",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "upsert",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer sb_secret_dDLrY1rj6t0bxTWJTsPR3Q_B1DLxlEb"
+            },
+            {
+              "name": "apikey",
+              "value": "sb_secret_dDLrY1rj6t0bxTWJTsPR3Q_B1DLxlEb"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2000,
+        320
+      ],
+      "id": "8ce9014f-3c89-4b91-88c8-62df77916479",
+      "name": "HTTP Request",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "resumes",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many rows').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "template_type",
+              "fieldValue": "={{ $('Webhook').item.json.body.template }}"
+            },
+            {
+              "fieldId": "pdf_url",
+              "fieldValue": "=https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/public/cv-bucket/{{ $item(0).$node[\"Webhook\"].json.body.nom }}.pdf"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        32
+      ],
+      "id": "cf6dfa29-2e56-40f6-8337-191f59df4599",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        720,
+        608
+      ],
+      "id": "6ba78454-7161-48e1-9b2b-cf54e7d6be5d",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        608
+      ],
+      "id": "83c36ab0-f0c2-4b69-be2e-39ac02832856",
+      "name": "Send a message",
+      "webhookId": "e01621b4-5fb3-402e-a347-5e3681f82527",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
     }
   ],
   "connections": {
@@ -199,40 +432,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Préparer & Valider": {
-      "main": [
-        [
-          {
-            "node": "Create a record",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
             "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent": {
-      "main": [
-        [
-          {
-            "node": "HTML to PDF",
             "type": "main",
             "index": 0
           }
@@ -249,6 +449,174 @@
           }
         ]
       ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Modern",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Classic",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Créatif",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML to PDF1": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modern": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classic": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créatif": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -259,7 +627,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4449a34d-70cd-4858-a891-8651bb389210",
+  "versionId": "4db2860b-50bd-4929-b077-50116ff45066",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

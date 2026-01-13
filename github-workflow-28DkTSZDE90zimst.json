@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-09T12:16:44.752Z",
+  "updatedAt": "2026-01-09T12:38:04.925Z",
   "createdAt": "2025-12-18T10:30:42.122Z",
   "id": "28DkTSZDE90zimst",
   "name": "GITHUB WORKFLOW",
@@ -16,23 +16,6 @@
       "typeVersion": 2,
       "position": [
         272,
-        480
-      ]
-    },
-    {
-      "parameters": {
-        "operation": "formatDate",
-        "date": "={{ $json.currentDate }}",
-        "format": "custom",
-        "customFormat": "dd-MM-yyyy/H:mm",
-        "options": {}
-      },
-      "id": "ab7ac9fa-af43-422b-b25a-cad76f19355e",
-      "name": "Format date",
-      "type": "n8n-nodes-base.dateTime",
-      "typeVersion": 2,
-      "position": [
-        480,
         480
       ]
     },
@@ -340,7 +323,9 @@
       "parameters": {
         "rule": {
           "interval": [
-            {}
+            {
+              "field": "hours"
+            }
           ]
         }
       },
@@ -352,6 +337,23 @@
       ],
       "id": "32be2e84-3985-4fa2-bb31-70957ee99463",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "formatDate",
+        "date": "={{ $json.currentDate }}",
+        "format": "custom",
+        "customFormat": "dd-MM-yyyy/H:mm",
+        "options": {}
+      },
+      "id": "ab7ac9fa-af43-422b-b25a-cad76f19355e",
+      "name": "Format date",
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        480,
+        480
+      ]
     }
   ],
   "connections": {
@@ -360,17 +362,6 @@
         [
           {
             "node": "Format date",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Format date": {
-      "main": [
-        [
-          {
-            "node": "Set commit date",
             "type": "main",
             "index": 0
           }
@@ -493,6 +484,17 @@
           }
         ]
       ]
+    },
+    "Format date": {
+      "main": [
+        [
+          {
+            "node": "Set commit date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -503,7 +505,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "4ea1e7ed-2ee9-426d-950b-347f8525b92a",
+  "versionId": "55f92e7e-2009-425e-8a60-dd7808acb9cf",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

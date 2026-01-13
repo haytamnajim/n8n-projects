@@ -1,0 +1,202 @@
+{
+  "updatedAt": "2026-01-12T12:39:41.004Z",
+  "createdAt": "2026-01-12T11:43:24.462Z",
+  "id": "Hy2q3mmjfNjBhfS7",
+  "name": "day 28-29",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "542a4d9f-4f75-49f0-9629-5c08c336d7c1",
+              "name": "userMessage",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "e6060029-9a12-41a6-9c9b-08c83f70d098",
+              "name": "sessionId",
+              "value": "={{ $json.body.sessionId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3587eeaa-f3b9-4fa4-b97c-85125ee3e02a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        208
+      ],
+      "id": "06735030-fa2a-4c23-b6d9-80c8f0a3fc44",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userMessage }}",
+        "options": {
+          "systemMessage": "أنت مساعد ذكاء اصطناعي متطور مخصص للمؤسسات. مهمتك هي مساعدة المستخدم بأسلوب مهني وواضح. أنت تمتلك ذاكرة طويلة الأمد عبر Redis، لذا يجب عليك تذكر اسم المستخدم وأي تفاصيل شخصية ذكرها سابقاً واستخدامها لجعل الحوار مخصصاً. إذا سألك المستخدم عن هويته أو اسمه، أجب بناءً على ما هو مخزن في ذاكرتك."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "adad8e14-82df-4d8b-8498-563c06557446",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        464,
+        208
+      ],
+      "id": "36c47942-b0df-43ac-a2ae-c68e0a386a3b",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "UDVNSzR6SwV1pANs",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        768,
+        0
+      ],
+      "id": "5946deed-ddb3-4917-9094-474049ec34c5",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "enterprise-ai-agent",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f6491bb5-0f0a-4443-880c-7126b92a994d",
+      "name": "Webhook",
+      "webhookId": "9bac8c4a-f7c8-43fd-a260-7a931680064a"
+    }
+  ],
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "9f2af215-1eba-4e53-8c6b-33519dab1221",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-12T11:43:24.488Z",
+      "createdAt": "2026-01-12T11:43:24.488Z",
+      "role": "workflow:owner",
+      "workflowId": "Hy2q3mmjfNjBhfS7",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

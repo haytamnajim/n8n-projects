@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T20:58:31.183Z",
+  "updatedAt": "2026-01-15T21:01:53.886Z",
   "createdAt": "2026-01-15T11:33:11.578Z",
   "id": "NMG0OY9He793ErBV",
   "name": "generate-video",
@@ -274,12 +274,12 @@
       "parameters": {
         "content": "Partie 2 : Production des Médias et Stockage Cloud\n\nRésumé : Transformation du texte en ressources visuelles et sonores prêtes pour le montage.\n\nGenerate Image : Crée l'image d'illustration.\n\nText-to-Speech API : Transforme le texte de Gemini en fichier audio.\n\nUpload Audio to Cloud (Cloudinary) : Héberge le son et génère un lien URL.\n\nUpload Image to Cloud (Cloudinary) : Héberge l'image et génère un lien URL.\n\nSync Audio & Image : Fusionne les liens des deux fichiers pour le rendu.",
         "height": 640,
-        "width": 864,
+        "width": 912,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        624,
+        592,
         -288
       ],
       "typeVersion": 1,
@@ -289,13 +289,13 @@
     {
       "parameters": {
         "content": "Partie 3 : Montage Vidéo (Shotstack) et Boucle d'Attente\n\nRésumé : Assemblage technique de la vidéo et gestion du temps de rendu.\n\nShotstack Video Render : Envoie les instructions de montage (Audio + Image + Sous-titres).\n\nWait for Rendering : Marque une pause le temps que le serveur Shotstack travaille.\n\nGet Final Video URL : Récupère l'état d'avancement du fichier vidéo.\n\nIf (Condition) : Vérifie si le statut est \"done\" (terminé) pour sortir de la boucle.",
-        "height": 576,
-        "width": 928,
+        "height": 640,
+        "width": 896,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1488,
+        1520,
         -320
       ],
       "typeVersion": 1,
@@ -579,7 +579,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "bb68e5f8-e1b0-4b46-b6c2-526b3f6aca29",
+  "versionId": "e556279b-c171-440b-8a26-7e97a4e764c3",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T09:51:46.870Z",
+  "updatedAt": "2026-01-15T10:59:04.011Z",
   "createdAt": "2025-12-16T15:40:39.297Z",
   "id": "jP2RI8Lp1fYFoOu8",
   "name": "Generator-Cv",
@@ -45,7 +45,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=# ROLE\nTu es un expert en recrutement et rédacteur professionnel de CV. Ta mission est de transformer les données brutes suivantes en un CV élégant, percutant et optimisé pour le marché du travail.\n\n# DONNÉES DE L'UTILISATEUR\n- Prénom : {{ $json.body.prenom }}\n- Nom : {{ $json.body.nom }}\n- Email : {{ $json.body.email }}\n- Téléphone : {{ $json.body.telephone }}\n- Ville/Pays : {{ $json.body.localisation }}\n- Poste visé : {{ $json.body.poste }}\n\n# CONTENU DÉTAILLÉ\n- Résumé professionnel : {{ $json.body.resume }}\n- Expériences : {{ $json.body.experiences }}\n- Éducation : {{ $json.body.education }}\n- Compétences : {{ $json.body.competences }}\n- Langues : {{ $json.body.langues }}\n- Projets : {{ $json.body.projets }}\n\n# DIRECTIVES DE RÉDACTION\n1. Langue : Français exclusivement.\n2. Ton : Professionnel, dynamique et formel.\n3. Optimisation : Améliore la formulation des expériences et du résumé pour les rendre plus percutants (utilisation de verbes d'action).\n4. Structure Markdown : Utilise des titres (#, ##), des listes à puces (-) et du gras (**) pour les éléments clés.\n\n# FORMAT DE SORTIE\nGénère uniquement le contenu du CV en Markdown. Ne rajoute pas de phrases d'introduction ou de conclusion.",
+        "text": "=# ROLE\nTu es un expert en recrutement et rédacteur professionnel de CV. Ta mission est de transformer les données brutes suivantes en un CV élégant, percutant et optimisé pour le marché du travail.\n\n# DONNÉES DE L'UTILISATEUR\n- Prénom : {{ $json.body.prenom }}\n- Nom : {{ $json.body.nom }}\n- Email : {{ $json.body.email }}\n- Téléphone : {{ $json.body.telephone }}\n- Ville/Pays : {{ $json.body.localisation }}\n- Poste visé : {{ $json.body.poste }}\n\n# CONTENU DÉTAILLÉ\n- Résumé professionnel : {{ $json.body.resume }}\n- Expériences : {{ $json.body.experiences }}\n- Éducation : {{ $json.body.education }}\n- Compétences : {{ $json.body.competences }}\n- Langues :{{ $json.body.langues }}\n- Projets : {{ $json.body.projets }}\n\n# DIRECTIVES DE RÉDACTION\n1. Langue : Français exclusivement.\n2. Ton : Professionnel, dynamique et formel.\n3. Optimisation : Améliore la formulation des expériences et du résumé pour les rendre plus percutants (utilisation de verbes d'action).\n4. Structure Markdown : Utilise des titres (#, ##), des listes à puces (-) et du gras (**) pour les éléments clés.\n\n# FORMAT DE SORTIE\nGénère uniquement le contenu du CV en Markdown. Ne rajoute pas de phrases d'introduction ou de conclusion.",
         "options": {
           "systemMessage": "Tu es un assistant spécialisé dans la structuration de données pour CV.\n\nRÈGLES STRICTES :\n- Tu ne génères PAS de HTML\n- Tu ne génères PAS de texte marketing\n- Tu réponds UNIQUEMENT en JSON valide\n- Si une information est absente, mets null\n\nFORMAT DE SORTIE OBLIGATOIRE :\n\n{\n  \"nom\": \"\",\n  \"prenom\": \"\",\n  \"email\": \"\",\n  \"telephone\": \"\",\n  \"ville\": \"\",\n  \"profil\": \"\",\n  \"poste_recherche\": \"\",\n  \"competences\": [],\n  \"experiences\": [\n    {\n      \"poste\": \"\",\n      \"entreprise\": \"\",\n      \"date_debut\": \"\",\n      \"date_fin\": \"\",\n      \"description\": \"\"\n    }\n  ],\n  \"formations\": [\n    {\n      \"diplome\": \"\",\n      \"etablissement\": \"\",\n      \"annee\": \"\"\n    }\n  ],\n  \"langues\": [],\n  \"projets\": []\n}\n"
         }
@@ -136,7 +136,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        928,
+        1136,
         112
       ],
       "id": "901a2a23-998f-46ed-95f1-9c699bec6d96",
@@ -145,12 +145,13 @@
     {
       "parameters": {
         "html_content": "={{ $json.html }}",
-        "output_format": "file"
+        "output_format": "file",
+        "output_filename": "=cv_{{ $('Webhook').item.json.body.nom }}"
       },
       "type": "n8n-nodes-htmlcsstopdf.htmlcsstopdf",
       "typeVersion": 1,
       "position": [
-        1376,
+        1584,
         128
       ],
       "id": "394f8642-3648-4c88-b227-3ed06b2365ab",
@@ -164,12 +165,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const data = items[0].json;\n\nconst html = `\n<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n<meta charset=\"UTF-8\">\n<style>\nbody {\n  font-family: Arial, sans-serif;\n  margin: 40px;\n  color: #333;\n}\nh1 {\n  border-bottom: 2px solid #007bff;\n}\n.section {\n  margin-top: 20px;\n}\n.section h2 {\n  color: #007bff;\n  font-size: 18px;\n}\nul {\n  padding-left: 20px;\n}\n</style>\n</head>\n<body>\n\n<h1>${data.prenom} ${data.nom}</h1>\n<p>${data.ville} | ${data.email} | ${data.telephone}</p>\n\n<div class=\"section\">\n<h2>Profil professionnel</h2>\n<p>${data.profil || \"\"}</p>\n</div>\n\n<div class=\"section\">\n<h2>Compétences</h2>\n<ul>\n${(data.competences || []).map(c => `<li>${c}</li>`).join(\"\")}\n</ul>\n</div>\n\n<div class=\"section\">\n<h2>Expériences</h2>\n${(data.experiences || []).map(e => `\n<p><strong>${e.poste}</strong> – ${e.entreprise}<br>\n${e.date_debut} - ${e.date_fin}<br>\n${e.description}</p>\n`).join(\"\")}\n</div>\n\n<div class=\"section\">\n<h2>Formation</h2>\n${(data.formations || []).map(f => `\n<p>${f.diplome} – ${f.etablissement} (${f.annee})</p>\n`).join(\"\")}\n</div>\n\n<div class=\"section\">\n<h2>Langues</h2>\n<p>${(data.langues || []).join(\", \")}</p>\n</div>\n\n</body>\n</html>\n`;\n\nreturn [\n  {\n    json: {\n      html\n    }\n  }\n];\n"
+        "jsCode": "// استلام البيانات من الـ AI Agent\nconst data = $json; \n\n// تصميم الـ HTML والـ CSS\nconst html = `\n<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <style>\n        :root { --primary: #2563eb; --text: #1f2937; }\n        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text); line-height: 1.5; padding: 0; margin: 0; }\n        .container { padding: 30px; }\n        .header { background: #f3f4f6; padding: 30px; border-left: 10px solid var(--primary); }\n        .name { font-size: 32px; font-weight: 800; color: var(--primary); text-transform: uppercase; }\n        .contact-info { font-size: 14px; margin-top: 10px; display: flex; gap: 15px; flex-wrap: wrap; }\n        .section { margin-top: 25px; }\n        .section-title { font-size: 18px; font-weight: bold; border-bottom: 2px solid #e5e7eb; color: var(--primary); padding-bottom: 5px; margin-bottom: 15px; }\n        .exp-item { margin-bottom: 15px; }\n        .exp-header { display: flex; justify-content: space-between; font-weight: bold; }\n        .date { color: #6b7280; font-size: 13px; }\n        .skills-grid { display: flex; gap: 8px; flex-wrap: wrap; }\n        .skill-tag { background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <div class=\"name\">${data.prenom || ''} ${data.nom || ''}</div>\n        <div class=\"contact-info\">\n            <span>📍 ${data.ville || ''}</span>\n            <span>📧 ${data.email || ''}</span>\n            <span>📞 ${data.telephone || ''}</span>\n        </div>\n        <p style=\"margin-top: 15px; font-style: italic;\">${data.profil || ''}</p>\n    </div>\n\n    <div class=\"container\">\n        <div class=\"section\">\n            <div class=\"section-title\">COMPÉTENCES</div>\n            <div class=\"skills-grid\">\n                ${(data.competences || []).map(s => `<span class=\"skill-tag\">${s}</span>`).join('')}\n            </div>\n        </div>\n\n        <div class=\"section\">\n            <div class=\"section-title\">EXPÉRIENCES PROFESSIONNELLES</div>\n            ${(data.experiences || []).map(exp => `\n                <div class=\"exp-item\">\n                    <div class=\"exp-header\">\n                        <span>${exp.poste} @ ${exp.entreprise}</span>\n                        <span class=\"date\">${exp.date_debut} - ${exp.date_fin}</span>\n                    </div>\n                    <p style=\"margin-top: 5px; font-size: 14px;\">${exp.description}</p>\n                </div>\n            `).join('')}\n        </div>\n\n        <div class=\"section\">\n            <div class=\"section-title\">FORMATION</div>\n            ${(data.formations || []).map(f => `\n                <div class=\"exp-item\">\n                    <div class=\"exp-header\">\n                        <span>${f.diplome}</span>\n                        <span class=\"date\">${f.annee}</span>\n                    </div>\n                    <div style=\"font-size: 14px;\">${f.etablissement}</div>\n                </div>\n            `).join('')}\n        </div>\n    </div>\n</body>\n</html>\n`;\n\nreturn { html };"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1152,
+        1360,
         -64
       ],
       "id": "8c7c99db-ed4a-47d7-bc1f-d6a173e60bd9",
@@ -182,7 +183,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1152,
+        1360,
         128
       ],
       "id": "ac0ae104-f21c-4ebc-a797-baf1debb1606",
@@ -190,12 +191,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const rawAiOutput = items[0].json.output || \"\"; \nconst rawData = $node[\"Webhook\"].json.body; \n\nconst clean = (text) => {\n    return String(text || \"\").replace(/[\\*\\#]/g, '').trim();\n};\n\nconst aiOutput = clean(rawAiOutput);\n\nconst htmlContent = `\n<!DOCTYPE html>\n<html>\n<head>\n    <style>\n        body { font-family: sans-serif; margin: 0; display: flex; min-height: 100vh; }\n        .sidebar { width: 30%; background: #2c3e50; color: white; padding: 30px 20px; }\n        .main { width: 70%; padding: 40px; background: white; }\n        .sidebar h1 { font-size: 24px; margin: 0; text-transform: uppercase; }\n        h2 { color: #2c3e50; border-bottom: 2px solid #e74c3c; padding-bottom: 5px; text-transform: uppercase; font-size: 18px; }\n        .content { font-size: 13px; white-space: pre-line; color: #34495e; }\n    </style>\n</head>\n<body>\n    <div class=\"sidebar\">\n        <h1>${clean(rawData.prenom)}</h1>\n        <p>📧 ${clean(rawData.email)}</p>\n        <p>📱 ${clean(rawData.telephone)}</p>\n        <p>📍 ${clean(rawData.localisation)}</p>\n    </div>\n    <div class=\"main\">\n        <h2>À propos de moi</h2>\n        <div class=\"content\">${aiOutput}</div>\n        <h2>Compétences</h2>\n        <div class=\"content\">${clean(rawData.competences)}</div>\n    </div>\n</body>\n</html>\n`;\nreturn [{ json: { html: htmlContent } }];"
+        "jsCode": "const data = items[0].json;\n\nconst html = `\n<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <style>\n        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background: #f4f7f6; color: #333; }\n        .cv-container { width: 800px; margin: auto; background: white; min-height: 1000px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }\n        .header { background: #1a365d; color: white; padding: 40px; text-align: center; }\n        .name { font-size: 28px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }\n        .title { font-size: 18px; color: #63b3ed; margin-top: 10px; }\n        .main { display: flex; }\n        .sidebar { width: 30%; background: #2d3748; color: white; padding: 20px; font-size: 13px; }\n        .content { width: 70%; padding: 30px; }\n        .section-title { border-bottom: 2px solid #1a365d; color: #1a365d; font-weight: bold; margin-bottom: 15px; padding-bottom: 5px; text-transform: uppercase; }\n        .job { margin-bottom: 20px; }\n        .job-header { display: flex; justify-content: space-between; font-weight: bold; }\n        .tag { background: #edf2f7; color: #2d3748; padding: 4px 10px; border-radius: 4px; display: inline-block; margin: 2px; font-size: 12px; }\n    </style>\n</head>\n<body>\n    <div class=\"cv-container\">\n        <div class=\"header\">\n            <div class=\"name\">${data.prenom || ''} ${data.nom || ''}</div>\n            <div class=\"title\">${data.poste_recherche || ''}</div>\n        </div>\n        <div class=\"main\">\n            <div class=\"sidebar\">\n                <h3>CONTACT</h3>\n                <p>📍 ${data.ville || ''}</p>\n                <p>📞 ${data.telephone || ''}</p>\n                <p>📧 ${data.email || ''}</p>\n                <br>\n                <h3>COMPÉTENCES</h3>\n                ${(data.competences || []).map(s => `<div class=\"tag\">${s}</div>`).join('')}\n            </div>\n            <div class=\"content\">\n                <div class=\"section-title\">Profil</div>\n                <p>${data.profil || ''}</p>\n                \n                <div class=\"section-title\">Expériences</div>\n                ${(data.experiences || []).map(exp => `\n                    <div class=\"job\">\n                        <div class=\"job-header\">\n                            <span>${exp.poste}</span>\n                            <span style=\"color:#718096\">${exp.date_debut} - ${exp.date_fin}</span>\n                        </div>\n                        <div style=\"font-style: italic; color: #4a5568;\">${exp.entreprise}</div>\n                        <p style=\"font-size: 14px;\">${exp.description}</p>\n                    </div>\n                `).join('')}\n            </div>\n        </div>\n    </div>\n</body>\n</html>\n`;\n\nreturn [{ json: { html: html } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1152,
+        1360,
         320
       ],
       "id": "1b0d5eae-031c-45b9-b5c3-20f6fdafea94",
@@ -209,7 +210,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1584,
+        1792,
         128
       ],
       "id": "5a5df7b5-938c-4759-8636-d7b41c4b3206",
@@ -248,7 +249,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1792,
+        2000,
         128
       ],
       "id": "d6f4be6e-3694-40df-b299-c9aa98290255",
@@ -263,7 +264,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        2528,
+        2736,
         176
       ],
       "id": "87feeebd-1583-41e3-bf69-4ff274e1e07a",
@@ -297,7 +298,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2160,
+        2368,
         192
       ],
       "id": "4d55fe38-8b09-49cd-9f9a-9523ac626d59",
@@ -344,7 +345,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2000,
+        2208,
         320
       ],
       "id": "8ce9014f-3c89-4b91-88c8-62df77916479",
@@ -381,7 +382,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        2000,
+        2208,
         32
       ],
       "id": "cf6dfa29-2e56-40f6-8337-191f59df4599",
@@ -393,6 +394,19 @@
         }
       },
       "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// تحويل النص القادم من الـ AI إلى كائن JSON حقيقي\nconst rawOutput = items[0].json.output;\nconst cleanJson = JSON.parse(rawOutput.replace(/```json|```/g, \"\"));\n\nreturn [{ json: cleanJson }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        128
+      ],
+      "id": "cd4f920c-d09f-429f-a518-4f28c0e0affa",
+      "name": "Code in JavaScript"
     }
   ],
   "connections": {
@@ -422,7 +436,7 @@
       "main": [
         [
           {
-            "node": "Switch",
+            "node": "Code in JavaScript",
             "type": "main",
             "index": 0
           }
@@ -574,6 +588,17 @@
           }
         ]
       ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -584,7 +609,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "22a22f68-49c9-4c1d-8415-0185067ed827",
+  "versionId": "8f9e3992-6ea9-4cd2-b105-40e6bdfd7529",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

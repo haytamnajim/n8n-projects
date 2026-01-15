@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T14:49:29.319Z",
+  "updatedAt": "2026-01-15T15:46:05.595Z",
   "createdAt": "2026-01-15T11:33:11.578Z",
   "id": "NMG0OY9He793ErBV",
   "name": "generate-video",
@@ -16,7 +16,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        0
+        96
       ],
       "id": "fa5bcdef-0fc6-4dfe-9bef-b19e90e1d662",
       "name": "Webhook",
@@ -34,8 +34,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        208,
-        0
+        224,
+        96
       ],
       "id": "9fff516a-cc31-4788-93d0-8d2a35abe737",
       "name": "HTTP Request"
@@ -47,8 +47,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        416,
-        0
+        448,
+        96
       ],
       "id": "4b91aad8-79da-4408-bf50-eb80647e0f14",
       "name": "Code in JavaScript"
@@ -61,8 +61,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        624,
-        0
+        672,
+        96
       ],
       "id": "a14acfbc-6c0a-4902-b8df-196a9a304c0d",
       "name": "Generate Image"
@@ -75,7 +75,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        832,
+        896,
         0
       ],
       "id": "3f83cf77-c4dd-42da-a043-571f88247c9a",
@@ -89,14 +89,14 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n    \"timeline\": {\n        \"tracks\": [\n            {\n                \"clips\": [\n                    {\n                        \"asset\": {\n                            \"type\": \"title\",\n                            \"text\": \"تم الربط بنجاح!\",\n                            \"style\": \"minimal\"\n                        },\n                        \"start\": 0,\n                        \"length\": 5\n                    }\n                ]\n            }\n        ]\n    },\n    \"output\": {\n        \"format\": \"mp4\",\n        \"resolution\": \"sd\"\n    }\n}",
+        "jsonBody": "={\n  \"timeline\": {\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"image\",\n              \"src\": \"{{ $node[\"Cloudinary Image\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"audio\",\n              \"src\": \"{{ $node[\"Upload an asset from file data\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"hd\"\n  }\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1248,
-        0
+        1568,
+        96
       ],
       "id": "adcfdfd5-7b5e-40e5-993b-9c8f5f004df8",
       "name": "HTTP Request2",
@@ -116,7 +116,7 @@
       "type": "n8n-nodes-cloudinary.cloudinary",
       "typeVersion": 1,
       "position": [
-        1040,
+        1120,
         0
       ],
       "id": "7ea48596-f877-4cd9-ae27-44d67be3bda3",
@@ -136,8 +136,8 @@
       "type": "n8n-nodes-cloudinary.cloudinary",
       "typeVersion": 1,
       "position": [
-        832,
-        224
+        1120,
+        192
       ],
       "id": "6f13d584-1364-4b99-b69c-c71a70d9b9b8",
       "name": "Cloudinary Image",
@@ -147,6 +147,21 @@
           "name": "Cloudinary account"
         }
       }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1344,
+        96
+      ],
+      "id": "8c7bd478-cb52-4133-88cf-cf2d373938b4",
+      "name": "Merge"
     }
   ],
   "connections": {
@@ -214,6 +229,28 @@
       "main": [
         [
           {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cloudinary Image": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
             "node": "HTTP Request2",
             "type": "main",
             "index": 0
@@ -231,7 +268,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "7a537e64-c98c-4fa5-829c-b8e6f347d252",
+  "versionId": "48d0bc20-dac6-4ae4-af0c-041100be3b2b",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

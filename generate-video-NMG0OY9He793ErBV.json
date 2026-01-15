@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T19:50:37.016Z",
+  "updatedAt": "2026-01-15T20:58:31.183Z",
   "createdAt": "2026-01-15T11:33:11.578Z",
   "id": "NMG0OY9He793ErBV",
   "name": "generate-video",
@@ -145,7 +145,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"timeline\": {\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"image\",\n              \"src\": \"{{ $node[\"Upload Image to Cloud\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"audio\",\n              \"src\": \"{{ $node[\"Upload Audio to Cloud\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"hd\"\n  }\n}",
+        "jsonBody": "={\n\n  \"timeline\": {\n\n    \"tracks\": [\n\n      {\n\n        \"clips\": [\n\n          {\n\n            \"asset\": {\n\n              \"type\": \"image\",\n\n              \"src\": \"{{ $node[\"Upload Image to Cloud\"].json[\"secure_url\"] }}\"\n\n            },\n\n            \"start\": 0,\n\n            \"length\": 15\n\n          }\n\n        ]\n\n      },\n\n      {\n\n        \"clips\": [\n\n          {\n\n            \"asset\": {\n\n              \"type\": \"audio\",\n\n              \"src\": \"{{ $node[\"Upload Audio to Cloud\"].json[\"secure_url\"] }}\"\n\n            },\n\n            \"start\": 0,\n\n            \"length\": 15\n\n          }\n\n        ]\n\n      }\n\n    ]\n\n  },\n\n  \"output\": {\n\n    \"format\": \"mp4\",\n\n    \"resolution\": \"hd\"\n\n  }\n\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -189,7 +189,7 @@
       "typeVersion": 4.3,
       "position": [
         2016,
-        96
+        24
       ],
       "id": "eeeeb5cf-3233-490f-b38c-d07258c57f95",
       "name": "Get Final Video URL",
@@ -197,6 +197,218 @@
         "httpHeaderAuth": {
           "id": "O4KVT34b9pU08047",
           "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2af3d625-7bd8-4a0d-b725-fa7d4602db94",
+              "leftValue": "={{ $json.response.status }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2240,
+        96
+      ],
+      "id": "b889fe4f-0110-4cb2-af01-5affc687feaa",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "5507847449",
+        "text": "=🎉 Félicitations ! Votre vidéo a été générée avec succès.  🔗 Lien de téléchargement {{ $json.response.url }}  ⏱️ Temps de rendu {{ $json.response.renderTime }} ms",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2672,
+        0
+      ],
+      "id": "295216bb-9ea6-4285-bbc9-51186e84db46",
+      "name": "Send a text message",
+      "webhookId": "f6a908eb-107c-4d4a-81bd-3e1de3477b3b",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Partie 1 : Initialisation et Génération de Contenu (IA)\n\nRésumé : Cette phase gère l'entrée des données et la création du script textuel via l'intelligence artificielle.\n\nWebhook : Reçoit la requête initiale (le prompt utilisateur).\n\nGemini AI Prompt : Génère le texte créatif basé sur le prompt.\n\nFormat AI Response : Formate et nettoie le texte pour les étapes suivantes.",
+        "height": 432,
+        "width": 592
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -24,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "76cb5f98-0508-4e7d-8f43-cd4ccf5c79a5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Partie 2 : Production des Médias et Stockage Cloud\n\nRésumé : Transformation du texte en ressources visuelles et sonores prêtes pour le montage.\n\nGenerate Image : Crée l'image d'illustration.\n\nText-to-Speech API : Transforme le texte de Gemini en fichier audio.\n\nUpload Audio to Cloud (Cloudinary) : Héberge le son et génère un lien URL.\n\nUpload Image to Cloud (Cloudinary) : Héberge l'image et génère un lien URL.\n\nSync Audio & Image : Fusionne les liens des deux fichiers pour le rendu.",
+        "height": 640,
+        "width": 864,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        624,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "afcc1d81-7250-457f-bcf6-90fd8075df64",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Partie 3 : Montage Vidéo (Shotstack) et Boucle d'Attente\n\nRésumé : Assemblage technique de la vidéo et gestion du temps de rendu.\n\nShotstack Video Render : Envoie les instructions de montage (Audio + Image + Sous-titres).\n\nWait for Rendering : Marque une pause le temps que le serveur Shotstack travaille.\n\nGet Final Video URL : Récupère l'état d'avancement du fichier vidéo.\n\nIf (Condition) : Vérifie si le statut est \"done\" (terminé) pour sortir de la boucle.",
+        "height": 576,
+        "width": 928,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1488,
+        -320
+      ],
+      "typeVersion": 1,
+      "id": "3ede9f20-c0b7-4c7e-97d4-43d4ea7e3a40",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "Partie 4 : Archivage et Notification\nRésumé : Cette étape finalise le processus après validation du rendu :\n\nGoogle Sheets : Enregistre automatiquement les détails et le lien de la vidéo pour l'historique.\n\nTelegram : Envoie une alerte instantanée avec le lien .mp4 directement sur votre mobile.",
+        "height": 464,
+        "width": 400,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2432,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "f84601f8-2690-47b4-afa5-5a512b4af65d",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "12USUxiWfiIDkAuCsbtRhPclEtNVZgr_O1n-IYoyRhOE",
+          "mode": "list",
+          "cachedResultName": "Archive Vidéos Automatisées - n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12USUxiWfiIDkAuCsbtRhPclEtNVZgr_O1n-IYoyRhOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12USUxiWfiIDkAuCsbtRhPclEtNVZgr_O1n-IYoyRhOE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now }}",
+            "Lien Vidéo (URL)": "={{ $('Get Final Video URL').item.json.response.url }}",
+            "Prompt Utilisateur": "={{ $('Webhook').item.json.body.user_prompt }}",
+            "Statut": "={{ $('Get Final Video URL').item.json.response.status }}",
+            "Render Time": "={{ $('Get Final Video URL').item.json.response.renderTime }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Prompt Utilisateur",
+              "displayName": "Prompt Utilisateur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lien Vidéo (URL)",
+              "displayName": "Lien Vidéo (URL)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Statut",
+              "displayName": "Statut",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Render Time",
+              "displayName": "Render Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2480,
+        0
+      ],
+      "id": "c9dc69b7-8f7f-47b4-9cfe-85e778c258f4",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
         }
       }
     }
@@ -316,6 +528,46 @@
           }
         ]
       ]
+    },
+    "Get Final Video URL": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for Rendering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -327,7 +579,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "432b4984-482b-40be-baf9-c15ccd5c4d63",
+  "versionId": "bb68e5f8-e1b0-4b46-b6c2-526b3f6aca29",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

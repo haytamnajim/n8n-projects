@@ -1,0 +1,421 @@
+{
+  "updatedAt": "2026-01-15T11:13:41.000Z",
+  "createdAt": "2026-01-15T11:07:38.091Z",
+  "id": "dAGHcSKXRhnr0WIt",
+  "name": "My workflow 6",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generer-cv",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1056,
+        112
+      ],
+      "id": "d1218b8d-4fc3-4a5b-96e4-3b420c8a6010",
+      "name": "Webhook",
+      "webhookId": "bb684752-9cdd-4054-99b7-eba4feedbaaf"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# ROLE\nTu es un expert en rédaction de CV.\n\n# DONNÉES UTILISATEUR\n- Prénom : {{ $json.body.prenom }}\n- Nom : {{ $json.body.nom }}\n- Email : {{ $json.body.email }}\n- Téléphone : {{ $json.body.telephone }}\n- Ville : {{ $json.body.localisation }}\n- Poste visé : {{ $json.body.poste }}\n\n- Résumé : {{ $json.body.resume }}\n- Expériences : {{ $json.body.experiences }}\n- Formations : {{ $json.body.education }}\n- Compétences : {{ $json.body.competences }}\n- Langues : {{ $json.body.langues }}\n- Projets : {{ $json.body.projets }}\n\n# DIRECTIVES\n1. Langue : Français uniquement\n2. Sortie : JSON strict, respect du format ci-dessous\n\n# FORMAT DE SORTIE\n{\n  \"nom\": \"\",\n  \"prenom\": \"\",\n  \"email\": \"\",\n  \"telephone\": \"\",\n  \"ville\": \"\",\n  \"profil\": \"\",\n  \"poste_recherche\": \"\",\n  \"competences\": [],\n  \"experiences\": [],\n  \"formations\": [],\n  \"langues\": [],\n  \"projets\": [],\n  \"template\": \"{{ $json.body.template }}\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -752,
+        112
+      ],
+      "id": "e0eacb32-74e2-4439-8f38-95ab718dd4b6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraire JSON propre du LLM\nconst rawOutput = items[0].json.text || items[0].json.output || '{}';\nconst match = rawOutput.match(/\\{[\\s\\S]*\\}/);\nif(!match) throw new Error('JSON non trouvé');\nconst data = JSON.parse(match[0]);\nreturn [{ json: data }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        112
+      ],
+      "id": "90926e99-ffb4-41df-9712-3bcbe98be926",
+      "name": "Parse AI JSON"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.template }}",
+                    "rightValue": "modern",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.template }}",
+                    "rightValue": "classic",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.template }}",
+                    "rightValue": "creatif",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        112
+      ],
+      "id": "b46a9174-e9fb-4624-b539-5807ee530c79",
+      "name": "Switch Template"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Modern Template HTML\nconst data = items[0].json;\nconst html = `<html><head><style>body{font-family:Segoe UI;}</style></head><body><h1>${data.prenom} ${data.nom}</h1><p>${data.profil}</p></body></html>`;\nreturn [{ json: { html } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4b22941a-9ddd-44c4-befa-03f664da37a4",
+      "name": "Modern HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Classic Template HTML\nconst data = items[0].json;\nconst html = `<html><head><style>body{font-family:Times New Roman;}</style></head><body><h1>${data.prenom} ${data.nom}</h1><p>${data.profil}</p></body></html>`;\nreturn [{ json: { html } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        144
+      ],
+      "id": "8246f393-12d6-4d4c-8fbf-5b686af391e1",
+      "name": "Classic HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Creatif Template HTML\nconst data = items[0].json;\nconst html = `<html><head><style>body{font-family:Arial;}</style></head><body><h1>${data.prenom} ${data.nom}</h1><p>${data.profil}</p></body></html>`;\nreturn [{ json: { html } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        288
+      ],
+      "id": "5bf6fbd8-6aa0-4f3e-9d5d-3c7298cdb27c",
+      "name": "Creatif HTML"
+    },
+    {
+      "parameters": {
+        "html_content": "={{ $json.html }}",
+        "output_format": "file",
+        "output_filename": "=cv_{{ $json.nom }}"
+      },
+      "type": "n8n-nodes-htmlcsstopdf.htmlcsstopdf",
+      "typeVersion": 1,
+      "position": [
+        256,
+        112
+      ],
+      "id": "1c29445f-22fa-4cd0-9d94-b448b85950f3",
+      "name": "HTML to PDF",
+      "credentials": {
+        "htmlcsstopdfApi": {
+          "id": "AIUPVcQr9w5tcGZu",
+          "name": "HTML to PDF account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/cv-bucket/{{ $json.nom }}.pdf",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer sb_secret_dDLrY1rj6t0bxTWJTsPR3Q_B1DLxlEb"
+            },
+            {
+              "name": "apikey",
+              "value": "sb_secret_dDLrY1rj6t0bxTWJTsPR3Q_B1DLxlEb"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        112
+      ],
+      "id": "15070015-6693-4f58-8542-c60ff2f275a4",
+      "name": "Upload Supabase"
+    },
+    {
+      "parameters": {
+        "operation": "upsert"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        752,
+        112
+      ],
+      "id": "fb07f976-50a5-4ec9-8b54-1717c057ff48",
+      "name": "Upsert Resume",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"pdf_url\": \"https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/public/cv-bucket/{{ $json.nom }}.pdf\"}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1008,
+        112
+      ],
+      "id": "242877f4-0208-4359-8338-05f69680ecb8",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -896,
+        320
+      ],
+      "id": "5d5a44bb-93b3-4359-ba5a-da504a9ac594",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse AI JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI JSON": {
+      "main": [
+        [
+          {
+            "node": "Switch Template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Template": {
+      "main": [
+        [
+          {
+            "node": "Modern HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Classic HTML",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Creatif HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classic HTML": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creatif HTML": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modern HTML": {
+      "main": [
+        [
+          {
+            "node": "HTML to PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML to PDF": {
+      "main": [
+        [
+          {
+            "node": "Upload Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Supabase": {
+      "main": [
+        [
+          {
+            "node": "Upsert Resume",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Resume": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "1ef782c0-feac-43ba-b2eb-d2037ce3c9b2",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-15T11:07:38.115Z",
+      "createdAt": "2026-01-15T11:07:38.115Z",
+      "role": "workflow:owner",
+      "workflowId": "dAGHcSKXRhnr0WIt",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

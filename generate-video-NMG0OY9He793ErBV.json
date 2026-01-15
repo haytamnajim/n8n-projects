@@ -1,0 +1,31 @@
+{
+  "updatedAt": "2026-01-15T11:33:11.578Z",
+  "createdAt": "2026-01-15T11:33:11.578Z",
+  "id": "NMG0OY9He793ErBV",
+  "name": "generate-video",
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "6140696a-1acd-4197-a58c-612df416872f",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-15T11:33:11.609Z",
+      "createdAt": "2026-01-15T11:33:11.609Z",
+      "role": "workflow:owner",
+      "workflowId": "NMG0OY9He793ErBV",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

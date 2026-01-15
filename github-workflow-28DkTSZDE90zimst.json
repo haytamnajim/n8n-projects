@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-09T12:38:04.925Z",
+  "updatedAt": "2026-01-15T21:42:14.219Z",
   "createdAt": "2025-12-18T10:30:42.122Z",
   "id": "28DkTSZDE90zimst",
   "name": "GITHUB WORKFLOW",
@@ -224,8 +224,8 @@
     {
       "parameters": {
         "content": "## Trigger\nYou can change it to [\"Schedule\" trigger](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger/) to make backups on regular basis.",
-        "height": 339.51767272727324,
-        "width": 182.4715262478496
+        "height": 340,
+        "width": 198
       },
       "id": "b847f61c-9826-4030-b765-bcb80350ee55",
       "name": "Sticky Note",
@@ -295,8 +295,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1648,
-        64
+        1632,
+        80
       ]
     },
     {
@@ -509,7 +509,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "55f92e7e-2009-425e-8a60-dd7808acb9cf",
+  "versionId": "bab11e91-53ac-4e66-b957-7d3a4b6c5989",
   "activeVersionId": "55f92e7e-2009-425e-8a60-dd7808acb9cf",
   "triggerCount": 1,
   "shared": [

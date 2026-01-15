@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T15:46:05.595Z",
+  "updatedAt": "2026-01-15T19:50:37.016Z",
   "createdAt": "2026-01-15T11:33:11.578Z",
   "id": "NMG0OY9He793ErBV",
   "name": "generate-video",
@@ -24,37 +24,6 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAfl2OxjB9vFo_LYafUcygMHA5jwSAVKlU\n",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Explique en quelques phrases comment fonctionne l'intelligence artificielle.\"\n        }\n      ]\n    }\n  ]\n}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        224,
-        96
-      ],
-      "id": "9fff516a-cc31-4788-93d0-8d2a35abe737",
-      "name": "HTTP Request"
-    },
-    {
-      "parameters": {
-        "jsCode": "// 1. استخراج النص من رد Gemini\nconst rawText = $json.candidates[0].content.parts[0].text;\n\ntry {\n  // 2. محاولة استخراج وتحويل الـ JSON من داخل النص\n  const jsonStart = rawText.indexOf('[');\n  const jsonEnd = rawText.lastIndexOf(']') + 1;\n  \n  if (jsonStart !== -1 && jsonEnd !== -1) {\n    const jsonString = rawText.substring(jsonStart, jsonEnd);\n    const scenes = JSON.parse(jsonString);\n    return Array.isArray(scenes) ? scenes : [scenes];\n  } else {\n    // إذا لم يرسل Gemini تنسيق JSON، نحول النص كاملاً لمشهد واحد كخطة احتياطية\n    return [{\n      text: rawText,\n      image_prompt: \"abstract technology background, cinematic lighting\",\n      duration: 7\n    }];\n  }\n} catch (e) {\n  // في حال حدوث أي خطأ في التحويل\n  return [{\n    text: \"خطأ في معالجة البيانات من Gemini\",\n    image_prompt: \"error screen background\",\n    duration: 5\n  }];\n}"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        448,
-        96
-      ],
-      "id": "4b91aad8-79da-4408-bf50-eb80647e0f14",
-      "name": "Code in JavaScript"
-    },
-    {
-      "parameters": {
         "url": "=https://image.pollinations.ai/prompt/{{ encodeURIComponent($json.image_prompt) }}?width=1024&height=768&nologo=true&seed={{ Math.floor(Math.random() * 1000) }}",
         "options": {}
       },
@@ -69,6 +38,37 @@
     },
     {
       "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAfl2OxjB9vFo_LYafUcygMHA5jwSAVKlU\n",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Explique en quelques phrases comment fonctionne l'intelligence artificielle.\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        96
+      ],
+      "id": "9fff516a-cc31-4788-93d0-8d2a35abe737",
+      "name": "Gemini AI Prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. استخراج النص من رد Gemini\nconst rawText = $json.candidates[0].content.parts[0].text;\n\ntry {\n  // 2. محاولة استخراج وتحويل الـ JSON من داخل النص\n  const jsonStart = rawText.indexOf('[');\n  const jsonEnd = rawText.lastIndexOf(']') + 1;\n  \n  if (jsonStart !== -1 && jsonEnd !== -1) {\n    const jsonString = rawText.substring(jsonStart, jsonEnd);\n    const scenes = JSON.parse(jsonString);\n    return Array.isArray(scenes) ? scenes : [scenes];\n  } else {\n    // إذا لم يرسل Gemini تنسيق JSON، نحول النص كاملاً لمشهد واحد كخطة احتياطية\n    return [{\n      text: rawText,\n      image_prompt: \"abstract technology background, cinematic lighting\",\n      duration: 7\n    }];\n  }\n} catch (e) {\n  // في حال حدوث أي خطأ في التحويل\n  return [{\n    text: \"خطأ في معالجة البيانات من Gemini\",\n    image_prompt: \"error screen background\",\n    duration: 5\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        96
+      ],
+      "id": "4b91aad8-79da-4408-bf50-eb80647e0f14",
+      "name": "Format AI Response"
+    },
+    {
+      "parameters": {
         "url": "=https://translate.google.com/translate_tts?ie=UTF-8&q={{ encodeURIComponent($json.text.substring(0, 150)) }}&tl=ar&client=tw-ob",
         "options": {}
       },
@@ -79,33 +79,7 @@
         0
       ],
       "id": "3f83cf77-c4dd-42da-a043-571f88247c9a",
-      "name": "HTTP Request1"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.shotstack.io/v1/render",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"timeline\": {\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"image\",\n              \"src\": \"{{ $node[\"Cloudinary Image\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"audio\",\n              \"src\": \"{{ $node[\"Upload an asset from file data\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"hd\"\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        1568,
-        96
-      ],
-      "id": "adcfdfd5-7b5e-40e5-993b-9c8f5f004df8",
-      "name": "HTTP Request2",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "O4KVT34b9pU08047",
-          "name": "Header Auth account"
-        }
-      }
+      "name": "Text-to-Speech API"
     },
     {
       "parameters": {
@@ -120,7 +94,7 @@
         0
       ],
       "id": "7ea48596-f877-4cd9-ae27-44d67be3bda3",
-      "name": "Upload an asset from file data",
+      "name": "Upload Audio to Cloud",
       "credentials": {
         "cloudinaryApi": {
           "id": "uY0FNvmMra92ViBI",
@@ -140,7 +114,7 @@
         192
       ],
       "id": "6f13d584-1364-4b99-b69c-c71a70d9b9b8",
-      "name": "Cloudinary Image",
+      "name": "Upload Image to Cloud",
       "credentials": {
         "cloudinaryApi": {
           "id": "uY0FNvmMra92ViBI",
@@ -161,7 +135,70 @@
         96
       ],
       "id": "8c7bd478-cb52-4133-88cf-cf2d373938b4",
-      "name": "Merge"
+      "name": "Sync Audio & Image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotstack.io/v1/render",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"timeline\": {\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"image\",\n              \"src\": \"{{ $node[\"Upload Image to Cloud\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"audio\",\n              \"src\": \"{{ $node[\"Upload Audio to Cloud\"].json[\"secure_url\"] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"hd\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1568,
+        96
+      ],
+      "id": "adcfdfd5-7b5e-40e5-993b-9c8f5f004df8",
+      "name": "Shotstack Video Render",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1792,
+        96
+      ],
+      "id": "c8d27dfc-5f5e-4ef5-88b6-cc7a1e872e2d",
+      "name": "Wait for Rendering",
+      "webhookId": "92f28793-573c-4a83-a9f1-632e79a66ffb"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.shotstack.io/v1/render/{{ $node[\"Shotstack Video Render\"].json[\"response\"][\"id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2016,
+        96
+      ],
+      "id": "eeeeb5cf-3233-490f-b38c-d07258c57f95",
+      "name": "Get Final Video URL",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
     }
   ],
   "connections": {
@@ -169,29 +206,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Code in JavaScript": {
-      "main": [
-        [
-          {
-            "node": "Generate Image",
+            "node": "Gemini AI Prompt",
             "type": "main",
             "index": 0
           }
@@ -202,56 +217,100 @@
       "main": [
         [
           {
-            "node": "HTTP Request1",
+            "node": "Text-to-Speech API",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Cloudinary Image",
+            "node": "Upload Image to Cloud",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "HTTP Request1": {
+    "Gemini AI Prompt": {
       "main": [
         [
           {
-            "node": "Upload an asset from file data",
+            "node": "Format AI Response",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Upload an asset from file data": {
+    "Format AI Response": {
       "main": [
         [
           {
-            "node": "Merge",
+            "node": "Generate Image",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Cloudinary Image": {
+    "Text-to-Speech API": {
       "main": [
         [
           {
-            "node": "Merge",
+            "node": "Upload Audio to Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Audio to Cloud": {
+      "main": [
+        [
+          {
+            "node": "Sync Audio & Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image to Cloud": {
+      "main": [
+        [
+          {
+            "node": "Sync Audio & Image",
             "type": "main",
             "index": 1
           }
         ]
       ]
     },
-    "Merge": {
+    "Sync Audio & Image": {
       "main": [
         [
           {
-            "node": "HTTP Request2",
+            "node": "Shotstack Video Render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shotstack Video Render": {
+      "main": [
+        [
+          {
+            "node": "Wait for Rendering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Rendering": {
+      "main": [
+        [
+          {
+            "node": "Get Final Video URL",
             "type": "main",
             "index": 0
           }
@@ -268,7 +327,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "48d0bc20-dac6-4ae4-af0c-041100be3b2b",
+  "versionId": "432b4984-482b-40be-baf9-c15ccd5c4d63",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T21:01:53.886Z",
+  "updatedAt": "2026-01-16T09:27:32.026Z",
   "createdAt": "2026-01-15T11:33:11.578Z",
   "id": "NMG0OY9He793ErBV",
   "name": "generate-video",
@@ -69,7 +69,12 @@
     },
     {
       "parameters": {
-        "url": "=https://translate.google.com/translate_tts?ie=UTF-8&q={{ encodeURIComponent($json.text.substring(0, 150)) }}&tl=ar&client=tw-ob",
+        "url": "=https://api.elevenlabs.io/v1/text-to-speech/21m0412tRbi8V362M4wp",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $node[\"Format AI Response\"].json[\"text\"] }}\",\n  \"model_id\": \"eleven_multilingual_v2\",\n  \"voice_settings\": {\n    \"stability\": 0.5,\n    \"similarity_boost\": 0.5\n  }\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -79,7 +84,13 @@
         0
       ],
       "id": "3f83cf77-c4dd-42da-a043-571f88247c9a",
-      "name": "Text-to-Speech API"
+      "name": "Text-to-Speech API",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
     },
     {
       "parameters": {
@@ -189,7 +200,7 @@
       "typeVersion": 4.3,
       "position": [
         2016,
-        24
+        32
       ],
       "id": "eeeeb5cf-3233-490f-b38c-d07258c57f95",
       "name": "Get Final Video URL",
@@ -263,7 +274,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -24,
+        -16,
         -176
       ],
       "typeVersion": 1,
@@ -579,7 +590,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "e556279b-c171-440b-8a26-7e97a4e764c3",
+  "versionId": "b523fc33-4935-4522-a202-6dcea11cc15f",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

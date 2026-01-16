@@ -1,0 +1,618 @@
+{
+  "updatedAt": "2026-01-16T11:15:57.911Z",
+  "createdAt": "2026-01-16T11:01:24.125Z",
+  "id": "hXQLcf6oSjSOIJXv",
+  "name": "generate-video copy",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2c508353-57aa-48dd-ab9d-39c3cd9bb9e7",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        96
+      ],
+      "id": "982037d8-8de7-4674-9e2f-0ca4023e6fe4",
+      "name": "Webhook",
+      "webhookId": "2c508353-57aa-48dd-ab9d-39c3cd9bb9e7"
+    },
+    {
+      "parameters": {
+        "url": "=https://image.pollinations.ai/prompt/{{ encodeURIComponent($json.image_prompt) }}?width=1024&height=768&nologo=true&seed={{ Math.floor(Math.random() * 1000) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        672,
+        96
+      ],
+      "id": "b0792f34-03b7-4d37-8a03-ee2ec95c3608",
+      "name": "Generate Image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAfl2OxjB9vFo_LYafUcygMHA5jwSAVKlU\n",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Explique en quelques phrases comment fonctionne l'intelligence artificielle.\"\n        }\n      ]\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        96
+      ],
+      "id": "c46f0eeb-77a8-4030-9cba-4cef527212c3",
+      "name": "Gemini AI Prompt"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. استخراج النص من رد Gemini\nconst rawText = $json.candidates[0].content.parts[0].text;\n\n// دالة لتنظيف النص من ( \" , \\n , \\t , \\r )\nconst cleanString = (str) => {\n  if (!str) return \"\";\n  return str.replace(/[\\n\\t\\r\"]/g, ' ').trim(); // استبدالها بمسافة لمنع التصاق الكلمات\n};\n\ntry {\n  // 2. محاولة استخراج وتحويل الـ JSON من داخل النص\n  const jsonStart = rawText.indexOf('[');\n  const jsonEnd = rawText.lastIndexOf(']') + 1;\n  \n  if (jsonStart !== -1 && jsonEnd !== -1) {\n    const jsonString = rawText.substring(jsonStart, jsonEnd);\n    let scenes = JSON.parse(jsonString);\n    \n    const result = Array.isArray(scenes) ? scenes : [scenes];\n    \n    return result.map(scene => ({\n      ...scene,\n      text: cleanString(scene.text) // تنظيف النص داخل المصفوفة\n    }));\n\n  } else {\n    // خطة احتياطية: تنظيف النص الخام بالكامل\n    return [{\n      text: cleanString(rawText), \n      image_prompt: \"abstract technology background, cinematic lighting\",\n      duration: 7\n    }];\n  }\n} catch (e) {\n  return [{\n    text: \"Erreur de traitement des données\",\n    image_prompt: \"error screen background\",\n    duration: 5\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        96
+      ],
+      "id": "07877a13-1ae2-415b-87e6-de7571cc6c51",
+      "name": "Format AI Response"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "output_format",
+              "value": "mp3_44100_128"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "sk_abc94d699f80e0a7b80ea209454b052e42e86e31c4a347af"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.text }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        896,
+        0
+      ],
+      "id": "ddca8176-17d3-4d44-900a-c63ee1eade02",
+      "name": "Text-to-Speech API"
+    },
+    {
+      "parameters": {
+        "operation": "uploadFile",
+        "resource_type_file": "video",
+        "additionalFieldsFile": {}
+      },
+      "type": "n8n-nodes-cloudinary.cloudinary",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "91a0de5c-9efc-44f3-bfa8-f064e868b34e",
+      "name": "Upload Audio to Cloud",
+      "credentials": {
+        "cloudinaryApi": {
+          "id": "uY0FNvmMra92ViBI",
+          "name": "Cloudinary account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "uploadFile",
+        "additionalFieldsFile": {}
+      },
+      "type": "n8n-nodes-cloudinary.cloudinary",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        192
+      ],
+      "id": "b5e203af-9621-4f66-b34e-296aba3f660d",
+      "name": "Upload Image to Cloud",
+      "credentials": {
+        "cloudinaryApi": {
+          "id": "uY0FNvmMra92ViBI",
+          "name": "Cloudinary account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1344,
+        96
+      ],
+      "id": "07d3df9d-baad-44ce-99d0-88f88bc1d8e3",
+      "name": "Sync Audio & Image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotstack.io/v1/render",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"timeline\": {\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"html\",\n              \"html\": \"<p align='center'>{{ $node['Format AI Response'].json['text'] }}</p>\",\n              \"css\": \"p { color: #ffffff; font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 18px; background: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 15px; line-height: 1.4; width: 500px; margin: 0 auto; }\",\n              \"width\": 600,\n              \"height\": 300\n            },\n            \"start\": 0,\n            \"length\": 15,\n            \"position\": \"center\",\n            \"offset\": {\n              \"y\": -0.2\n            },\n            \"transition\": {\n              \"in\": \"slideUp\",\n              \"out\": \"fade\"\n            },\n            \"effect\": \"zoomIn\"\n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"image\",\n              \"src\": \"{{ $node['Upload Image to Cloud'].json['secure_url'] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15,\n            \"effect\": \"zoomIn\" \n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"audio\",\n              \"src\": \"{{ $node['Upload Audio to Cloud'].json['secure_url'] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"hd\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1584,
+        96
+      ],
+      "id": "4f9d29c4-7d29-45d3-bbc0-1395356767ea",
+      "name": "Shotstack Video Render",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1792,
+        96
+      ],
+      "id": "1e5dccc8-6275-4ed1-93bf-331c1e02b2e1",
+      "name": "Wait for Rendering",
+      "webhookId": "9d2c1320-0702-4b31-a5b5-ba83cb1eea91"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.shotstack.io/v1/render/{{ $node[\"Shotstack Video Render\"].json[\"response\"][\"id\"] }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2016,
+        32
+      ],
+      "id": "34b2db45-3cb2-423b-9b50-97fca642634f",
+      "name": "Get Final Video URL",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2af3d625-7bd8-4a0d-b725-fa7d4602db94",
+              "leftValue": "={{ $json.response.status }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2240,
+        96
+      ],
+      "id": "a8151cbb-838c-49dd-a5b9-8db10fee7a2a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "5507847449",
+        "text": "=🎉 Félicitations ! Votre vidéo a été générée avec succès.  🔗 Lien de téléchargement {{ $('Get Final Video URL').item.json.response.url }}  ⏱️ Temps de rendu {{ $('Get Final Video URL').item.json.response.renderTime }} ms",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2688,
+        96
+      ],
+      "id": "6ef7bf33-7bca-4d7c-85ca-3c5223586c00",
+      "name": "Send a text message",
+      "webhookId": "b89df24b-5fb8-4a51-a11c-4c14ec4ae549",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Partie 1 : Initialisation et Génération de Contenu (IA)\n\nRésumé : Cette phase gère l'entrée des données et la création du script textuel via l'intelligence artificielle.\n\nWebhook : Reçoit la requête initiale (le prompt utilisateur).\n\nGemini AI Prompt : Génère le texte créatif basé sur le prompt.\n\nFormat AI Response : Formate et nettoie le texte pour les étapes suivantes.",
+        "height": 432,
+        "width": 592
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "ad114ebe-0974-4044-86e5-4f80883b6bb0",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Partie 2 : Production des Médias et Stockage Cloud\n\nRésumé : Transformation du texte en ressources visuelles et sonores prêtes pour le montage.\n\nGenerate Image : Crée l'image d'illustration.\n\nText-to-Speech API : Transforme le texte de Gemini en fichier audio.\n\nUpload Audio to Cloud (Cloudinary) : Héberge le son et génère un lien URL.\n\nUpload Image to Cloud (Cloudinary) : Héberge l'image et génère un lien URL.\n\nSync Audio & Image : Fusionne les liens des deux fichiers pour le rendu.",
+        "height": 640,
+        "width": 912,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        608,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "a73c62eb-8fdb-45ea-a2f3-17d809bf2829",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Partie 3 : Montage Vidéo (Shotstack) et Boucle d'Attente\n\nRésumé : Assemblage technique de la vidéo et gestion du temps de rendu.\n\nShotstack Video Render : Envoie les instructions de montage (Audio + Image + Sous-titres).\n\nWait for Rendering : Marque une pause le temps que le serveur Shotstack travaille.\n\nGet Final Video URL : Récupère l'état d'avancement du fichier vidéo.\n\nIf (Condition) : Vérifie si le statut est \"done\" (terminé) pour sortir de la boucle.",
+        "height": 640,
+        "width": 864,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1536,
+        -304
+      ],
+      "typeVersion": 1,
+      "id": "abd33eda-0591-4d25-b059-09639907c607",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "Partie 4 : Archivage et Notification\nRésumé : Cette étape finalise le processus après validation du rendu :\n\nGoogle Sheets : Enregistre automatiquement les détails et le lien de la vidéo pour l'historique.\n\nTelegram : Envoie une alerte instantanée avec le lien .mp4 directement sur votre mobile.",
+        "height": 464,
+        "width": 416,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2416,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "2474b070-6494-46b9-bfcf-696d952bc246",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "12USUxiWfiIDkAuCsbtRhPclEtNVZgr_O1n-IYoyRhOE",
+          "mode": "list",
+          "cachedResultName": "Archive Vidéos Automatisées - n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12USUxiWfiIDkAuCsbtRhPclEtNVZgr_O1n-IYoyRhOE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12USUxiWfiIDkAuCsbtRhPclEtNVZgr_O1n-IYoyRhOE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now }}",
+            "Lien Vidéo (URL)": "={{ $('Get Final Video URL').item.json.response.url }}",
+            "Prompt Utilisateur": "={{ $('Webhook').item.json.body.user_prompt }}",
+            "Statut": "={{ $('Get Final Video URL').item.json.response.status }}",
+            "Render Time": "={{ $('Get Final Video URL').item.json.response.renderTime }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Prompt Utilisateur",
+              "displayName": "Prompt Utilisateur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lien Vidéo (URL)",
+              "displayName": "Lien Vidéo (URL)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Statut",
+              "displayName": "Statut",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Render Time",
+              "displayName": "Render Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2464,
+        96
+      ],
+      "id": "e9038edb-a01b-4620-9432-abf814bde46e",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Gemini AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image": {
+      "main": [
+        [
+          {
+            "node": "Text-to-Speech API",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload Image to Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "Format AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format AI Response": {
+      "main": [
+        [
+          {
+            "node": "Generate Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text-to-Speech API": {
+      "main": [
+        [
+          {
+            "node": "Upload Audio to Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Audio to Cloud": {
+      "main": [
+        [
+          {
+            "node": "Sync Audio & Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image to Cloud": {
+      "main": [
+        [
+          {
+            "node": "Sync Audio & Image",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Sync Audio & Image": {
+      "main": [
+        [
+          {
+            "node": "Shotstack Video Render",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shotstack Video Render": {
+      "main": [
+        [
+          {
+            "node": "Wait for Rendering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Rendering": {
+      "main": [
+        [
+          {
+            "node": "Get Final Video URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Final Video URL": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for Rendering",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "1ec7cac8-eba9-4cfa-b7dc-f0d4871b52ac",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-16T11:01:24.140Z",
+      "createdAt": "2026-01-16T11:01:24.140Z",
+      "role": "workflow:owner",
+      "workflowId": "hXQLcf6oSjSOIJXv",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

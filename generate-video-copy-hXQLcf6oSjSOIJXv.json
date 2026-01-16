@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-16T12:22:27.279Z",
+  "updatedAt": "2026-01-16T13:47:45.373Z",
   "createdAt": "2026-01-16T11:01:24.125Z",
   "id": "hXQLcf6oSjSOIJXv",
   "name": "generate-video copy",
@@ -70,7 +70,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb/stream/with-timestamps",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM/with-timestamps",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -112,7 +112,7 @@
     {
       "parameters": {
         "operation": "uploadFile",
-        "file": "={{ $json.binary.data }}",
+        "file": "=data",
         "resource_type_file": "video",
         "additionalFieldsFile": {}
       },
@@ -319,7 +319,7 @@
       "parameters": {
         "content": "Partie 3 : Montage Vidéo (Shotstack) et Boucle d'Attente\n\nRésumé : Assemblage technique de la vidéo et gestion du temps de rendu.\n\nShotstack Video Render : Envoie les instructions de montage (Audio + Image + Sous-titres).\n\nWait for Rendering : Marque une pause le temps que le serveur Shotstack travaille.\n\nGet Final Video URL : Récupère l'état d'avancement du fichier vidéo.\n\nIf (Condition) : Vérifie si le statut est \"done\" (terminé) pour sortir de la boucle.",
         "height": 640,
-        "width": 864,
+        "width": 1088,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -340,8 +340,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2416,
-        -192
+        2640,
+        -176
       ],
       "typeVersion": 1,
       "id": "2474b070-6494-46b9-bfcf-696d952bc246",
@@ -443,7 +443,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// جلب البيانات من مخرجات ElevenLabs\nconst rawOutput = $node[\"Text-to-Speech API\"].json.data;\n\n// دالة لمعالجة النص وتحويله لـ JSON بشكل آمن\nfunction parseSafe(text) {\n  try {\n    // محاولة تنظيف النص من أي أحرف زائدة في البداية أو النهاية\n    const cleanText = text.trim().split('\\n')[0]; \n    return JSON.parse(cleanText);\n  } catch (e) {\n    // إذا فشل التنظيف، نحاول استخراج أول كائن JSON كامل نجده\n    const match = text.match(/\\{.*\\}/);\n    return match ? JSON.parse(match[0]) : null;\n  }\n}\n\nconst responseData = parseSafe(rawOutput);\n\nif (!responseData || !responseData.alignment) {\n  throw new Error(\"فشل في قراءة بيانات التوقيت. تأكد من إعدادات ElevenLabs.\");\n}\n\nconst alignment = responseData.alignment;\nconst audioBase64 = responseData.audio_base64;\n\nconst characters = alignment.characters;\nconst startTimes = alignment.character_start_times_seconds;\nconst endTimes = alignment.character_end_times_seconds;\n\nlet words = [];\nlet currentWord = \"\";\nlet wordStart = 0;\n\nfor (let i = 0; i < characters.length; i++) {\n    if (characters[i] === \" \" || i === characters.length - 1) {\n        if (i === characters.length - 1 && characters[i] !== \" \") currentWord += characters[i];\n        if (currentWord.trim() !== \"\") {\n            words.push({\n                text: currentWord.trim().toUpperCase(),\n                start: parseFloat(wordStart.toFixed(3)),\n                length: parseFloat((endTimes[i] - wordStart).toFixed(3))\n            });\n        }\n        currentWord = \"\";\n        wordStart = startTimes[i + 1];\n    } else {\n        if (currentWord === \"\") wordStart = startTimes[i];\n        currentWord += characters[i];\n    }\n}\n\nreturn {\n  captions: words,\n  binary: {\n    data: {\n      data: audioBase64,\n      mimeType: \"audio/mpeg\",\n      fileName: \"voice.mp3\"\n    }\n  }\n};"
+        "jsCode": "// 1. جلب البيانات من ElevenLabs\nconst rawData = $node[\"Text-to-Speech API\"].json.data;\n\n// 2. تحويل النص إلى JSON (الآن سيكون النص صافياً بدون مشاكل Stream)\nconst responseData = JSON.parse(rawData);\n\nconst audioBase64 = responseData.audio_base64;\nconst alignment = responseData.alignment;\n\n// 3. بناء توقيتات الكلمات (المصفوفة التي تعمل لديك)\nconst words = [];\nlet currentWord = \"\";\nlet wordStart = 0;\n\nfor (let i = 0; i < alignment.characters.length; i++) {\n    const char = alignment.characters[i];\n    if (char === \" \" || i === alignment.characters.length - 1) {\n        if (i === alignment.characters.length - 1 && char !== \" \") currentWord += char;\n        if (currentWord.trim() !== \"\") {\n            words.push({\n                text: currentWord.trim().toUpperCase(),\n                start: parseFloat(wordStart.toFixed(3)),\n                length: parseFloat((alignment.character_end_times_seconds[i] - wordStart).toFixed(3))\n            });\n        }\n        currentWord = \"\";\n        if (alignment.character_start_times_seconds[i + 1] !== undefined) {\n            wordStart = alignment.character_start_times_seconds[i + 1];\n        }\n    } else {\n        if (currentWord === \"\") wordStart = alignment.character_start_times_seconds[i];\n        currentWord += char;\n    }\n}\n\n// 4. المخرج النهائي كملف Binary حقيقي\nreturn [{\n    json: { captions: words },\n    binary: {\n        data: {\n            data: audioBase64,\n            mimeType: \"audio/mpeg\",\n            fileName: \"full_voiceover.mp3\"\n        }\n    }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -632,7 +632,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "472cae4f-e95f-4719-a5d4-9439d5d18496",
+  "versionId": "d1c6b6af-a266-460b-8c2d-cdbc526b4baa",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

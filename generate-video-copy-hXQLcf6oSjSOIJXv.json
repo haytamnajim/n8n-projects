@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-16T11:15:57.911Z",
+  "updatedAt": "2026-01-16T12:22:27.279Z",
   "createdAt": "2026-01-16T11:01:24.125Z",
   "id": "hXQLcf6oSjSOIJXv",
   "name": "generate-video copy",
@@ -70,7 +70,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb/stream/with-timestamps",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -91,8 +91,14 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"text\": \"{{ $json.text }}\"\n}",
-        "options": {}
+        "jsonBody": "={\n  \"text\": \"{{ $json.text }}\",\n  \"model_id\": \"eleven_multilingual_v2\",\n  \"voice_settings\": {\n    \"stability\": 0.5,\n    \"similarity_boost\": 0.8\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
@@ -106,13 +112,14 @@
     {
       "parameters": {
         "operation": "uploadFile",
+        "file": "={{ $json.binary.data }}",
         "resource_type_file": "video",
         "additionalFieldsFile": {}
       },
       "type": "n8n-nodes-cloudinary.cloudinary",
       "typeVersion": 1,
       "position": [
-        1120,
+        1328,
         0
       ],
       "id": "91a0de5c-9efc-44f3-bfa8-f064e868b34e",
@@ -153,7 +160,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1344,
+        1552,
         96
       ],
       "id": "07d3df9d-baad-44ce-99d0-88f88bc1d8e3",
@@ -167,13 +174,13 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"timeline\": {\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"html\",\n              \"html\": \"<p align='center'>{{ $node['Format AI Response'].json['text'] }}</p>\",\n              \"css\": \"p { color: #ffffff; font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 18px; background: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 15px; line-height: 1.4; width: 500px; margin: 0 auto; }\",\n              \"width\": 600,\n              \"height\": 300\n            },\n            \"start\": 0,\n            \"length\": 15,\n            \"position\": \"center\",\n            \"offset\": {\n              \"y\": -0.2\n            },\n            \"transition\": {\n              \"in\": \"slideUp\",\n              \"out\": \"fade\"\n            },\n            \"effect\": \"zoomIn\"\n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"image\",\n              \"src\": \"{{ $node['Upload Image to Cloud'].json['secure_url'] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15,\n            \"effect\": \"zoomIn\" \n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"audio\",\n              \"src\": \"{{ $node['Upload Audio to Cloud'].json['secure_url'] }}\"\n            },\n            \"start\": 0,\n            \"length\": 15\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"hd\"\n  }\n}",
+        "jsonBody": "={\n  \"timeline\": {\n    \"tracks\": [\n      {\n        \"clips\": {{ JSON.stringify($node[\"Code in JavaScript\"].json[\"captions\"].map(word => ({\n          \"asset\": {\n            \"type\": \"html\",\n            \"html\": `<p align='center' style='color:#ffffff; font-family:Montserrat; font-weight:bold; font-size:42px;'>${word.text}</p>`,\n            \"css\": \"p { text-shadow: 4px 4px 10px rgba(0,0,0,0.8); background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; width: 500px; margin: 0 auto; }\"\n          },\n          \"start\": word.start,\n          \"length\": word.length,\n          \"position\": \"center\",\n          \"offset\": { \"y\": -0.1 }\n        }))) }}\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"image\",\n              \"src\": \"{{ $node['Upload Image to Cloud'].json['secure_url'] }}\"\n            },\n            \"start\": 0,\n            \"length\": 25,\n            \"effect\": \"zoomIn\"\n          }\n        ]\n      },\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"audio\",\n              \"src\": \"{{ $node['Upload Audio to Cloud'].json['secure_url'] }}\"\n            },\n            \"start\": 0,\n            \"length\": 25\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"hd\"\n  }\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1584,
+        1792,
         96
       ],
       "id": "4f9d29c4-7d29-45d3-bbc0-1395356767ea",
@@ -193,7 +200,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1792,
+        2000,
         96
       ],
       "id": "1e5dccc8-6275-4ed1-93bf-331c1e02b2e1",
@@ -210,7 +217,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2016,
+        2224,
         32
       ],
       "id": "34b2db45-3cb2-423b-9b50-97fca642634f",
@@ -249,7 +256,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2240,
+        2448,
         96
       ],
       "id": "a8151cbb-838c-49dd-a5b9-8db10fee7a2a",
@@ -264,7 +271,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2688,
+        2896,
         96
       ],
       "id": "6ef7bf33-7bca-4d7c-85ca-3c5223586c00",
@@ -422,7 +429,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2464,
+        2672,
         96
       ],
       "id": "e9038edb-a01b-4620-9432-abf814bde46e",
@@ -433,6 +440,19 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// جلب البيانات من مخرجات ElevenLabs\nconst rawOutput = $node[\"Text-to-Speech API\"].json.data;\n\n// دالة لمعالجة النص وتحويله لـ JSON بشكل آمن\nfunction parseSafe(text) {\n  try {\n    // محاولة تنظيف النص من أي أحرف زائدة في البداية أو النهاية\n    const cleanText = text.trim().split('\\n')[0]; \n    return JSON.parse(cleanText);\n  } catch (e) {\n    // إذا فشل التنظيف، نحاول استخراج أول كائن JSON كامل نجده\n    const match = text.match(/\\{.*\\}/);\n    return match ? JSON.parse(match[0]) : null;\n  }\n}\n\nconst responseData = parseSafe(rawOutput);\n\nif (!responseData || !responseData.alignment) {\n  throw new Error(\"فشل في قراءة بيانات التوقيت. تأكد من إعدادات ElevenLabs.\");\n}\n\nconst alignment = responseData.alignment;\nconst audioBase64 = responseData.audio_base64;\n\nconst characters = alignment.characters;\nconst startTimes = alignment.character_start_times_seconds;\nconst endTimes = alignment.character_end_times_seconds;\n\nlet words = [];\nlet currentWord = \"\";\nlet wordStart = 0;\n\nfor (let i = 0; i < characters.length; i++) {\n    if (characters[i] === \" \" || i === characters.length - 1) {\n        if (i === characters.length - 1 && characters[i] !== \" \") currentWord += characters[i];\n        if (currentWord.trim() !== \"\") {\n            words.push({\n                text: currentWord.trim().toUpperCase(),\n                start: parseFloat(wordStart.toFixed(3)),\n                length: parseFloat((endTimes[i] - wordStart).toFixed(3))\n            });\n        }\n        currentWord = \"\";\n        wordStart = startTimes[i + 1];\n    } else {\n        if (currentWord === \"\") wordStart = startTimes[i];\n        currentWord += characters[i];\n    }\n}\n\nreturn {\n  captions: words,\n  binary: {\n    data: {\n      data: audioBase64,\n      mimeType: \"audio/mpeg\",\n      fileName: \"voice.mp3\"\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "7e88bed5-4e96-4bcd-86c7-5ff81d3f5391",
+      "name": "Code in JavaScript"
     }
   ],
   "connections": {
@@ -489,7 +509,7 @@
       "main": [
         [
           {
-            "node": "Upload Audio to Cloud",
+            "node": "Code in JavaScript",
             "type": "main",
             "index": 0
           }
@@ -590,6 +610,17 @@
           }
         ]
       ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Upload Audio to Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -601,7 +632,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "1ec7cac8-eba9-4cfa-b7dc-f0d4871b52ac",
+  "versionId": "472cae4f-e95f-4719-a5d4-9439d5d18496",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

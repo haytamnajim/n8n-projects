@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-17T16:22:20.165Z",
+  "updatedAt": "2026-01-18T17:19:40.855Z",
   "createdAt": "2025-12-17T16:22:20.165Z",
   "id": "sI2EMQjdnK80YnWv",
   "name": "LINKEDIN POST",
@@ -509,7 +509,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         384,
-        448
+        416
       ],
       "typeVersion": 1
     },
@@ -890,7 +890,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "33b55e5a-1b75-4c29-a5c6-267ff61f727a",
+  "versionId": "451ac956-c492-47dc-ae0c-4c37b47a00f3",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

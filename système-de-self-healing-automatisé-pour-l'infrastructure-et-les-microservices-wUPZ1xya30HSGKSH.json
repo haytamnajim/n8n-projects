@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-01-19T08:58:21.370Z",
+  "updatedAt": "2026-01-19T09:26:33.000Z",
   "createdAt": "2026-01-19T08:58:21.370Z",
   "id": "wUPZ1xya30HSGKSH",
   "name": "Système de Self-Healing Automatisé pour l'Infrastructure et les Microservices",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [],
   "connections": {},
   "settings": {
@@ -14,7 +14,7 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "e0c59d67-06ff-42ba-9359-4343c5b66c5d",
+  "versionId": "e276d321-0bd4-43f6-a0e3-1b2b748f8c5b",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

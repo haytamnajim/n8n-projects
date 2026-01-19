@@ -1,0 +1,134 @@
+{
+  "updatedAt": "2026-01-19T14:46:44.899Z",
+  "createdAt": "2026-01-19T14:18:38.890Z",
+  "id": "482CknoLZLyhoSrC",
+  "name": "My workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cv-generator-endpoint",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0f5317d3-5815-4a67-8f88-e4c7d0d1e8dc",
+      "name": "Webhook",
+      "webhookId": "c36d0266-b48b-4c98-9d76-ab340dc76b3a"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please process the following candidate information to create a professional CV:\n\nName: {{ $json.body.name }}\nEmail: {{ $json.body.email }}\nPhone: {{ $json.body.phone }}\n\nProfessional Summary:\n{{ $json.body.summary }}\n\nWork Experience:\n{{ JSON.stringify($json.body.experience) }}\n\nTechnical Skills:\n{{ JSON.stringify($json.body.skills) }}\n\nPlease follow the instructions in the System Message to format the output.",
+        "options": {
+          "systemMessage": "بما أنك قمت بضبط الإعدادات في n8n، إليك النص (Prompt) باللغة الإنجليزية لوضعه في خانة System Message. استخدام اللغة الإنجليزية مع نماذج Gemini يعطي نتائج أدق وأكثر احترافية في صياغة السير الذاتية التقنية:\n\nالـ Prompt باللغة الإنجليزية (لخانة System Message):\n\"You are an expert Professional Resume Writer specializing in ATS-friendly CVs. You have received candidate data including: Name, Professional Summary, Work Experience, and Skills.\n\nYour Task:\n\nRewrite the Professional Summary: Make it compelling, concise, and impact-oriented.\n\nRefine Experience Descriptions: Enhance job responsibilities using strong Action Verbs (e.g., 'Spearheaded', 'Optimized', 'Architected') and focus on achievements.\n\nOutput Format: You MUST return the data in a valid JSON object with the following keys:\n\nsummary_professional: The refined bio.\n\nexperiences_refined: An array of objects containing the improved descriptions.\n\nskills_categorized: The skills organized into logical categories (e.g., Languages, Frameworks, Tools).\n\nConstraints:\n\nDO NOT change names, dates, company names, or URLs.\n\nImprove only the linguistic phrasing and professional tone.\n\nEnsure the output is strictly JSON so it can be parsed in the next step.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5d8e7504-cd1b-48d9-bf1a-05449880c2a5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "dd889d64-936b-4add-b0cc-04a6bac5c448",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "CknoLZLyhoSrC"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "b4656f92-0c3b-4a5d-8e44-9a46c8401d2f",
+      "name": "Simple Memory"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "23348382-57a0-4329-864d-4a8f1f43bda6",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-19T14:18:38.935Z",
+      "createdAt": "2026-01-19T14:18:38.935Z",
+      "role": "workflow:owner",
+      "workflowId": "482CknoLZLyhoSrC",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

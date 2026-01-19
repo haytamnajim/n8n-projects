@@ -1,0 +1,31 @@
+{
+  "updatedAt": "2026-01-19T08:58:21.370Z",
+  "createdAt": "2026-01-19T08:58:21.370Z",
+  "id": "wUPZ1xya30HSGKSH",
+  "name": "Système de Self-Healing Automatisé pour l'Infrastructure et les Microservices",
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "e0c59d67-06ff-42ba-9359-4343c5b66c5d",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-19T08:58:21.378Z",
+      "createdAt": "2026-01-19T08:58:21.378Z",
+      "role": "workflow:owner",
+      "workflowId": "wUPZ1xya30HSGKSH",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

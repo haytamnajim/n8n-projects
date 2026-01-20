@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-19T15:25:47.069Z",
+  "updatedAt": "2026-01-20T10:30:49.784Z",
   "createdAt": "2026-01-19T14:18:38.890Z",
   "id": "482CknoLZLyhoSrC",
   "name": "Generator-Cv",
@@ -18,7 +18,7 @@
       "typeVersion": 3.1,
       "position": [
         224,
-        -24
+        -32
       ],
       "id": "5d8e7504-cd1b-48d9-bf1a-05449880c2a5",
       "name": "AI Agent"
@@ -30,8 +30,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        232,
-        200
+        240,
+        208
       ],
       "id": "dd889d64-936b-4add-b0cc-04a6bac5c448",
       "name": "Google Gemini Chat Model",
@@ -50,8 +50,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        360,
-        200
+        368,
+        208
       ],
       "id": "b4656f92-0c3b-4a5d-8e44-9a46c8401d2f",
       "name": "Simple Memory"
@@ -64,7 +64,7 @@
       "typeVersion": 2,
       "position": [
         576,
-        -24
+        -32
       ],
       "id": "c0a8d93f-9d86-428e-a3e4-009df87292b3",
       "name": "Code in JavaScript"
@@ -125,7 +125,7 @@
       "typeVersion": 3.4,
       "position": [
         800,
-        -24
+        -32
       ],
       "id": "048cbbb3-6163-4dd1-93e9-33d8a596ca20",
       "name": "Switch"
@@ -139,7 +139,7 @@
       "typeVersion": 1,
       "position": [
         1248,
-        -24
+        -32
       ],
       "id": "d89f06da-8e17-46dd-afca-2945e9b5472e",
       "name": "Get many rows",
@@ -178,7 +178,7 @@
       "typeVersion": 2.3,
       "position": [
         1472,
-        -24
+        -32
       ],
       "id": "65bf592c-ce27-461f-98c7-542c49b69f42",
       "name": "If"
@@ -274,7 +274,7 @@
       "typeVersion": 4.3,
       "position": [
         1696,
-        72
+        112
       ],
       "id": "e04e7b80-2fc5-4201-a2e1-363538f63281",
       "name": "HTTP Request",
@@ -331,7 +331,7 @@
       "typeVersion": 1,
       "position": [
         1024,
-        72
+        80
       ],
       "id": "1c0ee9ac-794c-4ef6-95a1-10cd63828808",
       "name": "Classic Template",
@@ -352,7 +352,7 @@
       "typeVersion": 1,
       "position": [
         1024,
-        -120
+        -128
       ],
       "id": "04984302-2f9b-40a7-ac14-18f5ae712e7c",
       "name": "Modern Template",
@@ -372,7 +372,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         768,
-        -360
+        -368
       ],
       "typeVersion": 1,
       "id": "3e6855a1-5230-4c63-8680-201eb796b9f0",
@@ -388,7 +388,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1168,
-        -392
+        -400
       ],
       "typeVersion": 1,
       "id": "70a4ed3a-29d6-452c-9a68-352bf2b23560",
@@ -452,7 +452,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        -24
+        -32
       ],
       "id": "0f5317d3-5815-4a67-8f88-e4c7d0d1e8dc",
       "name": "Webhook",
@@ -642,7 +642,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "c5e94db8-7ea8-43ea-aa8d-eff1908e9d23",
+  "versionId": "5dfd4eaf-6815-450c-a2c6-36af5808d36f",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

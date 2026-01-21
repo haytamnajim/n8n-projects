@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-21T14:44:29.359Z",
+  "updatedAt": "2026-01-21T15:34:51.703Z",
   "createdAt": "2026-01-19T14:18:38.890Z",
   "id": "482CknoLZLyhoSrC",
   "name": "Generator-Cv",
@@ -22,25 +22,6 @@
       ],
       "id": "5d8e7504-cd1b-48d9-bf1a-05449880c2a5",
       "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        232,
-        0
-      ],
-      "id": "dd889d64-936b-4add-b0cc-04a6bac5c448",
-      "name": "Google Gemini Chat Model",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "LxG8UkEyW5ofJq1B",
-          "name": "Google Gemini(PaLM) Api account 2"
-        }
-      }
     },
     {
       "parameters": {
@@ -227,7 +208,7 @@
       "typeVersion": 1,
       "position": [
         2144,
-        -24
+        -16
       ],
       "id": "62f16b5c-4744-414d-8106-c8d2e81a6507",
       "name": "Create a row",
@@ -236,7 +217,8 @@
           "id": "80otpuBVqftqUD6q",
           "name": "Supabase account"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -276,7 +258,8 @@
         -24
       ],
       "id": "e04e7b80-2fc5-4201-a2e1-363538f63281",
-      "name": "HTTP Request"
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -381,22 +364,6 @@
       "typeVersion": 1,
       "id": "97785647-bbf1-4699-92bd-430a55f3cdd5",
       "name": "Sticky Note3"
-    },
-    {
-      "parameters": {
-        "content": "",
-        "height": 128,
-        "width": 150,
-        "color": 7
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        -27,
-        -88
-      ],
-      "typeVersion": 1,
-      "id": "b8b6dd82-4e12-4f59-b167-2f7207c30724",
-      "name": "Sticky Note4"
     },
     {
       "parameters": {
@@ -524,7 +491,8 @@
         -120
       ],
       "id": "6cf712cb-a416-4b3c-ac50-daddb7555d73",
-      "name": "If1"
+      "name": "If1",
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -629,6 +597,7 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "analyze-match",
+        "responseMode": "responseNode",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
@@ -644,7 +613,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=INPUT CANDIDAT (CV JSON):\n{{ JSON.stringify($json.body.cvData) }}\n\nINPUT JOB DESCRIPTION:\n{{ $json.body.jobDescription }}",
+        "text": "=INPUT CANDIDAT (CV JSON):\n{{ $json.cleanCvData }}\n\nINPUT JOB DESCRIPTION:\n{{ $json.jobDescription }}",
         "options": {
           "systemMessage": "   Tu es un Expert Recruteur AI.\nTa mission : Comparer le profil du candidat (CV) avec l'offre d'emploi (Job Description) et fournir une analyse objective.\nRÈGLES STRICTES DE SORTIE :\n1. Analyse la pertinence des compétences, de l'expérience et du profil.\n2. Attribue un \"score\" de compatibilité de 0 à 100.\n3. Donne 3 à 5 conseils concrets pour adapter le CV à cette offre spécifique.\n4. Réponds UNIQUEMENT en JSON valide, sans Markdown, sans ```json, sans intro.\nFORMAT ATTENDU :\n{\n  \"score\": 85,\n  \"advice\": [\n    \"Mettre en avant l'expérience React pour coller à l'offre\",\n    \"Ajouter des mots-clés comme 'Agile' ou 'Scrum'\",\n    \"Détailler le projet X qui ressemble aux besoins du poste\"\n  ]\n}"
         }
@@ -652,30 +621,11 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        224,
+        448,
         744
       ],
       "id": "8a00bda7-be7b-43fa-a2c4-1777af368bd7",
       "name": "AI Agent2"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        232,
-        968
-      ],
-      "id": "9c9da58d-02ae-4ba9-8db9-838ce5d2a4c2",
-      "name": "Google Gemini Chat Model2",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "LxG8UkEyW5ofJq1B",
-          "name": "Google Gemini(PaLM) Api account 2"
-        }
-      }
     },
     {
       "parameters": {},
@@ -689,11 +639,14 @@
       "name": "Simple Memory1"
     },
     {
-      "parameters": {},
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "CknoLZLyhoSrC"
+      },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        360,
+        584,
         968
       ],
       "id": "ce12733b-00ee-44bd-913b-a34d67d92ece",
@@ -702,31 +655,89 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.parse($node[\"AI Agent\"].json.output) }}",
+        "responseBody": "={{ $json.output }}",
         "options": {}
       },
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        576,
+        800,
         744
       ],
       "id": "a2448508-80db-4be9-99c5-507b07c61810",
       "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5c3a0dfc-6456-4a5a-9ecc-7a9e83d7297b",
+              "name": "cleanCvData",
+              "value": "=الاسم: {{ $json.body.cvData.prenom }} {{ $json.body.cvData.nom }}\n\nالملخص: {{ $json.body.cvData.resume }}\n\nالوظيفة المستهدفة: {{ $json.body.cvData.poste }}\n",
+              "type": "string"
+            },
+            {
+              "id": "32395b0c-7c3d-4253-a4c1-8e62d664e6c5",
+              "name": "jobDescription",
+              "value": "={{ $json.body.jobDescription }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        744
+      ],
+      "id": "431588de-2005-48c4-a83a-5ae882995783",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "model": "groq/compound-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        456,
+        968
+      ],
+      "id": "afed9ac7-7b9b-4ceb-86a2-613770c56650",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "groq/compound-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        232,
+        0
+      ],
+      "id": "9b491952-9c4b-4124-873d-05c725715a86",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
     }
   ],
   "connections": {
-    "Google Gemini Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Simple Memory": {
       "ai_memory": [
         [
@@ -942,19 +953,8 @@
       "main": [
         [
           {
-            "node": "AI Agent2",
+            "node": "Edit Fields",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent2",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -992,6 +992,39 @@
           }
         ]
       ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1003,7 +1036,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "6add4df2-c865-431c-81da-932de85c71c9",
+  "versionId": "ee51869f-86ec-4f2a-ba8e-536fb51e69eb",
   "activeVersionId": "58c867d1-d5d2-4659-a510-640dc20fd22d",
   "triggerCount": 2,
   "shared": [

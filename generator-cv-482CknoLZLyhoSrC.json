@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-21T11:58:22.750Z",
+  "updatedAt": "2026-01-21T12:25:19.674Z",
   "createdAt": "2026-01-19T14:18:38.890Z",
   "id": "482CknoLZLyhoSrC",
   "name": "Generator-Cv",
@@ -426,7 +426,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        304
+        312
       ],
       "id": "1052f111-7500-49e3-bdd3-644e8da0c62f",
       "name": "Webhook1",
@@ -435,7 +435,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Texte à améliorer : {{ $json.body.text }}",
+        "text": "=Tu es un expert en rédaction de CV.\nTon rôle : Réécrire le texte ci-dessous pour qu'il soit plus professionnel, percutant et concis.\n\nRègles STRICTES :\n1. Ne réponds QUE par le texte réécrit.\n2. Pas de \"Voici une proposition\", pas de guillemets, pas d'explications avant ou après.\n3. Fais un seul paragraphe fluide (pas de liste à puces).\n4. Utilise un ton direct et actif (ex: \"Développeur Full Stack expert...\", \"Passionné par...\").\n\nTexte à améliorer :\n{{ $json.body.text }}",
         "options": {
           "systemMessage": "Tu es un expert en ressources humaines et recrutement. Ta mission : Réécrire le texte suivant pour qu'il soit plus professionnel, percutant et sans fautes d'orthographe. Garde le même sens, mais améliore le style. Sois concis. "
         }
@@ -471,7 +471,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={\n  \"improvedText\": \"{{ $node['Nom_De_Votre_Node_IA'].json.output }}\"\n}",
+        "responseBody": "={{ { \"improvedText\": $node[\"AI Agent1\"].json.output } }}",
         "options": {
           "responseHeaders": {
             "entries": [
@@ -859,7 +859,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "62228c4d-51af-4247-9d08-4e032e1a63e9",
+  "versionId": "9f413440-14d7-4727-8f36-012b95cf991d",
   "activeVersionId": "58c867d1-d5d2-4659-a510-640dc20fd22d",
   "triggerCount": 2,
   "shared": [

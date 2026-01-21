@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-20T13:41:59.056Z",
+  "updatedAt": "2026-01-21T09:24:10.611Z",
   "createdAt": "2026-01-19T14:18:38.890Z",
   "id": "482CknoLZLyhoSrC",
   "name": "Generator-Cv",
@@ -30,7 +30,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        232,
+        240,
         0
       ],
       "id": "dd889d64-936b-4add-b0cc-04a6bac5c448",
@@ -50,7 +50,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        360,
+        368,
         0
       ],
       "id": "b4656f92-0c3b-4a5d-8e44-9a46c8401d2f",
@@ -64,7 +64,7 @@
       "typeVersion": 2,
       "position": [
         576,
-        -120
+        -128
       ],
       "id": "c0a8d93f-9d86-428e-a3e4-009df87292b3",
       "name": "Code in JavaScript"
@@ -125,7 +125,7 @@
       "typeVersion": 3.4,
       "position": [
         800,
-        -120
+        -128
       ],
       "id": "048cbbb3-6163-4dd1-93e9-33d8a596ca20",
       "name": "Switch"
@@ -139,7 +139,7 @@
       "typeVersion": 1,
       "position": [
         1248,
-        -120
+        -128
       ],
       "id": "d89f06da-8e17-46dd-afca-2945e9b5472e",
       "name": "Get many rows",
@@ -178,7 +178,7 @@
       "typeVersion": 2.3,
       "position": [
         1472,
-        -120
+        -128
       ],
       "id": "65bf592c-ce27-461f-98c7-542c49b69f42",
       "name": "If"
@@ -193,7 +193,7 @@
       "typeVersion": 1.5,
       "position": [
         2368,
-        -216
+        -224
       ],
       "id": "c7b1f2a0-4449-4694-8e68-bfd9baeec494",
       "name": "Respond to Webhook1"
@@ -227,7 +227,7 @@
       "typeVersion": 1,
       "position": [
         1920,
-        -24
+        -32
       ],
       "id": "62f16b5c-4744-414d-8106-c8d2e81a6507",
       "name": "Create a row",
@@ -273,7 +273,7 @@
       "typeVersion": 4.3,
       "position": [
         1696,
-        -24
+        -32
       ],
       "id": "e04e7b80-2fc5-4201-a2e1-363538f63281",
       "name": "HTTP Request"
@@ -309,7 +309,7 @@
       "typeVersion": 1,
       "position": [
         1920,
-        -216
+        -224
       ],
       "id": "6f276be0-6cff-44b5-97a5-3fa4b712e154",
       "name": "Update a row",
@@ -328,7 +328,7 @@
       "typeVersion": 1,
       "position": [
         1024,
-        -24
+        -32
       ],
       "id": "1c0ee9ac-794c-4ef6-95a1-10cd63828808",
       "name": "Classic Template",
@@ -349,7 +349,7 @@
       "typeVersion": 1,
       "position": [
         1024,
-        -216
+        -224
       ],
       "id": "04984302-2f9b-40a7-ac14-18f5ae712e7c",
       "name": "Modern Template",
@@ -369,7 +369,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         768,
-        -456
+        -464
       ],
       "typeVersion": 1,
       "id": "3e6855a1-5230-4c63-8680-201eb796b9f0",
@@ -385,7 +385,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1168,
-        -472
+        -480
       ],
       "typeVersion": 1,
       "id": "70a4ed3a-29d6-452c-9a68-352bf2b23560",
@@ -399,8 +399,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        504,
-        -456
+        512,
+        -464
       ],
       "typeVersion": 1,
       "id": "7b34cfc5-0d1c-4b70-bd29-ef53ccb36ff2",
@@ -415,8 +415,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        152,
-        -528
+        128,
+        -480
       ],
       "typeVersion": 1,
       "id": "97785647-bbf1-4699-92bd-430a55f3cdd5",
@@ -431,8 +431,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -27,
-        -88
+        -32,
+        -96
       ],
       "typeVersion": 1,
       "id": "b8b6dd82-4e12-4f59-b167-2f7207c30724",
@@ -466,7 +466,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        312
+        320
       ],
       "id": "1052f111-7500-49e3-bdd3-644e8da0c62f",
       "name": "Webhook1",
@@ -485,7 +485,7 @@
       "typeVersion": 3.1,
       "position": [
         224,
-        312
+        320
       ],
       "id": "1fd39519-06e5-42b7-80b9-6e81ce6aa87c",
       "name": "AI Agent1"
@@ -497,8 +497,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        296,
-        536
+        304,
+        544
       ],
       "id": "a89bfe0f-6a68-4aa7-877a-74af82573f08",
       "name": "Google Gemini Chat Model1",
@@ -518,7 +518,7 @@
       "typeVersion": 1.5,
       "position": [
         576,
-        312
+        320
       ],
       "id": "6078a1cd-cd62-4cb1-9a38-bbce817b6931",
       "name": "Respond to Webhook"
@@ -552,7 +552,7 @@
       "typeVersion": 2.3,
       "position": [
         2144,
-        -120
+        -128
       ],
       "id": "6cf712cb-a416-4b3c-ac50-daddb7555d73",
       "name": "If1"
@@ -569,7 +569,7 @@
       "typeVersion": 1.5,
       "position": [
         2368,
-        -24
+        -32
       ],
       "id": "cd34935e-259f-4fde-b42f-cc471b8ee615",
       "name": "Respond to Webhook2"
@@ -797,8 +797,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "c154e431-fa23-4d8c-af41-e9126b2b18cc",
-  "activeVersionId": "a3fadf38-4d57-4a67-a29a-cb065ba9c60d",
+  "versionId": "b4499086-e028-41da-80c9-eab7ca2a5d34",
+  "activeVersionId": "c154e431-fa23-4d8c-af41-e9126b2b18cc",
   "triggerCount": 1,
   "shared": [
     {
@@ -810,9 +810,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-20T13:21:51.000Z",
-    "createdAt": "2026-01-20T13:21:47.074Z",
-    "versionId": "a3fadf38-4d57-4a67-a29a-cb065ba9c60d",
+    "updatedAt": "2026-01-21T09:09:50.000Z",
+    "createdAt": "2026-01-20T13:41:59.144Z",
+    "versionId": "c154e431-fa23-4d8c-af41-e9126b2b18cc",
     "workflowId": "482CknoLZLyhoSrC",
     "nodes": [
       {
@@ -827,7 +827,7 @@
         "typeVersion": 3.1,
         "position": [
           224,
-          -184
+          -224
         ],
         "id": "5d8e7504-cd1b-48d9-bf1a-05449880c2a5",
         "name": "AI Agent"
@@ -840,7 +840,7 @@
         "typeVersion": 1,
         "position": [
           232,
-          40
+          0
         ],
         "id": "dd889d64-936b-4add-b0cc-04a6bac5c448",
         "name": "Google Gemini Chat Model",
@@ -860,7 +860,7 @@
         "typeVersion": 1.3,
         "position": [
           360,
-          40
+          0
         ],
         "id": "b4656f92-0c3b-4a5d-8e44-9a46c8401d2f",
         "name": "Simple Memory"
@@ -873,7 +873,7 @@
         "typeVersion": 2,
         "position": [
           576,
-          -80
+          -120
         ],
         "id": "c0a8d93f-9d86-428e-a3e4-009df87292b3",
         "name": "Code in JavaScript"
@@ -934,7 +934,7 @@
         "typeVersion": 3.4,
         "position": [
           800,
-          -80
+          -120
         ],
         "id": "048cbbb3-6163-4dd1-93e9-33d8a596ca20",
         "name": "Switch"
@@ -948,7 +948,7 @@
         "typeVersion": 1,
         "position": [
           1248,
-          -80
+          -120
         ],
         "id": "d89f06da-8e17-46dd-afca-2945e9b5472e",
         "name": "Get many rows",
@@ -987,7 +987,7 @@
         "typeVersion": 2.3,
         "position": [
           1472,
-          -80
+          -120
         ],
         "id": "65bf592c-ce27-461f-98c7-542c49b69f42",
         "name": "If"
@@ -1001,8 +1001,8 @@
         "type": "n8n-nodes-base.respondToWebhook",
         "typeVersion": 1.5,
         "position": [
-          2432,
-          -96
+          2368,
+          -216
         ],
         "id": "c7b1f2a0-4449-4694-8e68-bfd9baeec494",
         "name": "Respond to Webhook1"
@@ -1036,7 +1036,7 @@
         "typeVersion": 1,
         "position": [
           1920,
-          64
+          -24
         ],
         "id": "62f16b5c-4744-414d-8106-c8d2e81a6507",
         "name": "Create a row",
@@ -1082,7 +1082,7 @@
         "typeVersion": 4.3,
         "position": [
           1696,
-          -8
+          -24
         ],
         "id": "e04e7b80-2fc5-4201-a2e1-363538f63281",
         "name": "HTTP Request"
@@ -1118,7 +1118,7 @@
         "typeVersion": 1,
         "position": [
           1920,
-          -224
+          -216
         ],
         "id": "6f276be0-6cff-44b5-97a5-3fa4b712e154",
         "name": "Update a row",
@@ -1137,7 +1137,7 @@
         "typeVersion": 1,
         "position": [
           1024,
-          16
+          -24
         ],
         "id": "1c0ee9ac-794c-4ef6-95a1-10cd63828808",
         "name": "Classic Template",
@@ -1158,7 +1158,7 @@
         "typeVersion": 1,
         "position": [
           1024,
-          -176
+          -216
         ],
         "id": "04984302-2f9b-40a7-ac14-18f5ae712e7c",
         "name": "Modern Template",
@@ -1177,8 +1177,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          784,
-          -384
+          768,
+          -456
         ],
         "typeVersion": 1,
         "id": "3e6855a1-5230-4c63-8680-201eb796b9f0",
@@ -1193,8 +1193,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          1184,
-          -384
+          1168,
+          -472
         ],
         "typeVersion": 1,
         "id": "70a4ed3a-29d6-452c-9a68-352bf2b23560",
@@ -1208,8 +1208,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          528,
-          -448
+          504,
+          -456
         ],
         "typeVersion": 1,
         "id": "7b34cfc5-0d1c-4b70-bd29-ef53ccb36ff2",
@@ -1224,8 +1224,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          144,
-          -448
+          152,
+          -528
         ],
         "typeVersion": 1,
         "id": "97785647-bbf1-4699-92bd-430a55f3cdd5",
@@ -1240,8 +1240,8 @@
         },
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          -32,
-          -96
+          -27,
+          -88
         ],
         "typeVersion": 1,
         "id": "b8b6dd82-4e12-4f59-b167-2f7207c30724",
@@ -1258,7 +1258,7 @@
         "typeVersion": 2.1,
         "position": [
           0,
-          -80
+          -112
         ],
         "id": "0f5317d3-5815-4a67-8f88-e4c7d0d1e8dc",
         "name": "Webhook",
@@ -1275,7 +1275,7 @@
         "typeVersion": 2.1,
         "position": [
           0,
-          400
+          312
         ],
         "id": "1052f111-7500-49e3-bdd3-644e8da0c62f",
         "name": "Webhook1",
@@ -1294,7 +1294,7 @@
         "typeVersion": 3.1,
         "position": [
           224,
-          392
+          312
         ],
         "id": "1fd39519-06e5-42b7-80b9-6e81ce6aa87c",
         "name": "AI Agent1"
@@ -1307,7 +1307,7 @@
         "typeVersion": 1,
         "position": [
           296,
-          616
+          536
         ],
         "id": "a89bfe0f-6a68-4aa7-877a-74af82573f08",
         "name": "Google Gemini Chat Model1",
@@ -1326,8 +1326,8 @@
         "type": "n8n-nodes-base.respondToWebhook",
         "typeVersion": 1.5,
         "position": [
-          832,
-          400
+          576,
+          312
         ],
         "id": "6078a1cd-cd62-4cb1-9a38-bbce817b6931",
         "name": "Respond to Webhook"
@@ -1344,7 +1344,7 @@
             "conditions": [
               {
                 "id": "9b47e0c3-135e-4f4a-ab9c-4075ecd8346b",
-                "leftValue": "={{ $node['Webhook'].json.body.nom + '.pdf' }}",
+                "leftValue": "={{ $node[\"Webhook\"].json.body.name }}",
                 "rightValue": "",
                 "operator": {
                   "type": "string",
@@ -1360,11 +1360,28 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2160,
-          -80
+          2144,
+          -120
         ],
         "id": "6cf712cb-a416-4b3c-ac50-daddb7555d73",
         "name": "If1"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "{\n  \"status\": \"error\",\n  \"message\": \"Désolé, l'URL du PDF est introuvable. Veuillez vérifier que les données ont été correctement enregistrées.\"\n}",
+          "options": {
+            "responseCode": 400
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          2368,
+          -24
+        ],
+        "id": "cd34935e-259f-4fde-b42f-cc471b8ee615",
+        "name": "Respond to Webhook2"
       }
     ],
     "connections": {
@@ -1570,12 +1587,18 @@
               "index": 0
             }
           ],
-          []
+          [
+            {
+              "node": "Respond to Webhook2",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
       }
     },
     "authors": "HAITAM NAJIM",
-    "name": "Version a3fadf38",
+    "name": "Version c154e431",
     "description": "",
     "autosaved": false
   },

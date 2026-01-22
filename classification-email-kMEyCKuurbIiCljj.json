@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-22T10:25:25.566Z",
+  "updatedAt": "2026-01-22T11:54:31.878Z",
   "createdAt": "2026-01-22T10:04:31.383Z",
   "id": "kMEyCKuurbIiCljj",
   "name": "classification-email",
@@ -21,7 +21,7 @@
       "typeVersion": 1.3,
       "position": [
         -320,
-        -80
+        16
       ],
       "id": "5b5eca43-b63c-4f41-8212-275dd8abb7bf",
       "name": "Gmail Trigger",
@@ -52,6 +52,10 @@
             {
               "category": "finance et facturation",
               "description": "Les e-mails de finance et de facturation sont envoyés aux clients pour communiquer des informations liées aux paiements, factures, reçus, rappels de paiement ou relevés financiers. Ils ont pour objectif d’assurer la transparence des transactions, de faciliter la gestion des paiements et de prévenir les retards ou litiges financiers. Mots-clés : facture, paiement, reçu, relevé, rappel de paiement, transaction, gestion financière."
+            },
+            {
+              "category": "Non classé",
+              "description": "Les e-mails non classés regroupent toutes les communications qui ne correspondent pas aux catégories prédéfinies (priorité haute, support client, promotions ou finance). Ils ont pour objectif de centraliser les messages divers afin de permettre une révision manuelle et d’éviter la perte d’informations importantes mais non spécifiques. Mots-clés : divers, autre, information générale, notification, mise à jour, personnel, non spécifié."
             }
           ]
         },
@@ -63,7 +67,7 @@
       "typeVersion": 1.1,
       "position": [
         -96,
-        -80
+        16
       ],
       "id": "db617aab-bce8-4d66-a20a-998dec1e4d9c",
       "name": "Text Classifier"
@@ -76,7 +80,7 @@
       "typeVersion": 1,
       "position": [
         -32,
-        208
+        336
       ],
       "id": "f54f5809-f088-4d12-a64f-2de12aac511c",
       "name": "Google Gemini Chat Model",
@@ -182,6 +186,194 @@
           "name": "Gmail account"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_4031036067542000981"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        400
+      ],
+      "id": "a5f862c8-425f-47a9-ad7b-c7ee7a0ede74",
+      "name": "Add label to message",
+      "webhookId": "7f6003b8-29fc-4deb-9bd0-e1a17f36f89a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Gmail Trigger').item.json.Subject }}",
+        "options": {
+          "systemMessage": "Tu es un assistant administratif. Ton rôle est de répondre à l'e-mail reçu de manière concise et professionnelle.\n\nRemercie l'expéditeur pour son message.\n\nRéponds aux points soulevés (ou confirme que tu as bien reçu la facture/demande).\n\nGarde un ton poli et court (maximum 2 paragraphes).\n\nN'utilise pas de texte entre crochets comme [Nom]."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        480,
+        16
+      ],
+      "id": "44082574-c2e3-4ec8-864d-b5a3943c2364",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "groq/compound-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        560,
+        240
+      ],
+      "id": "67cd36e1-c9df-47c1-8542-81bf63c702c3",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $('Gmail Trigger').item.json.Subject }}",
+        "message": "={{ $json.output }}",
+        "options": {
+          "threadId": "={{ $('Gmail : Étiqueter Finance & Factures').item.json.threadId }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        16
+      ],
+      "id": "1db030a0-f5c4-4cab-8f9d-611fe979ca76",
+      "name": "Create a draft",
+      "webhookId": "38cff103-802d-4e5a-88a5-82874058b828",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "5507847449",
+        "text": "=🤖 **Assistant IA : Nouveau Brouillon Créé**  📥 **De :** {{ $('Gmail Trigger').item.json.From }} 📧 **Objet :** {{ $('Gmail Trigger').item.json.Subject }}  ✅ **Action :** L'e-mail a été analysé et une réponse (**Draft**) a été générée avec succès dans le fil de discussion (**Thread**) original.  📝 **Aperçu de la réponse :** {{ $node[\"AI Agent\"].json[\"output\"] }}  🚀 Vous pouvez maintenant réviser et envoyer le brouillon depuis votre compte Gmail.",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Oui, envoyer l'email",
+                    "additionalFields": {
+                      "callback_data": "envoyer_ok"
+                    }
+                  },
+                  {
+                    "text": "annuler_ok",
+                    "additionalFields": {
+                      "callback_data": "annuler_ok"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        16
+      ],
+      "id": "379e4732-51df-4d88-a5cc-a32bdccc99f4",
+      "name": "Send a text message",
+      "webhookId": "53c0bb73-93ae-4b28-9e2f-e7f231117ac1",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6786acf9-4957-4b67-93f0-5fe5320ef935",
+              "leftValue": "={{ $json.callback_query.data }}",
+              "rightValue": "envoyer_ok",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        240,
+        688
+      ],
+      "id": "9ef057d3-f28c-4a2f-8c5c-819107b4e110",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        16,
+        688
+      ],
+      "id": "d4b2fc3a-79d8-491a-8f9b-d0f61198f900",
+      "name": "Telegram Trigger2",
+      "webhookId": "1b3dfeb5-a407-4ef9-a597-4593a63cbf8b",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
     }
   ],
   "connections": {
@@ -236,6 +428,112 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Add label to message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail : Étiqueter Priorité Haute": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail : Étiqueter Support Client": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail : Étiqueter Promotions": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail : Étiqueter Finance & Factures": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add label to message": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a draft": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     }
@@ -249,7 +547,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "ed87d9b7-b782-4188-9e4c-92e5604e618e",
+  "versionId": "03aa8bfb-5527-4425-a4a4-8cee914d6fb8",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

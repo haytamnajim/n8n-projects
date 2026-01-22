@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-21T15:34:51.703Z",
+  "updatedAt": "2026-01-21T22:12:50.471Z",
   "createdAt": "2026-01-19T14:18:38.890Z",
   "id": "482CknoLZLyhoSrC",
   "name": "Generator-Cv",
@@ -208,7 +208,7 @@
       "typeVersion": 1,
       "position": [
         2144,
-        -16
+        -32
       ],
       "id": "62f16b5c-4744-414d-8106-c8d2e81a6507",
       "name": "Create a row",
@@ -622,7 +622,7 @@
       "typeVersion": 3.1,
       "position": [
         448,
-        744
+        640
       ],
       "id": "8a00bda7-be7b-43fa-a2c4-1777af368bd7",
       "name": "AI Agent2"
@@ -647,25 +647,10 @@
       "typeVersion": 1.3,
       "position": [
         584,
-        968
+        864
       ],
       "id": "ce12733b-00ee-44bd-913b-a34d67d92ece",
       "name": "Simple Memory2"
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "={{ $json.output }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.5,
-      "position": [
-        800,
-        744
-      ],
-      "id": "a2448508-80db-4be9-99c5-507b07c61810",
-      "name": "Respond to Webhook3"
     },
     {
       "parameters": {
@@ -705,7 +690,7 @@
       "typeVersion": 1,
       "position": [
         456,
-        968
+        864
       ],
       "id": "afed9ac7-7b9b-4ceb-86a2-613770c56650",
       "name": "Groq Chat Model",
@@ -735,6 +720,475 @@
           "name": "Groq account"
         }
       }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adapter-cv",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        1184
+      ],
+      "id": "d7244e60-2af9-4c5d-aff6-a174de16f4f6",
+      "name": "Webhook3",
+      "webhookId": "fa0f4487-045d-4cc0-bc7b-b30bf0b41529"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=INPUT CANDIDAT (JSON):\n{{ JSON.stringify($json.body.cvData) }}\n\nINPUT JOB (TEXTE):\n{{ $json.body.jobDescription }}",
+        "options": {
+          "systemMessage": "Tu es un Expert CV. Ta mission : Réécrire le contenu du candidat pour qu'il corresponde parfaitement à l'offre d'emploi.\n\nRÈGLES STRICTES :\n1. Réécris le \"summary\" (Résumé) pour intégrer les mots-clés de l'offre.\n2. Pour chaque expérience, mets en avant les tâches pertinentes pour ce poste, reformule si nécessaire pour coller au vocabulaire de l'offre.\n3. GARDE Exactement la même structure JSON que l'entrée (ne change pas les noms des clés).\n4. Renvoie UNIQUEMENT le JSON complet modifié, sans markdown ni intro."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        1184
+      ],
+      "id": "9ed8212b-920f-4a01-bd3a-20448d735b0b",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "model": "groq/compound-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        296,
+        1400
+      ],
+      "id": "aed44ece-0753-407b-8e08-6194596ea99e",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// تنظيف الرد من أي علامات Markdown قد يضيفها الذكاء الاصطناعي\nconst rawOutput = $input.first().json.output;\nconst cleanJson = rawOutput.replace(/```json|```/g, '').trim();\nreturn JSON.parse(cleanJson);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        1184
+      ],
+      "id": "a244cb80-9b07-40ce-a123-d26c4b694334",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.template }}",
+                    "rightValue": "modern",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "54c34916-4bff-4a75-98ff-935d6ba1ac93"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "45aeb440-d2f4-4d24-b553-8d01ab97ce78",
+                    "leftValue": "={{ $('Webhook').item.json.body.template }}",
+                    "rightValue": "Classic",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        1088
+      ],
+      "id": "9093ecb7-164a-4379-9436-80c0ffd3f408",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "resumes"
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        1088
+      ],
+      "id": "186df7ad-2dab-4ec6-a790-8e0f82f1c26f",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f319aa37-e751-46dd-93d0-49c011a00ccd",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "={{ $('Webhook').item.json.body.email }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1808,
+        1088
+      ],
+      "id": "d065ecf6-7c16-4ed3-910c-d174d10ff5aa",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  \"status\": \"success\",\n  \"pdf_url\": `https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/public/cv-bucket/${$('Webhook').first().json.body.name.replace(/\\s+/g, '_')}.pdf`\n}\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2720,
+        960
+      ],
+      "id": "71070a11-a546-42c7-87d7-76c7c0030bce",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "useCustomSchema": true,
+        "tableId": "resumes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "full_name",
+              "fieldValue": "={{ $('Webhook').item.json.body.prenom }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "fieldId": "template_type",
+              "fieldValue": "={{ $('Webhook').item.json.body.template }}"
+            },
+            {
+              "fieldId": "pdf_url",
+              "fieldValue": "=https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/public/cv-bucket/{{ $node[\"Webhook\"].json.body.nom }}.pdf"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        1184
+      ],
+      "id": "a960d784-479b-4325-afe9-e1d662b3c558",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/cv-bucket/{{ $('Webhook').first().json.body.name.replace(/\\s+/g, '_') }}.pdf",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "upsert",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer sb_secret_dDLrY1rj6t0bxTWJTsPR3Q_B1DLxlEb"
+            },
+            {
+              "name": "apikey",
+              "value": "sb_secret_dDLrY1rj6t0bxTWJTsPR3Q_B1DLxlEb"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2032,
+        1184
+      ],
+      "id": "de2d26c4-b76d-4dac-b5c7-e6c4543c02be",
+      "name": "HTTP Request3",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "resumes",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Get many rows1').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "template_type",
+              "fieldValue": "={{ $('Webhook').item.json.body.template }}"
+            },
+            {
+              "fieldId": "pdf_url",
+              "fieldValue": "=https://nhijgehvjwulxxnqjlzj.supabase.co/storage/v1/object/public/cv-bucket/{{ $item(0).$node[\"Webhook\"].json.body.nom }}.pdf"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        992
+      ],
+      "id": "05993c8a-17f7-4792-85fb-489b8132a06c",
+      "name": "Update a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9b47e0c3-135e-4f4a-ab9c-4075ecd8346b",
+              "leftValue": "={{ $('Webhook').first().json.body.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2496,
+        1056
+      ],
+      "id": "6060085b-e136-4598-b77d-83edbaeddb80",
+      "name": "If3",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"error\",\n  \"message\": \"Désolé, l'URL du PDF est introuvable. Veuillez vérifier que les données ont été correctement enregistrées.\"\n}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2720,
+        1152
+      ],
+      "id": "0d32ece5-fd7f-4e3a-bfd9-f18c130aa862",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://v2.api2pdf.com/chrome/pdf/html",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "2e8678c5-a117-4fc9-b1b0-7fd414ca0b8c"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ \n{\n  \"html\": `<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <style>\n        @page { size: A4; margin: 0; }\n        body {\n            font-family: 'Helvetica', Arial, sans-serif;\n            margin: 0; padding: 0; color: #333; font-size: 12px; line-height: 1.4;\n        }\n        .header { background-color: #1a4a7c; color: white; display: table; width: 100%; height: 160px; }\n        .header-left { display: table-cell; width: 160px; vertical-align: middle; background-color: #fff; border-right: 4px solid #1a4a7c; }\n        .header-left img { width: 100%; height: 160px; object-fit: cover; }\n        .header-right { display: table-cell; vertical-align: middle; padding: 20px 30px; }\n        .header-right h1 { margin: 0 0 10px 0; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; }\n        .contact-grid { display: block; font-size: 11px; }\n        .container { padding: 30px 40px; }\n        h2 { color: #000; font-size: 16px; border-bottom: 2px solid #1a4a7c; margin: 20px 0 10px 0; padding-bottom: 5px; text-transform: uppercase; }\n        .row { display: flex; width: 100%; gap: 40px; }\n        .column { flex: 1; }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <div class=\"header-left\">\n            <img src=\"${$json.photo}\">\n        </div>\n        <div class=\"header-right\">\n            <h1>${$json.name}</h1>\n            <div class=\"contact-grid\">\n                <div><b>Phone:</b> ${$json.phone}</div>\n                <div><b>Email:</b> ${$json.email}</div>\n                <div><b>LinkedIn:</b> ${$json.linkedin || 'N/A'}</div>\n                <div><b>GitHub:</b> ${$json.github || 'N/A'}</div>\n            </div>\n        </div>\n    </div>\n    <div class=\"container\">\n        <h2>Profil</h2>\n        <p>${$json.summary}</p>\n        \n        <h2>Experience</h2>\n        ${$json.experiences.map(exp => `\n            <div style=\"margin-bottom: 15px;\">\n                <div style=\"display: flex; justify-content: space-between; font-weight: bold;\">\n                    <span>${exp.poste_experience} | ${exp.entreprise}</span>\n                    <span>${exp.date_debut} – ${exp.date_fin}</span>\n                </div>\n                <ul><li>${exp.description_experience}</li></ul>\n            </div>\n        `).join('')}\n\n        <div class=\"row\">\n            <div class=\"column\">\n                <h2>Compétences</h2>\n                <ul>\n                    ${$json.skills[\"Programming Languages\"] ? $json.skills[\"Programming Languages\"].map(skill => `<li>${skill}</li>`).join('') : '<li>N/A</li>'}\n                </ul>\n            </div>\n        </div>\n    </div>\n</body>\n</html>`\n} \n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1136,
+        992
+      ],
+      "id": "72f2da2a-3c47-4898-96c9-fe5b63e7914b",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://v2.api2pdf.com/chrome/pdf/html",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "2e8678c5-a117-4fc9-b1b0-7fd414ca0b8c"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ \n{\n  \"html\": `<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <style>\n        @page { size: A4; margin: 20mm; }\n        body {\n            font-family: 'Times New Roman', Times, serif;\n            line-height: 1.5;\n            color: #333;\n            margin: 0;\n            padding: 0;\n            font-size: 11pt;\n        }\n        .header {\n            text-align: center;\n            border-bottom: 2px solid #000;\n            padding-bottom: 10px;\n            margin-bottom: 20px;\n        }\n        .header h1 {\n            margin: 0;\n            font-size: 24pt;\n            text-transform: uppercase;\n            letter-spacing: 1px;\n        }\n        .contact-info {\n            margin-top: 5px;\n            font-size: 10pt;\n        }\n        h2 {\n            font-size: 14pt;\n            text-transform: uppercase;\n            border-bottom: 1px solid #ccc;\n            margin-top: 20px;\n            margin-bottom: 10px;\n            color: #000;\n        }\n        .experience-item {\n            margin-bottom: 15px;\n        }\n        .exp-header {\n            display: flex;\n            justify-content: space-between;\n            font-weight: bold;\n        }\n        .company-name {\n            color: #444;\n            font-style: italic;\n        }\n        ul {\n            margin-top: 5px;\n            padding-left: 20px;\n        }\n        .skills-container {\n            display: grid;\n            grid-template-columns: 1fr 1fr;\n            gap: 10px;\n        }\n        .skill-category {\n            font-weight: bold;\n        }\n    </style>\n</head>\n<body>\n\n    <div class=\"header\">\n        <h1>${$json.name}</h1>\n        <div class=\"contact-info\">\n            ${$json.phone} | ${$json.email} <br>\n            LinkedIn: ${$json.linkedin || 'N/A'} | GitHub: ${$json.github || 'N/A'}\n        </div>\n    </div>\n\n    <div class=\"section\">\n        <h2>Profil Professionnel</h2>\n        <p>${$json.summary}</p>\n    </div>\n\n    <div class=\"section\">\n        <h2>Expérience Professionnelle</h2>\n        ${$json.experiences.map(exp => `\n            <div class=\"experience-item\">\n                <div class=\"exp-header\">\n                    <span>${exp.poste_experience}</span>\n                    <span>${exp.date_debut} – ${exp.date_fin}</span>\n                </div>\n                <div class=\"company-name\">${exp.entreprise}</div>\n                <ul>\n                    <li>${exp.description_experience}</li>\n                </ul>\n            </div>\n        `).join('')}\n    </div>\n\n    <div class=\"section\">\n        <h2>Compétences Techniques</h2>\n        <div class=\"skills-container\">\n            <div>\n                <span class=\"skill-category\">Langages:</span> \n                ${$json.skills[\"Programming Languages\"] ? $json.skills[\"Programming Languages\"].join(', ') : 'N/A'}\n            </div>\n            <div>\n                <span class=\"skill-category\">Frameworks:</span> \n                ${$json.skills[\"Frontend Frameworks\"] ? $json.skills[\"Frontend Frameworks\"].join(', ') : 'N/A'}\n            </div>\n        </div>\n    </div>\n\n    <div class=\"section\">\n        <h2>Formation</h2>\n        <div class=\"exp-header\">\n            <span>Master en Informatique</span>\n            <span>2023</span>\n        </div>\n        <div class=\"company-name\">SUPMTI, Rabat</div>\n    </div>\n\n</body>\n</html>`\n} \n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1360,
+        1184
+      ],
+      "id": "5275071b-0cb5-4b36-bed1-cca1f89e05cd",
+      "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.FileUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1360,
+        992
+      ],
+      "id": "fd0b34e7-b488-40be-9309-a7230668a991",
+      "name": "Download PDF1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        800,
+        744
+      ],
+      "id": "a2448508-80db-4be9-99c5-507b07c61810",
+      "name": "Respond to Webhook3"
     }
   ],
   "connections": {
@@ -1025,6 +1479,181 @@
           }
         ]
       ]
+    },
+    "Webhook3": {
+      "main": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update a row1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "Download PDF1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download PDF1": {
+      "main": [
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1036,7 +1665,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "ee51869f-86ec-4f2a-ba8e-536fb51e69eb",
+  "versionId": "3eefd07f-5c5b-4053-a9be-1da107c1866b",
   "activeVersionId": "58c867d1-d5d2-4659-a510-640dc20fd22d",
   "triggerCount": 2,
   "shared": [

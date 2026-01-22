@@ -1,0 +1,266 @@
+{
+  "updatedAt": "2026-01-22T10:25:25.566Z",
+  "createdAt": "2026-01-22T10:04:31.383Z",
+  "id": "kMEyCKuurbIiCljj",
+  "name": "classification-email",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -320,
+        -80
+      ],
+      "id": "5b5eca43-b63c-4f41-8212-275dd8abb7bf",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.Subject }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Haute priorité",
+              "description": "Les e-mails qui nécessitent une attention ou une action immédiate, généralement envoyés par des parties prenantes clés, des clients ou des décideurs. Ces messages contiennent souvent des demandes sensibles au facteur temps, des échéances ou des situations urgentes. Mots-clés : urgent, dès que possible, immédiat, date limite, action requise, priorité maximale."
+            },
+            {
+              "category": "Support client",
+              "description": "Les e-mails de support client qui nécessitent une assistance rapide ou une prise en charge immédiate, généralement envoyés par des clients rencontrant des problèmes techniques, des demandes d’information ou des réclamations. Ces messages concernent souvent des incidents, des dysfonctionnements de service ou des demandes sensibles au temps ayant un impact direct sur la satisfaction du client. Mots-clés : support client, assistance, problème technique, réclamation, ticket, réponse rapide, satisfaction client."
+            },
+            {
+              "category": "Promotions ",
+              "description": "Les e-mails promotionnels visant à informer les clients des offres spéciales, réductions, nouveautés ou campagnes marketing, généralement envoyés par les équipes commerciales ou marketing. Ces messages ont pour objectif d’attirer l’attention du client, d’encourager l’achat et de promouvoir des produits ou services sur une période limitée. Mots-clés : promotion, offre spéciale, réduction, remise, campagne marketing, nouveauté, durée limitée."
+            },
+            {
+              "category": "finance et facturation",
+              "description": "Les e-mails de finance et de facturation sont envoyés aux clients pour communiquer des informations liées aux paiements, factures, reçus, rappels de paiement ou relevés financiers. Ils ont pour objectif d’assurer la transparence des transactions, de faciliter la gestion des paiements et de prévenir les retards ou litiges financiers. Mots-clés : facture, paiement, reçu, relevé, rappel de paiement, transaction, gestion financière."
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "Veuillez analyser le texte fourni par l’utilisateur et le classer avec précision dans l’une des catégories indiquées dans la liste suivante : {categories}.\nAssurez-vous de respecter scrupuleusement les instructions de formatage indiquées ci-dessous pour la sortie.\nNe fournissez aucune explication ni commentaire supplémentaire et ne renvoyez que la structure JSON requise, conforme aux directives spécifiées."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -96,
+        -80
+      ],
+      "id": "db617aab-bce8-4d66-a20a-998dec1e4d9c",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        208
+      ],
+      "id": "f54f5809-f088-4d12-a64f-2de12aac511c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_1753102577728039164"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        -368
+      ],
+      "id": "8e770e62-3606-4de3-979d-d915a3bf3012",
+      "name": "Gmail : Étiqueter Priorité Haute",
+      "webhookId": "44247c2b-1ce6-4988-8703-9c5c32e61edb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_4150217713420907988"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        -176
+      ],
+      "id": "dddd38f1-af02-4be2-a95b-713e4890c43e",
+      "name": "Gmail : Étiqueter Support Client",
+      "webhookId": "44247c2b-1ce6-4988-8703-9c5c32e61edb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_2052408102059576527"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        16
+      ],
+      "id": "4b65a69d-83fb-4d58-814b-92274824e8d5",
+      "name": "Gmail : Étiqueter Promotions",
+      "webhookId": "44247c2b-1ce6-4988-8703-9c5c32e61edb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "Label_7399848836516726216"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        256,
+        208
+      ],
+      "id": "6538b3f4-e22d-489c-874c-788a75229a5c",
+      "name": "Gmail : Étiqueter Finance & Factures",
+      "webhookId": "44247c2b-1ce6-4988-8703-9c5c32e61edb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Gmail : Étiqueter Priorité Haute",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail : Étiqueter Support Client",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail : Étiqueter Promotions",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail : Étiqueter Finance & Factures",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "ed87d9b7-b782-4188-9e4c-92e5604e618e",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-22T10:04:31.400Z",
+      "createdAt": "2026-01-22T10:04:31.400Z",
+      "role": "workflow:owner",
+      "workflowId": "kMEyCKuurbIiCljj",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

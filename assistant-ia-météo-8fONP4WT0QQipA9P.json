@@ -1,0 +1,477 @@
+{
+  "updatedAt": "2026-01-27T08:58:19.685Z",
+  "createdAt": "2026-01-25T11:31:00.965Z",
+  "id": "8fONP4WT0QQipA9P",
+  "name": "Assistant IA Météo",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4579519e-a76f-4d34-8f92-4cf8b33d24bf",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -384,
+        -16
+      ],
+      "id": "8818ca2a-4614-4ae2-a015-f36eed185da1",
+      "name": "Webhook",
+      "webhookId": "4579519e-a76f-4d34-8f92-4cf8b33d24bf"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=CONTEXTE MÉTÉO ACTUEL :\nVille : {{ $json.body.weatherContext.city }}\nTempérature : {{ $json.body.weatherContext.temp }}°C\nDescription : {{ $json.body.weatherContext.desc }}\n\nMESSAGE DE L’UTILISATEUR :\n{{ $json.body.message }}\n\nLogique à suivre :\n1. Si l’utilisateur décrit sa tenue :\n   - Juge si elle est adaptée à la météo.\n   - Dis si elle est trop chaude, trop légère ou correcte.\n   - Termine par : « Voulez-vous que je vous suggère un meilleur look en image ? »\n\n2. Si l’utilisateur demande une autre ville :\n   - Réponds UNIQUEMENT au format JSON :\n     {\"action\":\"change_city\",\"city\":\"Nom de la ville\"}\n\n3. Sinon :\n   - Donne la météo actuelle de la ville.\n   - Demande : « Souhaitez-vous que je génère pour vous un look convenable ? »\n\n4. Si l’utilisateur accepte le look :\n   - Donne des conseils vestimentaires.\n   - Termine EXACTEMENT par :\n\nIMAGE_PROMPT:\nA 3D low-poly stylized mannequin in a strict T-pose, full body, front view,\nwearing [DETAILED CLOTHING LIST],\nsmooth matte coral pink and dark brown color palette,\nsimplified geometric anatomy,\narticulated joints clearly visible at neck, shoulders, elbows, wrists, hips, knees and ankles,\nno facial features, no hair, no eyes, no mouth,\nfashion display mannequin style,\nneutral proportions, symmetrical body,\ngrey gradient studio background with a subtle floor shadow,\nsoft studio lighting,\nclean minimalist 3D render,\ncentered composition\n",
+        "options": {
+          "systemMessage": "Tu es un expert mode et météo pour l’application “Météo Maroc”.\n\nTon rôle est de conseiller les utilisateurs sur leur tenue vestimentaire\nen fonction de la ville, de la température et de la description météo fournies.\n\nRègles obligatoires :\n- Tu réponds TOUJOURS en français (sauf IMAGE_PROMPT qui doit être en anglais).\n- Ton ton est amical, moderne et professionnel avec quelques emojis 🌤️👗.\n- Tes réponses sont concises, utiles et claires.\n- Tu respectes strictement les règles vestimentaires selon la température :\n  • < 10°C : gros manteau, écharpe, gants\n  • 10–18°C : veste légère, pull ou trench-coat\n  • 18–25°C : t-shirt, chemise légère, pantalon léger\n  • > 25°C : vêtements courts, lunettes de soleil, chapeau\n- Si la météo indique de la pluie : recommande un parapluie ou un imperméable ☔\n- Tu ne changes jamais le style visuel de l’image.\n- Tu ne modifies que la liste des vêtements.\n\nQuand tu génères une image, tu termines TOUJOURS par un bloc IMAGE_PROMPT\nen anglais, sans commentaire après.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -160,
+        -16
+      ],
+      "id": "5f2dce99-9b2c-434d-9b52-ff6080baea84",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "lCqcgfePm2KDotZq"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -32,
+        208
+      ],
+      "id": "0dbf277d-18f5-45e2-8a66-906d2d93bec2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1072,
+        -112
+      ],
+      "id": "11148e6c-b0fe-49b0-a103-95cdcb8cfa98",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "image/png"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"inputs\": \"A professional fashion photo of a person wearing {{ $node[\"AI Agent\"].json[\"output\"].split('.').find(s => s.includes('conseille') || s.includes('porte')) || 'modern clothes' }} in {{ $node[\"Webhook\"].json[\"body\"][\"weatherContext\"][\"city\"] }}, realistic, high quality\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        416,
+        -112
+      ],
+      "id": "c7ac7f2e-e2fe-4502-b87a-36f643cb7138",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7baec749-1caa-4ac9-96df-a9b88df5141a",
+              "leftValue": "={{ $node[\"AI Agent\"].json.output }}",
+              "rightValue": "IMAGE_PROMPT",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "65fbeee2-4cd3-4697-98f4-b67ba9d2ec4f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        80
+      ],
+      "id": "87ed4802-661c-4123-ac96-e12bc53539c6",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        208
+      ],
+      "id": "5dddea5f-5128-4274-8495-dcc21d14c088",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        -112
+      ],
+      "id": "f3c59b20-3ed9-469e-bcd1-5e4faf9a2776",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e8b8775d-e2e7-46d5-b1da-7e71266d5057",
+              "name": "text",
+              "value": "Voici votre look !",
+              "type": "string"
+            },
+            {
+              "id": "a5fcd6ae-2b57-4db2-bd75-d86ac1f06d62",
+              "name": "imageUrl",
+              "value": "={{ \"data:image/png;base64,\" + $json.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        848,
+        -112
+      ],
+      "id": "e98cfa54-dee9-4c14-81da-53b8b5dd0355",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "08ec9581-34ff-42f3-b89f-c86e825651c2",
+  "activeVersionId": "2b726f05-337e-4ba8-87f3-ff1084f0ece5",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-01-25T11:31:01.011Z",
+      "createdAt": "2026-01-25T11:31:01.011Z",
+      "role": "workflow:owner",
+      "workflowId": "8fONP4WT0QQipA9P",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-26T10:24:16.000Z",
+    "createdAt": "2026-01-26T09:47:15.441Z",
+    "versionId": "2b726f05-337e-4ba8-87f3-ff1084f0ece5",
+    "workflowId": "8fONP4WT0QQipA9P",
+    "nodes": [
+      {
+        "parameters": {
+          "path": "4579519e-a76f-4d34-8f92-4cf8b33d24bf",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -384,
+          -16
+        ],
+        "id": "8818ca2a-4614-4ae2-a015-f36eed185da1",
+        "name": "Webhook",
+        "webhookId": "4579519e-a76f-4d34-8f92-4cf8b33d24bf"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.message }}\n\n---\nCONTEXTE MÉTÉO ACTUEL :\nVille : {{ $json.weatherContext.city }}\nTempérature : {{ $json.weatherContext.temp }}°C\nCiel : {{ $json.weatherContext.desc }}",
+          "options": {
+            "systemMessage": "Tu es un expert en mode et météo pour l'application \"Météo Maroc\". \nTon rôle est d'aider les utilisateurs à choisir leurs vêtements en fonction de la ville et de la température fournies.\n\nInstructions :\n1. Sois amical, moderne et utilise quelques emojis.\n2. Si l'utilisateur demande quoi porter, analyse la température :\n   - < 10°C : Gros manteau, écharpe, gants.\n   - 10-18°C : Veste légère, pull ou trench-coat.\n   - 18-25°C : T-shirt, chemise légère, pantalon léger.\n   - > 25°C : Vêtements courts, lunettes de soleil, chapeau.\n3. Tiens compte du ciel (ex: s'il pleut, recommande un parapluie ou un imperméable).\n4. Réponds toujours en français.\n5. Garde tes réponses concises et utiles."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          -160,
+          -16
+        ],
+        "id": "5f2dce99-9b2c-434d-9b52-ff6080baea84",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -152,
+          208
+        ],
+        "id": "9805a673-2480-4bab-a7bd-da4bd98e0f47",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "LxG8UkEyW5ofJq1B",
+            "name": "Google Gemini(PaLM) Api account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "lCqcgfePm2KDotZq"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          -24,
+          208
+        ],
+        "id": "0dbf277d-18f5-45e2-8a66-906d2d93bec2",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          192,
+          -16
+        ],
+        "id": "11148e6c-b0fe-49b0-a103-95cdcb8cfa98",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "HAITAM NAJIM",
+    "name": "Version 2b726f05",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}

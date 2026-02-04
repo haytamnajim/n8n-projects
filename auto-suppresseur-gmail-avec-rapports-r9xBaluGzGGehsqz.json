@@ -1,0 +1,757 @@
+{
+  "updatedAt": "2026-01-28T09:09:37.723Z",
+  "createdAt": "2026-01-27T09:30:03.293Z",
+  "id": "r9xBaluGzGGehsqz",
+  "name": "Auto-Suppresseur Gmail avec Rapports",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 3
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -560,
+        384
+      ],
+      "id": "32665fdb-e220-4bc7-bc88-36f19c563e32",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fea36561-241b-4a6f-82dd-c7a00d4de04d",
+              "name": "JOURS_ANCIENNETE",
+              "value": "730",
+              "type": "string"
+            },
+            {
+              "id": "4ab09726-3871-4ee0-bfc2-e9c7015b77b8",
+              "name": "TAILLE_MO",
+              "value": "10",
+              "type": "string"
+            },
+            {
+              "id": "c7afdc21-ec05-4d8e-92d6-070047da12bf",
+              "name": "TAILLE_LOT",
+              "value": "10",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        384
+      ],
+      "id": "dc7a2cc6-16d3-4d90-be11-df299e0f2f42",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "q": "=older_than:{{ $('Edit Fields').item.json.JOURS_ANCIENNETE }}d"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        64
+      ],
+      "id": "74eb4a59-6c7c-4866-93e0-b5d5a0f165ac",
+      "name": "Recherche Vieux",
+      "webhookId": "b954e126-7d58-4fcd-a159-03c9fcca0aa4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "q": "=larger:{{ $('Edit Fields').item.json.TAILLE_MO }}M"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        256
+      ],
+      "id": "1796515a-14e2-4750-a35d-9ce63f6bd70e",
+      "name": "Recherche Gros",
+      "webhookId": "0b42e846-21c2-4744-ac3e-9bdc6b5d0129",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        560,
+        320
+      ],
+      "id": "cabe6632-7226-4357-ac38-c92a540d0351",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "messageId": "={{ $('Loop Over Items').item.json.id }}"
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1904,
+        384
+      ],
+      "id": "cd8c18f0-c0a1-4136-8e3b-cd8eccc1ffff",
+      "name": "Delete a message1",
+      "webhookId": "e072bf7c-6750-406e-9eb8-4fddf5f6c7b9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2128,
+        448
+      ],
+      "id": "5e3504fd-445e-4c04-9417-77cc5154a085",
+      "name": "Wait",
+      "webhookId": "7f8a1640-6064-4472-87d5-14226b813b6f"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1456,
+        352
+      ],
+      "id": "7794480d-303e-46bd-b7bd-ff0f46e92afc",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "chatId": "5507847449",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1904,
+        192
+      ],
+      "id": "d743fbe0-39d1-4d07-8d71-a89a2fd7ce87",
+      "name": "Send a text message",
+      "webhookId": "7366e200-9058-413c-91a6-3473bde339c3",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "q": " category:promotions older_than:2d"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        448
+      ],
+      "id": "5fe5bec8-3920-42b6-8881-f6cba8856c99",
+      "name": "Recherche Newsletters",
+      "webhookId": "1d1d373f-c309-4320-88b7-b978dcdd06a7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 5,
+        "filters": {
+          "q": "has:attachment larger:5M older_than:1y"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        640
+      ],
+      "id": "0233ac17-aa51-4367-97e1-1ea5c0a320e3",
+      "name": "Recherche Pièces Jointes",
+      "webhookId": "1d1d373f-c309-4320-88b7-b978dcdd06a7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nlet totalBytes = 0;\nlet stats = {\n  newsletters: 0,\n  gros: 0,\n  anciens: 0,\n  pieces_jointes: 0\n};\n\nitems.forEach(item => {\n  // Calcul taille\n  if (item.json.sizeEstimate) {\n    totalBytes += item.json.sizeEstimate;\n  }\n  \n  // Détection Catégorie (Logique simplifiée)\n  const labels = item.json.labelIds || [];\n  const size = item.json.sizeEstimate || 0;\n  \n  if (labels.includes('CATEGORY_PROMOTIONS')) {\n    stats.newsletters++;\n  } else if (size > 10485760) { // > 10 Mo\n    stats.gros++;\n  } else if (item.json.payload?.mimeType !== 'text/plain' && size > 5242880) { // PJ > 5Mo\n     stats.pieces_jointes++;\n  } else {\n    stats.anciens++; // Le reste = anciens\n  }\n});\n\nconst totalMB = (totalBytes / (1024 * 1024)).toFixed(2);\n\n// Stocker tout dans la mémoire\n$execution.customData.set('totalSize', String(totalMB));\n$execution.customData.set('totalEmails', String(items.length));\n$execution.customData.set('stats', JSON.stringify(stats)); // <-- IMPORTANT : stringify\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        352
+      ],
+      "id": "1036f35c-b343-41da-8452-c97528f337d0",
+      "name": "Calcul Taille Totale"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1i8EimSY_DJVbCg2qD0BqsK1bKjQ-Fo2xkG7hP88LJqQ",
+          "mode": "list",
+          "cachedResultName": "Gmail Cleanup Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1i8EimSY_DJVbCg2qD0BqsK1bKjQ-Fo2xkG7hP88LJqQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1i8EimSY_DJVbCg2qD0BqsK1bKjQ-Fo2xkG7hP88LJqQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ new Date().toLocaleString('fr-FR') }}",
+            "Email ID": "={{ $json.id }}",
+            "Sujet": "={{ $json.snippet }}",
+            "Expéditeur": "={{ $json.payload?.headers?.find(h => h.name === 'From')?.value || 'N/A' }}",
+            "Taille (Mo)": "={{ ($json.sizeEstimate / 1048576).toFixed(2) }}",
+            "Labels": "={{ ($json.labelIds || []).join(', ') || 'Aucun' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email ID",
+              "displayName": "Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sujet",
+              "displayName": "Sujet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Expéditeur",
+              "displayName": "Expéditeur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Taille (Mo)",
+              "displayName": "Taille (Mo)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Labels",
+              "displayName": "Labels",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1680,
+        384
+      ],
+      "id": "a0de3a7c-7b27-4a6e-9437-ecfc1a3760a4",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "5507847449",
+        "text": "=🚀 Démarrage du nettoyage Gmail... 👤 Compte : {{ $('HTTP Request').item.json.emailAddress }} 📨 Total Emails : {{ $('HTTP Request').item.json.messagesTotal }} 💾 Version Historique : {{ $('HTTP Request').item.json.historyId }} 🔍 Recherche en cours...",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        112,
+        384
+      ],
+      "id": "00966d78-e3a8-4adf-8766-6f85d738df34",
+      "name": "Send a text message1",
+      "webhookId": "e234269b-554e-4fa2-b3b6-e8c0a8c69fbb",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/profile",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "gmailOAuth2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -112,
+        384
+      ],
+      "id": "15b6cca6-b56c-4709-85a0-14b028dd9905",
+      "name": "HTTP Request",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "1️⃣ Déclenchement automatique (Trigger)\nLe workflow se lance automatiquement selon l’événement défini (horaire, webhook ou action spécifique).\n\n2️⃣ Préparation des données (Edit Fields)\nLes variables nécessaires sont initialisées : tokens, paramètres de configuration ou valeurs temporaires utilisées dans la suite du workflow.\n\n3️⃣ Vérification / récupération externe (HTTP Request)\nLe workflow vérifie une connexion ou récupère des informations depuis une source externe (API, service tiers, etc.).\n\n4️⃣ Notification de démarrage (Telegram / SMS)\nUne notification est envoyée à l’utilisateur pour confirmer le lancement du processus :\n📩 « Démarrage du scan Gmail ! »",
+        "height": 480,
+        "width": 848,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -592,
+        64
+      ],
+      "typeVersion": 1,
+      "id": "0be0deac-f700-4e62-af15-0d169f044642",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "1️⃣ Recherches parallèles (optimisation du temps)\nLe workflow lance 4 recherches simultanées dans la boîte mail afin d’accélérer l’analyse (par exemple : gros emails, newsletters, notifications, etc.).\n\n2️⃣ Fusion des résultats (Merge)\nLe nœud Merge regroupe l’ensemble des résultats obtenus en une seule liste unifiée.\nExemple :\n\n10 emails volumineux\n\n20 newsletters\n\n➡️ Résultat final : 30 emails combinés, prêts à être traités par les étapes suivantes du workflow.",
+        "height": 1104,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        272,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "1e56ae06-3f7c-4679-ba72-166880063f61",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "1️⃣ Nettoyage des données (suppression des doublons)\nLe workflow nettoie les résultats afin d’éviter les doublons, par exemple lorsqu’un même email apparaît à la fois dans les catégories « anciens » et « volumineux ».\n➡️ Chaque email est conservé une seule fois dans la liste finale.\n\n2️⃣ Calcul de l’espace total libérable\nLa taille de chaque email est additionnée pour obtenir une estimation précise de l’espace pouvant être libéré.\n📦 Exemple :\n\n« Je vais libérer environ 450 Mo d’espace dans votre boîte mail »",
+        "height": 416,
+        "width": 640,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        752,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "2be334d4-dc8b-420d-8e05-9fc97a5c4811",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "1️⃣ Traitement séquentiel des emails (Loop Over Items)\nLe nœud Loop Over Items traite les emails un par un à partir de la liste générée, ce qui permet d’appliquer des actions individuelles (comme la suppression) sur chaque message.\n➡️ Indispensable pour gérer plusieurs résultats de recherche de manière fiable.\n\n2️⃣ Archivage des actions (Google Sheets – Row)\nChaque email traité est enregistré dans un fichier Google Sheets afin de conserver une trace complète des actions effectuées (date, sujet, taille, etc.).\n➡️ Ce journal sert de historique de sécurité et permet un suivi précis.\n\n3️⃣ Contrôle du rythme d’exécution (Wait / Pause)\nLe nœud Wait introduit une pause contrôlée entre les actions pour éviter les limitations d’API (rate limit) imposées par Google.\n➡️ Garantit la stabilité du workflow et évite tout blocage du compte.",
+        "height": 1040,
+        "width": 1008,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1408,
+        -384
+      ],
+      "typeVersion": 1,
+      "id": "e1c4cf99-080c-4108-86a5-5becf9007d64",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "1️⃣ Notification en temps réel (Telegram – Message)\nLe nœud Telegram envoie une notification instantanée sur le téléphone ou le PC afin d’informer l’utilisateur de l’avancement ou du résultat du workflow.\n➡️ Exemple : « J’ai supprimé 50 Mo d’emails »\n➡️ Idéal pour un suivi en temps réel sans ouvrir l’outil.\n\n2️⃣ Traitement avancé des données (Code – JavaScript)\nLe nœud Code exécute du JavaScript pour transformer ou analyser les données lorsque les nœuds standards ne suffisent pas (calculs, formatage complexe, logique conditionnelle avancée).\n➡️ Il agit comme le cerveau du workflow.",
+        "height": 384,
+        "width": 784,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1456,
+        -48
+      ],
+      "typeVersion": 1,
+      "id": "35210656-8b37-47ee-8044-e395512d2977",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupérer et parser\nconst totalMB = $execution.customData.get('totalSize') || '0.00';\nconst totalEmails = $execution.customData.get('totalEmails') || 0;\nconst statsString = $execution.customData.get('stats');\nconst stats = statsString ? JSON.parse(statsString) : { newsletters: 0, gros: 0, anciens: 0, pieces_jointes: 0 };\n\nconst message = `🎉 Nettoyage Gmail terminé ! \n\n📊 STATISTIQUES\n━━━━━━━━━━━━━━━━\n📧 Total : ${totalEmails} emails\n💾 Espace : ${totalMB} Mo\n\n📂 DÉTAILS\n- 📰 Newsletters : ${stats.newsletters}\n- 🐘 Gros fichiers : ${stats.gros}\n- 📎 Pièces jointes : ${stats.pieces_jointes}\n- 📅 Autres : ${stats.anciens}\n\n🗑️ Corbeille Gmail vérifiée\n\n⏰ Prochain : Dimanche 3h`;\n\nreturn [{ \n  json: { \n    totalDeleted: totalEmails,\n    totalMB: totalMB,\n    message: message\n  } \n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        192
+      ],
+      "id": "52eef761-5a76-4e75-b071-903245c92162",
+      "name": "Préparer Synthèse"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Garder les emails uniques basés sur leur ID\nconst unique = new Map();\nfor (const item of $input.all()) {\n  unique.set(item.json.id, item);\n}\nreturn Array.from(unique.values());"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        352
+      ],
+      "id": "eb8fdeb7-4c5a-4bbb-9c90-a4d08b4d6a0d",
+      "name": "Suppression Doublons"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Bloquer seulement les emails avec le label STARRED\nreturn $input.all().filter(item => {\n  const labels = item.json.labelIds || [];\n  return !labels.includes('STARRED');\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        352
+      ],
+      "id": "062467a0-63dc-468f-8a5a-3311733fda93",
+      "name": "Filtrer Starred"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recherche Vieux": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recherche Gros": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Suppression Doublons",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a message1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Préparer Synthèse",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recherche Newsletters": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Recherche Pièces Jointes": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Calcul Taille Totale": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Delete a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Recherche Vieux",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Recherche Gros",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Recherche Newsletters",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Recherche Pièces Jointes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Synthèse": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Suppression Doublons": {
+      "main": [
+        [
+          {
+            "node": "Filtrer Starred",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrer Starred": {
+      "main": [
+        [
+          {
+            "node": "Calcul Taille Totale",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "999df3dd-b3e8-4fc7-8adf-1477f2d49ce0",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-27T09:30:03.343Z",
+      "createdAt": "2026-01-27T09:30:03.343Z",
+      "role": "workflow:owner",
+      "workflowId": "r9xBaluGzGGehsqz",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

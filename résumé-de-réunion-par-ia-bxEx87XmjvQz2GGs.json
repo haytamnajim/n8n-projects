@@ -1,0 +1,442 @@
+{
+  "updatedAt": "2026-01-26T19:54:38.523Z",
+  "createdAt": "2026-01-26T19:53:11.638Z",
+  "id": "bxEx87XmjvQz2GGs",
+  "name": "Résumé de réunion par IA",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "YOUR_FOLDER_ID_HERE",
+          "mode": "list",
+          "cachedResultName": "Meetings-Recording",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/YOUR_FOLDER_ID_HERE"
+        },
+        "event": "folderUpdated"
+      },
+      "id": "12d39db0-07c8-473d-9289-ff527e44bc3a",
+      "name": "Google Drive Trigger",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1296,
+        208
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files"
+        },
+        "options": {}
+      },
+      "id": "d7629994-be81-40f6-8a69-ca8015c81b16",
+      "name": "Find Audio File",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1040,
+        208
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "id": "b89ce3f7-7faa-4889-9914-ccc778b18581",
+      "name": "Download Audio",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -608,
+        208
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "inputType": "binary",
+        "simplify": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -352,
+        208
+      ],
+      "id": "6b71408b-5e78-4ef6-99a8-368763210902",
+      "name": "Transcribe Audio",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fileName",
+              "name": "fileName",
+              "value": "={{ $('Google Drive Trigger').first().json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "driveLink",
+              "name": "driveLink",
+              "value": "={{ $('Google Drive Trigger').first().json.webViewLink }}",
+              "type": "string"
+            },
+            {
+              "id": "83785dc9-ded4-408f-847b-bfa4ae21488e",
+              "name": "Transcription",
+              "value": "={{ $json.candidates[0].content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c2660aea-977c-4ecc-bf82-a618b5cd41cc",
+      "name": "Extract Transcription",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -128,
+        208
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        64,
+        208
+      ],
+      "id": "6dfb996c-e2a1-4907-be4e-8780c189ca8f",
+      "name": "Analyze Meeting"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        32,
+        400
+      ],
+      "id": "e7ee3505-7573-4da0-8c06-02ba5d63d857",
+      "name": "OpenRouter Chat Model"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4c89f194-9876-4a64-a2a0-1040c32325b5",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "m4a",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -800,
+        208
+      ],
+      "id": "53c10fd8-a1c3-4489-a351-c4993c10296d",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "YOUR_NOTION_DATABASE_ID",
+          "mode": "list",
+          "cachedResultName": "Meeting Notes",
+          "cachedResultUrl": "https://www.notion.so/YOUR_NOTION_DATABASE_ID"
+        },
+        "title": "={{ $('Extract Transcription').item.json.fileName }}",
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "heading_1",
+              "textContent": "={{ $('Extract Transcription').item.json.fileName }}"
+            },
+            {},
+            {
+              "type": "heading_2",
+              "textContent": "📋 Meeting Summary"
+            },
+            {
+              "textContent": "={{ $json.output.meeting_summary }}"
+            },
+            {},
+            {
+              "type": "heading_2",
+              "textContent": "💡 Key Discussion Points"
+            },
+            {
+              "textContent": "={{ $json.output.key_discussion_points }}"
+            },
+            {},
+            {
+              "type": "heading_2",
+              "textContent": "✅ Action Items"
+            },
+            {
+              "textContent": "={{ $json.output.action_items }}"
+            },
+            {},
+            {
+              "type": "heading_2",
+              "textContent": "🎯 Decisions Made"
+            },
+            {
+              "textContent": "={{ $json.output.decisions_made }}"
+            },
+            {},
+            {
+              "type": "heading_2",
+              "textContent": "👥 Participants & Contributions"
+            },
+            {
+              "textContent": "={{ $json.output.participants_contributions }}"
+            },
+            {},
+            {
+              "type": "heading_2",
+              "textContent": "🤖 Automation Opportunities"
+            },
+            {
+              "textContent": "={{ $json.output.automation_opportunities }}"
+            },
+            {},
+            {
+              "textContent": "🔗 Recording: ={{ $('Extract Transcription').item.json.driveLink }}"
+            }
+          ]
+        },
+        "options": {
+          "iconType": "emoji",
+          "icon": "🎙️"
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        208
+      ],
+      "id": "3719b4a7-c7a0-4195-8c5a-5f9bc911bac9",
+      "name": "Create a database page"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"meeting_summary\": {\n      \"type\": \"string\"\n    },\n    \"key_discussion_points\": {\n      \"type\": \"string\"\n    },\n    \"action_items\": {\n      \"type\": \"string\"\n    },\n    \"decisions_made\": {\n      \"type\": \"string\"\n    },\n    \"participants_contributions\": {\n      \"type\": \"string\"\n    },\n    \"automation_opportunities\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\"meeting_summary\", \"key_discussion_points\", \"action_items\", \"decisions_made\", \"participants_contributions\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        384
+      ],
+      "id": "fa142c23-6952-417f-b28c-aa9e9f4f0ff0",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "## Download Recording Audio\nWatches your Google Drive folder for new Zoom recordings and downloads them automatically.",
+        "height": 272,
+        "width": 912,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1376,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "247fe4fa-c165-4e7e-915c-25e5b430d3e1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Audio Transcription\n**Using Gemini 2.5 Flash**\n\nTranscribes audio in ANY language including Darija, Arabic, French, and English mixed together!",
+        "height": 336,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -448,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "b77d0d73-664b-42f9-8a88-f8678113ee1d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Extract Meeting Details\nAI analyzes the transcription and extracts:\n• Summary\n• Key Points\n• Action Items\n• Decisions\n• Participants\n• Automation Opportunities",
+        "height": 544,
+        "width": 384,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "834c5e11-c877-4825-9744-96207ee75cc5",
+      "name": "Sticky Note2"
+    }
+  ],
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Find Audio File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Audio File": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Audio": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Audio": {
+      "main": [
+        [
+          {
+            "node": "Extract Transcription",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Download Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "c64a6005-31a2-42f1-b6d6-b51450fd5a23",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-26T19:53:11.651Z",
+      "createdAt": "2026-01-26T19:53:11.651Z",
+      "role": "workflow:owner",
+      "workflowId": "bxEx87XmjvQz2GGs",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

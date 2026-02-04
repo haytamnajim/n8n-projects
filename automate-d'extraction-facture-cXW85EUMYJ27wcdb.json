@@ -1,0 +1,1816 @@
+{
+  "updatedAt": "2026-02-03T19:45:55.410Z",
+  "createdAt": "2026-01-28T10:49:07.494Z",
+  "id": "cXW85EUMYJ27wcdb",
+  "name": "Automate d'Extraction Facture",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "5d90f496-08d6-4d14-91c9-4c76b6fb46df",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        -608
+      ],
+      "id": "29cc63d6-0653-4dd6-a589-b7b61398a53c",
+      "name": "Réception Image Facture",
+      "webhookId": "5d90f496-08d6-4d14-91c9-4c76b6fb46df"
+    },
+    {
+      "parameters": {
+        "jsCode": "// On récupère le buffer (les données brutes) de l'image\nconst buffer = await this.helpers.getBinaryDataBuffer(0, 'data');\n\n// On le transforme en chaîne Base64\nconst base64Image = buffer.toString('base64');\n\nreturn {\n  base64Image: base64Image\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        -608
+      ],
+      "id": "55b799da-9b74-4488-bbd8-fc348dd91ff1",
+      "name": "Conversion Image vers Base64"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"model\": \"meta-llama/llama-4-scout-17b-16e-instruct\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": \"Tu es un expert en comptabilité marocaine. Analyse cette facture et extrais TOUTES les informations en JSON pur. \\nStructure la réponse exactement comme ceci :\\n{\\n  \\\"header\\\": {\\n    \\\"fournisseur\\\": \\\"nom\\\",\\n    \\\"ice_fournisseur\\\": \\\"numéro\\\",\\n    \\\"if_fournisseur\\\": \\\"numéro\\\",\\n    \\\"client\\\": \\\"nom\\\",\\n    \\\"date\\\": \\\"AAAA-MM-JJ\\\",\\n    \\\"numero_facture\\\": \\\"code\\\",\\n    \\\"numero_bl\\\": \\\"code\\\",\\n    \\\"mode_paiement\\\": \\\"chèque/effet/virement/espèces\\\"\\n  },\\n  \\\"articles\\\": [\\n    {\\\"code\\\": \\\"id\\\", \\\"designation\\\": \\\"nom\\\", \\\"quantite\\\": 0, \\\"prix_u\\\": 0, \\\"total\\\": 0}\\n  ],\\n  \\\"totaux\\\": {\\n    \\\"montant_ht\\\": 0,\\n    \\\"tva_taux\\\": \\\"0%\\\",\\n    \\\"montant_tva\\\": 0,\\n    \\\"total_ttc\\\": 0,\\n    \\\"devise\\\": \\\"MAD\\\"\\n  }\\n}\\nRéponds UNIQUEMENT le JSON.\"\n        },\n        {\n          \"type\": \"image_url\",\n          \"image_url\": {\n            \"url\": \"data:image/png;base64,{{ $json.base64Image }}\"\n          }\n        }\n      ]\n    }\n  ],\n  \"temperature\": 0.1,\n  \"max_tokens\": 4096\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        -608
+      ],
+      "id": "f8c2f5b9-c1d2-4ed7-aaa6-d0b630b3e44c",
+      "name": "Analyse IA (Llama 4 Vision)",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const genId = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);\n\nconst raw = $json.choices[0].message.content;\nconst start = raw.indexOf('{');\nconst end = raw.lastIndexOf('}');\nconst data = JSON.parse(raw.substring(start, end + 1).replace(/[\\n\\r\\t]/g, \" \"));\n\nconst num = (v) => parseFloat(v?.toString().replace(/[^\\d.-]/g, '')) || 0;\n\n// 1. On récupère les lignes\nconst rawLines = data.articles || data.lines || data.lignes_articles || [];\n\n// 2. Calcul du total théorique à partir des lignes pour double-check\nconst calculatedTotalHTFromLines = rawLines.reduce((acc, l) => {\n    const qty = num(l.quantite || l.quantity);\n    const pu = num(l.prix_u || l.unit_price_ht);\n    return acc + (qty * pu);\n}, 0);\n\n// 3. Extraction du total lu par l'IA\nconst extractedTotalHT = num(data.total_ht || data.totaux?.montant_ht);\n\nreturn {\n    invoice: {\n     \n        company_id: \"COMP01\",\n        contact_id: \"CONT01\",\n        direction: 'purchase',\n        number: data.number || data.header?.numero_facture || data.numero_facture,\n        issue_date: data.issue_date || data.header?.date || data.date,\n        due_date: data.due_date || data.header?.date || data.date,\n        // On prend le total de l'IA, ou le calcul si l'IA a oublié\n        subtotal_ht: extractedTotalHT || calculatedTotalHTFromLines,\n        total_ht: extractedTotalHT || calculatedTotalHTFromLines,\n        total_tva: num(data.total_tva || data.totaux?.montant_tva),\n        total_ttc: num(data.total_ttc || data.totaux?.total_ttc) || (calculatedTotalHTFromLines * 1.20),\n        currency: data.currency || data.totaux?.devise || \"MAD\",\n        supplier_name: data.supplier_name || data.header?.fournisseur || data.fournisseur,\n        supplier_ice: data.supplier_ice || data.header?.ice_fournisseur,\n        client_name: data.client_name || data.header?.client,\n        client_ice: data.client_ice || data.header?.client_ice,\n        \n        // --- NOUVEAUX CHAMPS DE VÉRIFICATION ---\n        verification_total_ht: calculatedTotalHTFromLines,\n        is_total_valid: Math.abs(calculatedTotalHTFromLines - extractedTotalHT) < 0.1\n    },\n    lines: rawLines.map((l, idx) => {\n        const qty = num(l.quantite || l.quantity);\n        const pu = num(l.prix_u || l.unit_price_ht);\n        const lineHT = qty * pu;\n        return {\n            position: idx + 1,\n            code_article: l.code || l.code_article,\n            description: l.description || l.designation,\n            quantity: qty,\n            unit_price_ht: pu,\n            line_total_ht: lineHT,\n            line_total_ttc: lineHT * 1.20\n        };\n    })\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -608
+      ],
+      "id": "5cbdcb1c-246a-494f-8543-6498ce297c7c",
+      "name": "Nettoyage & Génération IDs"
+    },
+    {
+      "parameters": {
+        "tableId": "invoices",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "company_id",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.company_id }}"
+            },
+            {
+              "fieldId": "number",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.number }}"
+            },
+            {
+              "fieldId": "issue_date",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.issue_date }}"
+            },
+            {
+              "fieldId": "supplier_ice",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.supplier_ice }}"
+            },
+            {
+              "fieldId": "supplier_name",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.supplier_name }}"
+            },
+            {
+              "fieldId": "total_ht",
+              "fieldValue": "=  {{ $('Nettoyage & Génération IDs').item.json.invoice.total_ht }}"
+            },
+            {
+              "fieldId": "total_tva",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.total_tva }}"
+            },
+            {
+              "fieldId": "total_ttc",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.total_ttc }}"
+            },
+            {
+              "fieldId": "direction",
+              "fieldValue": "={{ $('Nettoyage & Génération IDs').item.json.invoice.direction }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        384,
+        -144
+      ],
+      "id": "667a4508-327a-4f71-9df1-e8fe49e2e1b6",
+      "name": "Créer Facture",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "lines",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        -592
+      ],
+      "id": "73f0f813-0756-4728-90e0-70935432d18d",
+      "name": "Extraction Liste Articles"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b8743e39-ce8e-463d-97d1-78b9fd6643ab",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        -224
+      ],
+      "id": "084ef651-510c-4fe5-9afb-e1f9e1ae25ac",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "invoice_lines",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "invoice_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -320
+      ],
+      "id": "00dac640-3241-4450-8b89-22f84ac2b29e",
+      "name": "Supprimer Anciens Articles",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        960,
+        -592
+      ],
+      "id": "19734793-ea65-4b07-b51a-3b2165dc1209",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "invoices",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "number",
+              "condition": "eq",
+              "keyValue": "={{ $json.invoice.number }}"
+            },
+            {
+              "keyName": "supplier_ice",
+              "condition": "eq",
+              "keyValue": "={{ $json.invoice.supplier_ice }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -224
+      ],
+      "id": "ce38f09e-a639-4255-b9f7-0e370e187142",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "invoice_lines",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "position",
+              "fieldValue": "={{ $json.lines.position }}"
+            },
+            {
+              "fieldId": "code_article",
+              "fieldValue": "={{ $json.lines.code_article }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.lines.description }}"
+            },
+            {
+              "fieldId": "quantity",
+              "fieldValue": "={{ $json.lines.quantity }}"
+            },
+            {
+              "fieldId": "unit_price_ht",
+              "fieldValue": "={{ $json.lines.unit_price_ht }}"
+            },
+            {
+              "fieldId": "line_total_ht",
+              "fieldValue": "={{ $json.invoice.total_ht }}"
+            },
+            {
+              "fieldId": "line_total_ttc",
+              "fieldValue": "={{ $json.invoice.total_ttc }}"
+            },
+            {
+              "fieldId": "invoice_id",
+              "fieldValue": "={{ $json.valable_invoice_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        -592
+      ],
+      "id": "14ef27f4-c756-4b50-8200-7cdb125d5abf",
+      "name": "Créer Lignes Articles",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "invoices",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "direction",
+              "fieldValue": "={{ $json.direction }}"
+            },
+            {
+              "fieldId": "number",
+              "fieldValue": "={{ $json.number }}"
+            },
+            {
+              "fieldId": "external_ref",
+              "fieldValue": "={{ $json.external_ref }}"
+            },
+            {
+              "fieldId": "issue_date",
+              "fieldValue": "={{ $json.issue_date }}"
+            },
+            {
+              "fieldId": "due_date",
+              "fieldValue": "={{ $json.due_date }}"
+            },
+            {
+              "fieldId": "service_date",
+              "fieldValue": "={{ $json.service_date }}"
+            },
+            {
+              "fieldId": "delivery_date",
+              "fieldValue": "={{ $json.delivery_date }}"
+            },
+            {
+              "fieldId": "subtotal_ht",
+              "fieldValue": "={{ $json.subtotal_ht }}"
+            },
+            {
+              "fieldId": "discount_percent",
+              "fieldValue": "={{ $json.discount_percent }}"
+            },
+            {
+              "fieldId": "discount_amount",
+              "fieldValue": "={{ $json.discount_amount }}"
+            },
+            {
+              "fieldId": "total_ht",
+              "fieldValue": "={{ $json.total_ht }}"
+            },
+            {
+              "fieldId": "total_tva",
+              "fieldValue": "={{ $json.total_tva }}"
+            },
+            {
+              "fieldId": "total_ttc",
+              "fieldValue": "={{ $json.total_ttc }}"
+            },
+            {
+              "fieldId": "is_ras_applicable",
+              "fieldValue": "={{ $json.is_ras_applicable }}"
+            },
+            {
+              "fieldId": "ras_rate",
+              "fieldValue": "={{ $json.ras_rate }}"
+            },
+            {
+              "fieldId": "ras_amount",
+              "fieldValue": "={{ $json.ras_amount }}"
+            },
+            {
+              "fieldId": "currency",
+              "fieldValue": "={{ $json.currency }}"
+            },
+            {
+              "fieldId": "foo",
+              "fieldValue": "={{ $json.foo }}"
+            },
+            {
+              "fieldId": "supplier_name",
+              "fieldValue": "={{ $json.supplier_name }}"
+            },
+            {
+              "fieldId": "supplier_ice",
+              "fieldValue": "={{ $json.supplier_ice }}"
+            },
+            {
+              "fieldId": "client_name",
+              "fieldValue": "={{ $json.client_name }}"
+            },
+            {
+              "fieldId": "client_ice",
+              "fieldValue": "={{ $json.client_ice }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $json.created_at }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $json.updated_at }}"
+            },
+            {
+              "fieldId": "id",
+              "fieldValue": "={{ $json.id }}"
+            },
+            {
+              "fieldId": "is_synced",
+              "fieldValue": "={{ $json.is_synced }}"
+            },
+            {
+              "fieldId": "synced_at",
+              "fieldValue": "={{ $json.synced_at }}"
+            },
+            {
+              "fieldId": "batch_id",
+              "fieldValue": "={{ $json.batch_id }}"
+            },
+            {
+              "fieldId": "contact_id",
+              "fieldValue": "={{ $json.contact_id }}"
+            },
+            {
+              "fieldId": "company_id",
+              "fieldValue": "={{ $json.company_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        256,
+        -320
+      ],
+      "id": "c499a9de-4007-47aa-b259-20921c8f3da0",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "453ba440-0e1e-4ea0-8980-4d965521612a",
+              "name": "valable_invoice_id",
+              "value": "={{ $('Get many rows').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        -320
+      ],
+      "id": "6852f7cb-8a1a-4e33-8a06-c6ce4029590c",
+      "name": "Préparer Data (Update)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb694483-7676-437e-b853-f3502183923c",
+              "name": "valable_invoice_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        -144
+      ],
+      "id": "d78d6586-8555-4f41-806e-0647aed15f77",
+      "name": "Préparer Data (Create)"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ Object.values($binary)[0].mimeType }}",
+                    "rightValue": "pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "bb3cccc9-b7b0-4704-aa4d-beac016ad5ed"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d2652b1c-c3f2-47fc-bdfa-09642f22f5aa",
+                    "leftValue": "={{ Object.values($binary)[0].mimeType }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -256,
+        512
+      ],
+      "id": "d525ed42-5963-4528-9554-c44ff999db07",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.cloudmersive.com/convert/pdf/to/jpg",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Apikey",
+              "value": "4825915a-e385-4a54-83e1-6eb73ad33a83"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "={{ $(\"Switch\").first().binary.data0 }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        640,
+        272
+      ],
+      "id": "f38de816-db90-478e-a542-3091639e1372",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "data0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -16,
+        400
+      ],
+      "id": "f8ca3f4b-c286-4f09-bf3f-f1bdf327b365",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a298ed45-d2b9-4a09-8fab-a29a0b738f94",
+              "leftValue": "={{ $json.text.length }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        176,
+        400
+      ],
+      "id": "e136a548-a2ce-41f9-ad9b-0b7578ea5a8e",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{\n({\n  \"model\": \"meta-llama/llama-4-scout-17b-16e-instruct\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": `Tu es un expert en comptabilité marocaine. Analyse ce texte extrait d'un fichier PDF.\n\nRÈGLES CRITIQUES :\n1. TABLEAU DES ARTICLES : Chaque ligne du tableau a des colonnes SÉPARÉES. Lis chaque colonne indépendamment :\n   - Colonne 1 : Désignation (nom de l'article)\n   - Colonne 2 : Quantité (un nombre, souvent 1, 2, 5, 10, etc.)\n   - Colonne 3 : Prix Unitaire HT (le prix pour UNE seule unité)\n   - Colonne 4 : Total de la ligne (= Quantité × Prix Unitaire)\n   \n2. NE CONFONDS JAMAIS :\n   - Le TOTAL HT GLOBAL (en bas de page) avec le Prix Unitaire d'une ligne\n   - La Quantité doit être lue dans SA propre colonne, pas déduite\n   \n3. VÉRIFICATION : Pour chaque ligne, vérifie que : Quantité × Prix_Unitaire = Total_Ligne\n   Si ce n'est pas le cas, relis les valeurs.\n\n4. NUMÉRO : Cherche bien le numéro (Facture N°, Commande N°, N° B.L).\n\n5. ARTICLES : Chaque ligne physique du tableau = Un objet dans 'articles'. NE FUSIONNE JAMAIS deux lignes.\n\n6. TVA : Lis le taux de TVA indiqué (souvent 20% au Maroc). Calcule : TVA = Total_HT × Taux.\n\nExtrais tout dans 'invoices'. Structure :\n{\n  \"header\": { \"fournisseur\": \"\", \"ice_fournisseur\": \"\", \"date\": \"AAAA-MM-JJ\", \"numero_facture\": \"\" },\n  \"articles\": [\n    { \"code\": \"\", \"designation\": \"\", \"quantite\": 0, \"prix_u\": 0, \"total\": 0, \"tva_taux\": \"20%\", \"remise_pourcent\": 0 }\n  ],\n  \"totaux\": { \"montant_ht\": 0, \"montant_tva\": 0, \"total_ttc\": 0, \"devise\": \"MAD\" }\n}\n\nEXEMPLE DE LECTURE CORRECTE :\nSi le texte contient : \"Support technique | 2 | 1200 | 2400\"\nTu dois écrire : { \"designation\": \"Support technique\", \"quantite\": 2, \"prix_u\": 1200, \"total\": 2400 }\n\nRéponds UNIQUEMENT le JSON pur.\n\nTEXTE EXTRAIT DU PDF :\n${$json.text}\n`\n    }\n  ],\n  \"temperature\": 0.1,\n  \"max_tokens\": 4096\n})\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        928,
+        384
+      ],
+      "id": "fc502aa5-1b8e-494d-81d5-a3b16dea22fb",
+      "name": "Analyse IA Texte PDF",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "86f612d9-3302-40a5-9880-d982f7c85921",
+              "name": "data",
+              "value": "={{ $(\"Switch\").first().binary.data0 }}",
+              "type": "binary"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        304
+      ],
+      "id": "3472220e-d867-4fc2-9184-29cb55d06533",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "5d90f496-08d6-4d14-91c9-4c76b6fb46df",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -480,
+        512
+      ],
+      "id": "7fc58cd6-690f-40e1-8ede-1eb230beaf48",
+      "name": "Réception Image Facture2",
+      "webhookId": "5d90f496-08d6-4d14-91c9-4c76b6fb46df"
+    },
+    {
+      "parameters": {
+        "jsCode": "const newItems = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const item = items[i];\n  const images = [];\n\n  // CAS 1 : PDF converti par Cloudmersive (JSON)\n  if (item.json.JpgResultPages && item.json.JpgResultPages.length > 0) {\n    for (const page of item.json.JpgResultPages) {\n       images.push({\n         name: `page_${page.PageNumber}.jpg`,\n         mimeType: 'image/jpeg',\n         data: page.Content // Déjà en base64 string\n       });\n    }\n  } \n  // CAS 2 : Image binaire directe (Binaire venant du Switch/Photo)\n  else if (item.binary) {\n    for (const key of Object.keys(item.binary)) {\n      const binaryData = item.binary[key];\n      // On utilise l'helper getBinaryDataBuffer pour extraire le binaire réel\n      const buffer = await this.helpers.getBinaryDataBuffer(i, key);\n      const base64 = buffer.toString('base64');\n\n      images.push({\n        name: binaryData.fileName || 'image.jpg',\n        mimeType: binaryData.mimeType,\n        data: base64\n      });\n    }\n  }\n\n  newItems.push({\n    json: {\n      images: images,\n      count: images.length\n    }\n  });\n}\n\nreturn newItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        560
+      ],
+      "id": "cc9e7b1d-9c35-4768-9b0a-76e64e35a458",
+      "name": "Conversion Image vers Base1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{\n({\n  \"model\": \"meta-llama/llama-4-scout-17b-16e-instruct\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"text\",\n          \"text\": `Tu es un expert en comptabilité marocaine. Analyse ces images.\n\nIMPORTANT :\n1. FUSION : Si les images sont les pages d'une même facture, fusionne tout. Sinon, sépare les objets.\n2. NUMÉRO : Cherche bien le numéro (Facture N°, Commande N°, N° B.L). Ne réponds jamais \"SANS_NUMERO\" si un code existe.\n3. ARTICLES : Chaque ligne physique du tableau = Un objet dans 'articles'. NE FUSIONNE JAMAIS deux lignes.\n4. REMISES & TVA : Pour chaque article, extrais le '% Rem' et le taux de TVA spécifique. \n5. DESCRIPTION UNIQUE : Lis attentivement chaque ligne. NE RECOPIE PAS la description de la ligne 1 sur la ligne 2. Si la ligne 1 dit \"W\" et la ligne 2 dit \"BEURRE INDE\", tu dois écrire exactement ces textes différents.\n\nExtrais tout dans 'invoices'. Structure :\n{\n  \"header\": { \"fournisseur\": \"\", \"ice_fournisseur\": \"\", \"date\": \"AAAA-MM-JJ\", \"numero_facture\": \"\" },\n  \"articles\": [\n    { \"code\": \"\", \"designation\": \"\", \"quantite\": 0, \"prix_u\": 0, \"tva_taux\": \"20%\", \"remise_pourcent\": 0 }\n  ],\n  \"totaux\": { \"montant_ht\": 0, \"montant_tva\": 0, \"total_ttc\": 0, \"devise\": \"MAD\" }\n}\nRéponds UNIQUEMENT le JSON pur.`\n        },\n        ...$json.images.map(img => ({\n          \"type\": \"image_url\",\n          \"image_url\": { \"url\": `data:${img.mimeType};base64,${img.data}` }\n        }))\n      ]\n    }\n  ],\n  \"temperature\": 0.1,\n  \"max_tokens\": 4096\n})\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1072,
+        560
+      ],
+      "id": "768daebd-6cb3-4b63-aad0-7962b2a6fe20",
+      "name": "Analyse IA (Llama 4 Vision)2",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const uuid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => (c == 'x' ? Math.random() * 16 | 0 : (Math.random() * 16 | 0 & 0x3 | 0x8)).toString(16));\n\nconst raw = $json.choices[0].message.content;\nconst start = raw.indexOf('{');\nconst end = raw.lastIndexOf('}');\nconst rawData = JSON.parse(raw.substring(start, end + 1).replace(/[\\n\\r\\t]/g, \" \"));\n\nconst num = (v) => parseFloat(v?.toString().replace(/[^\\d.-]/g, '')) || 0;\n\nreturn (rawData.invoices || [rawData]).map(data => {\n    const invId = uuid();\n    const rawLines = data.articles || [];\n    \n    // Taux de TVA par défaut\n    const tvaStr = data.totaux?.tva_taux || \"20%\";\n    const tvaRate = num(tvaStr) / 100; \n\n    // 1. Calcul des lignes (pour les articles)\n    const lines = rawLines.map((l, idx) => {\n        const qty = num(l.quantite);\n        const pu = num(l.prix_u);\n        const remise = num(l.remise_pourcent) / 100;\n        const l_tva = num(l.tva_taux || tvaStr) / 100;\n        const lineHT = (qty * pu) * (1 - remise);\n        \n        return {\n            id: uuid(),\n            invoice_id: invId,\n            position: idx + 1,\n            code_article: l.code,\n            description: l.designation,\n            quantity: qty,\n            unit_price_ht: pu,\n            line_total_ht: lineHT,\n            line_total_ttc: lineHT * (1 + l_tva),\n            tva_rate: num(l.tva_taux || tvaStr)\n        };\n    });\n\n    // 2. RÉCUPÉRATION DES TOTAUX ÉCRITS SUR L'IMAGE (par l'IA)\n    const totalHT_IA = num(data.totaux?.montant_ht);\n    const totalTVA_IA = num(data.totaux?.montant_tva);\n    const totalTTC_IA = num(data.totaux?.total_ttc);\n\n    // 3. CALCUL DE SÉCURITÉ (en cas d'oubli de l'IA)\n    const totalHT_Calc = lines.reduce((acc, l) => acc + l.line_total_ht, 0);\n    const totalTTC_Calc = lines.reduce((acc, l) => acc + l.line_total_ttc, 0);\n\n    return {\n        invoice: {\n            id: invId,\n            company_id: \"COMP01\",\n            contact_id: \"CONT01\",\n            direction: 'purchase',\n            number: data.header?.numero_facture || data.numero_facture || \"SANS_NUMERO\",\n            issue_date: data.header?.date || data.date,\n            \n            // --- MODIFICATION ICI : PRIORITÉ À L'IMAGE ---\n            total_ht: totalHT_IA || totalHT_Calc,\n            total_tva: totalTVA_IA || (totalTTC_Calc - totalHT_Calc),\n            total_ttc: totalTTC_IA || totalTTC_Calc,\n            // --------------------------------------------\n            \n            currency: data.totaux?.devise || \"MAD\",\n            supplier_name: data.header?.fournisseur || data.fournisseur,\n            supplier_ice: data.header?.ice_fournisseur\n        },\n        lines: lines\n    };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        560
+      ],
+      "id": "07b680d0-e5df-4633-a8c0-7630f5309b9f",
+      "name": "Nettoyage & Génération IDs2"
+    },
+    {
+      "parameters": {
+        "tableId": "invoices",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "id",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.id }}"
+            },
+            {
+              "fieldId": "company_id",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.company_id }}"
+            },
+            {
+              "fieldId": "contact_id",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.contact_id }}"
+            },
+            {
+              "fieldId": "number",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.number || $node[\"Loop Over Items1\"].json.invoice.invoice_number || \"SANS_NUMERO\" }}"
+            },
+            {
+              "fieldId": "issue_date",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.issue_date }}"
+            },
+            {
+              "fieldId": "due_date",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.due_date }}"
+            },
+            {
+              "fieldId": "total_ht",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.total_ht }}"
+            },
+            {
+              "fieldId": "total_tva",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.total_tva }}"
+            },
+            {
+              "fieldId": "total_ttc",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.total_ttc }}"
+            },
+            {
+              "fieldId": "currency",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.currency.substring(0, 3) }}"
+            },
+            {
+              "fieldId": "supplier_name",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.supplier_name }}"
+            },
+            {
+              "fieldId": "supplier_ice",
+              "fieldValue": "={{ $node[\"Loop Over Items1\"].json.invoice.supplier_ice }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        848,
+        1056
+      ],
+      "id": "8993191b-325d-4374-a1c7-0e60fe396ecf",
+      "name": "Créer Facture2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "articles_a_creer",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        816
+      ],
+      "id": "15baba54-7c29-4cc9-a9d0-a0a5d00168b0",
+      "name": "Extraction Liste Articles2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b8743e39-ce8e-463d-97d1-78b9fd6643ab",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        496,
+        976
+      ],
+      "id": "aaedda8e-0de6-46f1-8b1d-39c07678e0a9",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "invoice_lines",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "invoice_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        944,
+        880
+      ],
+      "id": "125a27b8-01de-4d4e-9d91-9debe0d1e29f",
+      "name": "Supprimer Anciens Articles2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1440,
+        800
+      ],
+      "id": "bcfc6bd7-2afb-40a7-9c83-7a3b36399641",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "invoices",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "number",
+              "condition": "eq",
+              "keyValue": "={{ $json.invoice.number }}"
+            },
+            {
+              "keyName": "supplier_ice",
+              "condition": "eq",
+              "keyValue": "={{ $json.invoice.supplier_ice }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        272,
+        976
+      ],
+      "id": "75769064-dcba-46b0-89fc-05ae65ba1c94",
+      "name": "Get many rows2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "invoice_lines",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "position",
+              "fieldValue": "={{ Number($json.articles_a_creer.position) }}"
+            },
+            {
+              "fieldId": "code_article",
+              "fieldValue": "={{ $json.articles_a_creer.code_article }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.articles_a_creer.description }}"
+            },
+            {
+              "fieldId": "quantity",
+              "fieldValue": "={{ Number($json.articles_a_creer.quantity) }}"
+            },
+            {
+              "fieldId": "unit_price_ht",
+              "fieldValue": "={{ Number($json.articles_a_creer.unit_price_ht) }}"
+            },
+            {
+              "fieldId": "line_total_ht",
+              "fieldValue": "={{ Number($json.articles_a_creer.line_total_ht) }}"
+            },
+            {
+              "fieldId": "line_total_ttc",
+              "fieldValue": "={{ Number($json.articles_a_creer.line_total_ttc) }}"
+            },
+            {
+              "fieldId": "invoice_id",
+              "fieldValue": "={{ $json.valable_invoice_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        816
+      ],
+      "id": "4cd35455-179f-4726-847f-6524547f51e3",
+      "name": "Créer Lignes Articles2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "invoices",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "direction",
+              "fieldValue": "={{ $json.direction }}"
+            },
+            {
+              "fieldId": "number",
+              "fieldValue": "={{ $json.number }}"
+            },
+            {
+              "fieldId": "external_ref",
+              "fieldValue": "={{ $json.external_ref }}"
+            },
+            {
+              "fieldId": "issue_date",
+              "fieldValue": "={{ $json.issue_date }}"
+            },
+            {
+              "fieldId": "due_date",
+              "fieldValue": "={{ $json.due_date }}"
+            },
+            {
+              "fieldId": "service_date",
+              "fieldValue": "={{ $json.service_date }}"
+            },
+            {
+              "fieldId": "delivery_date",
+              "fieldValue": "={{ $json.delivery_date }}"
+            },
+            {
+              "fieldId": "subtotal_ht",
+              "fieldValue": "={{ $json.subtotal_ht }}"
+            },
+            {
+              "fieldId": "discount_percent",
+              "fieldValue": "={{ $json.discount_percent }}"
+            },
+            {
+              "fieldId": "discount_amount",
+              "fieldValue": "={{ $json.discount_amount }}"
+            },
+            {
+              "fieldId": "total_ht",
+              "fieldValue": "={{ $json.total_ht }}"
+            },
+            {
+              "fieldId": "total_tva",
+              "fieldValue": "={{ $json.total_tva }}"
+            },
+            {
+              "fieldId": "total_ttc",
+              "fieldValue": "={{ $json.total_ttc }}"
+            },
+            {
+              "fieldId": "is_ras_applicable",
+              "fieldValue": "={{ $json.is_ras_applicable }}"
+            },
+            {
+              "fieldId": "ras_rate",
+              "fieldValue": "={{ $json.ras_rate }}"
+            },
+            {
+              "fieldId": "ras_amount",
+              "fieldValue": "={{ $json.ras_amount }}"
+            },
+            {
+              "fieldId": "currency",
+              "fieldValue": "={{ $json.currency }}"
+            },
+            {
+              "fieldId": "foo",
+              "fieldValue": "={{ $json.foo }}"
+            },
+            {
+              "fieldId": "supplier_name",
+              "fieldValue": "={{ $json.supplier_name }}"
+            },
+            {
+              "fieldId": "supplier_ice",
+              "fieldValue": "={{ $json.supplier_ice }}"
+            },
+            {
+              "fieldId": "client_name",
+              "fieldValue": "={{ $json.client_name }}"
+            },
+            {
+              "fieldId": "client_ice",
+              "fieldValue": "={{ $json.client_ice }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $json.created_at }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $json.updated_at }}"
+            },
+            {
+              "fieldId": "id",
+              "fieldValue": "={{ $json.id }}"
+            },
+            {
+              "fieldId": "is_synced",
+              "fieldValue": "={{ $json.is_synced }}"
+            },
+            {
+              "fieldId": "synced_at",
+              "fieldValue": "={{ $json.synced_at }}"
+            },
+            {
+              "fieldId": "batch_id",
+              "fieldValue": "={{ $json.batch_id }}"
+            },
+            {
+              "fieldId": "contact_id",
+              "fieldValue": "={{ $json.contact_id }}"
+            },
+            {
+              "fieldId": "company_id",
+              "fieldValue": "={{ $json.company_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        880
+      ],
+      "id": "813ccbed-c4a1-46c8-800d-1333fc062253",
+      "name": "Update a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "80otpuBVqftqUD6q",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "453ba440-0e1e-4ea0-8980-4d965521612a",
+              "name": "valable_invoice_id",
+              "value": "={{ $('Get many rows2').first().json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "079f5a62-a312-4bdc-aec4-c7bd40583030",
+              "name": "articles_a_creer",
+              "value": "={{ $(\"Nettoyage & Génération IDs2\").first().json.lines }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1168,
+        880
+      ],
+      "id": "b8679149-f48b-409d-a1df-5866c84d17fd",
+      "name": "Préparer Data (Update)2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb694483-7676-437e-b853-f3502183923c",
+              "name": "valable_invoice_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "bd52dc67-d9de-4c83-a8b3-830f55d8a679",
+              "name": "articles_a_creer",
+              "value": "={{ $node[\"Loop Over Items1\"].json.lines }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1168,
+        1056
+      ],
+      "id": "3d4f5761-ab26-4117-b475-e554ceff5e00",
+      "name": "Préparer Data (Create)2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a20139c7-69f2-4977-8120-ab663ccaee05",
+              "name": "invoice",
+              "value": "={{ $json.invoice }}",
+              "type": "object"
+            },
+            {
+              "id": "7293a16f-915e-4e64-adb1-ec416a805bc7",
+              "name": " Field Name : ",
+              "value": "={{ $json.lines }}",
+              "type": "array"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        560
+      ],
+      "id": "2369a551-0678-40d8-a368-7319e814699d",
+      "name": "Préparer Flux stable1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1840,
+        560
+      ],
+      "id": "a0006d1e-1e7c-49f3-b12b-426c9733a94c",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 480,
+        "width": 1312
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -512,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "6f7ba919-e4ec-433d-8873-40b070bd636d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 368,
+        "width": 1184,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        816,
+        368
+      ],
+      "typeVersion": 1,
+      "id": "1b015264-43d3-4be4-8986-1879e5c68808",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 224,
+        "width": 672,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1360,
+        784
+      ],
+      "typeVersion": 1,
+      "id": "f2ba7fc2-3568-4fee-8a84-29b2128671da",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 432,
+        "width": 1104,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        240,
+        784
+      ],
+      "typeVersion": 1,
+      "id": "9384988d-82c1-4ff6-9d29-a06d7fc9e9bd",
+      "name": "Sticky Note3"
+    }
+  ],
+  "connections": {
+    "Réception Image Facture": {
+      "main": [
+        [
+          {
+            "node": "Conversion Image vers Base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversion Image vers Base64": {
+      "main": [
+        [
+          {
+            "node": "Analyse IA (Llama 4 Vision)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyse IA (Llama 4 Vision)": {
+      "main": [
+        [
+          {
+            "node": "Nettoyage & Génération IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nettoyage & Génération IDs": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créer Facture": {
+      "main": [
+        [
+          {
+            "node": "Préparer Data (Create)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction Liste Articles": {
+      "main": [
+        [
+          {
+            "node": "Créer Lignes Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Créer Facture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supprimer Anciens Articles": {
+      "main": [
+        [
+          {
+            "node": "Préparer Data (Update)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Extraction Liste Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Supprimer Anciens Articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Data (Update)": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Préparer Data (Create)": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Conversion Image vers Base1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Conversion Image vers Base1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyse IA Texte PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyse IA Texte PDF": {
+      "main": [
+        [
+          {
+            "node": "Nettoyage & Génération IDs2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Réception Image Facture2": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversion Image vers Base1": {
+      "main": [
+        [
+          {
+            "node": "Analyse IA (Llama 4 Vision)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyse IA (Llama 4 Vision)2": {
+      "main": [
+        [
+          {
+            "node": "Nettoyage & Génération IDs2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nettoyage & Génération IDs2": {
+      "main": [
+        [
+          {
+            "node": "Préparer Flux stable1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créer Facture2": {
+      "main": [
+        [
+          {
+            "node": "Préparer Data (Create)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraction Liste Articles2": {
+      "main": [
+        [
+          {
+            "node": "Créer Lignes Articles2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Update a row2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Créer Facture2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supprimer Anciens Articles2": {
+      "main": [
+        [
+          {
+            "node": "Préparer Data (Update)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Extraction Liste Articles2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows2": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créer Lignes Articles2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row2": {
+      "main": [
+        [
+          {
+            "node": "Supprimer Anciens Articles2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer Data (Update)2": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Préparer Data (Create)2": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Préparer Flux stable1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get many rows2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "94172d80-767c-4ab8-a20a-d79bdb277053",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-28T10:49:07.542Z",
+      "createdAt": "2026-01-28T10:49:07.542Z",
+      "role": "workflow:owner",
+      "workflowId": "cXW85EUMYJ27wcdb",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

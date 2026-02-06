@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-03T19:45:55.410Z",
+  "updatedAt": "2026-02-05T22:40:28.144Z",
   "createdAt": "2026-01-28T10:49:07.494Z",
   "id": "cXW85EUMYJ27wcdb",
   "name": "Automate d'Extraction Facture",
@@ -17,8 +17,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -240,
-        -608
+        -336,
+        -448
       ],
       "id": "29cc63d6-0653-4dd6-a589-b7b61398a53c",
       "name": "Réception Image Facture",
@@ -31,8 +31,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -16,
-        -608
+        -112,
+        -448
       ],
       "id": "55b799da-9b74-4488-bbd8-fc348dd91ff1",
       "name": "Conversion Image vers Base64"
@@ -52,8 +52,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        208,
-        -608
+        112,
+        -448
       ],
       "id": "f8c2f5b9-c1d2-4ed7-aaa6-d0b630b3e44c",
       "name": "Analyse IA (Llama 4 Vision)",
@@ -71,8 +71,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        432,
-        -608
+        336,
+        -448
       ],
       "id": "5cbdcb1c-246a-494f-8543-6498ce297c7c",
       "name": "Nettoyage & Génération IDs"
@@ -124,8 +124,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        384,
-        -144
+        288,
+        16
       ],
       "id": "667a4508-327a-4f71-9df1-e8fe49e2e1b6",
       "name": "Créer Facture",
@@ -145,8 +145,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1152,
-        -592
+        1056,
+        -432
       ],
       "id": "73f0f813-0756-4728-90e0-70935432d18d",
       "name": "Extraction Liste Articles"
@@ -180,8 +180,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        32,
-        -224
+        -64,
+        -64
       ],
       "id": "084ef651-510c-4fe5-9afb-e1f9e1ae25ac",
       "name": "If"
@@ -203,8 +203,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        480,
-        -320
+        384,
+        -160
       ],
       "id": "00dac640-3241-4450-8b89-22f84ac2b29e",
       "name": "Supprimer Anciens Articles",
@@ -227,8 +227,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        960,
-        -592
+        864,
+        -432
       ],
       "id": "19734793-ea65-4b07-b51a-3b2165dc1209",
       "name": "Merge"
@@ -257,8 +257,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        -192,
-        -224
+        -288,
+        -64
       ],
       "id": "ce38f09e-a639-4255-b9f7-0e370e187142",
       "name": "Get many rows",
@@ -313,8 +313,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1344,
-        -592
+        1248,
+        -432
       ],
       "id": "14ef27f4-c756-4b50-8200-7cdb125d5abf",
       "name": "Créer Lignes Articles",
@@ -466,8 +466,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        256,
-        -320
+        160,
+        -160
       ],
       "id": "c499a9de-4007-47aa-b259-20921c8f3da0",
       "name": "Update a row",
@@ -495,8 +495,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        704,
-        -320
+        608,
+        -160
       ],
       "id": "6852f7cb-8a1a-4e33-8a06-c6ce4029590c",
       "name": "Préparer Data (Update)"
@@ -518,8 +518,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        720,
-        -144
+        624,
+        16
       ],
       "id": "d78d6586-8555-4f41-806e-0647aed15f77",
       "name": "Préparer Data (Create)"
@@ -1799,7 +1799,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "94172d80-767c-4ab8-a20a-d79bdb277053",
+  "versionId": "3e5db09e-759d-45be-a4a4-3794375821af",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

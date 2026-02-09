@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-05T22:40:28.144Z",
+  "updatedAt": "2026-02-06T15:05:07.533Z",
   "createdAt": "2026-01-28T10:49:07.494Z",
   "id": "cXW85EUMYJ27wcdb",
   "name": "Automate d'Extraction Facture",
@@ -17,8 +17,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -336,
-        -448
+        -208,
+        -768
       ],
       "id": "29cc63d6-0653-4dd6-a589-b7b61398a53c",
       "name": "Réception Image Facture",
@@ -31,8 +31,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -112,
-        -448
+        16,
+        -768
       ],
       "id": "55b799da-9b74-4488-bbd8-fc348dd91ff1",
       "name": "Conversion Image vers Base64"
@@ -52,15 +52,15 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        112,
-        -448
+        240,
+        -768
       ],
       "id": "f8c2f5b9-c1d2-4ed7-aaa6-d0b630b3e44c",
       "name": "Analyse IA (Llama 4 Vision)",
       "credentials": {
         "httpHeaderAuth": {
           "id": "O4KVT34b9pU08047",
-          "name": "Header Auth account"
+          "name": "clé API Groq"
         }
       }
     },
@@ -71,8 +71,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        336,
-        -448
+        464,
+        -768
       ],
       "id": "5cbdcb1c-246a-494f-8543-6498ce297c7c",
       "name": "Nettoyage & Génération IDs"
@@ -124,8 +124,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        288,
-        16
+        416,
+        -304
       ],
       "id": "667a4508-327a-4f71-9df1-e8fe49e2e1b6",
       "name": "Créer Facture",
@@ -145,8 +145,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1056,
-        -432
+        1184,
+        -752
       ],
       "id": "73f0f813-0756-4728-90e0-70935432d18d",
       "name": "Extraction Liste Articles"
@@ -180,8 +180,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -64,
-        -64
+        64,
+        -384
       ],
       "id": "084ef651-510c-4fe5-9afb-e1f9e1ae25ac",
       "name": "If"
@@ -203,8 +203,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        384,
-        -160
+        512,
+        -480
       ],
       "id": "00dac640-3241-4450-8b89-22f84ac2b29e",
       "name": "Supprimer Anciens Articles",
@@ -227,8 +227,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        864,
-        -432
+        992,
+        -752
       ],
       "id": "19734793-ea65-4b07-b51a-3b2165dc1209",
       "name": "Merge"
@@ -257,8 +257,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        -288,
-        -64
+        -160,
+        -384
       ],
       "id": "ce38f09e-a639-4255-b9f7-0e370e187142",
       "name": "Get many rows",
@@ -313,8 +313,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1248,
-        -432
+        1376,
+        -752
       ],
       "id": "14ef27f4-c756-4b50-8200-7cdb125d5abf",
       "name": "Créer Lignes Articles",
@@ -466,8 +466,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        160,
-        -160
+        288,
+        -480
       ],
       "id": "c499a9de-4007-47aa-b259-20921c8f3da0",
       "name": "Update a row",
@@ -495,8 +495,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        608,
-        -160
+        736,
+        -480
       ],
       "id": "6852f7cb-8a1a-4e33-8a06-c6ce4029590c",
       "name": "Préparer Data (Update)"
@@ -518,8 +518,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        624,
-        16
+        752,
+        -304
       ],
       "id": "d78d6586-8555-4f41-806e-0647aed15f77",
       "name": "Préparer Data (Create)"
@@ -579,7 +579,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        -256,
+        160,
         512
       ],
       "id": "d525ed42-5963-4528-9554-c44ff999db07",
@@ -608,7 +608,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        640,
+        1056,
         272
       ],
       "id": "f38de816-db90-478e-a542-3091639e1372",
@@ -616,7 +616,7 @@
       "credentials": {
         "httpHeaderAuth": {
           "id": "O4KVT34b9pU08047",
-          "name": "Header Auth account"
+          "name": "clé API Groq"
         }
       }
     },
@@ -629,7 +629,7 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
       "position": [
-        -16,
+        400,
         400
       ],
       "id": "f8ca3f4b-c286-4f09-bf3f-f1bdf327b365",
@@ -662,7 +662,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        176,
+        592,
         400
       ],
       "id": "e136a548-a2ce-41f9-ad9b-0b7578ea5a8e",
@@ -683,7 +683,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        928,
+        1344,
         384
       ],
       "id": "fc502aa5-1b8e-494d-81d5-a3b16dea22fb",
@@ -691,7 +691,7 @@
       "credentials": {
         "httpHeaderAuth": {
           "id": "O4KVT34b9pU08047",
-          "name": "Header Auth account"
+          "name": "clé API Groq"
         }
       }
     },
@@ -712,7 +712,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        384,
+        800,
         304
       ],
       "id": "3472220e-d867-4fc2-9184-29cb55d06533",
@@ -743,7 +743,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        864,
+        1280,
         560
       ],
       "id": "cc9e7b1d-9c35-4768-9b0a-76e64e35a458",
@@ -764,7 +764,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1072,
+        1488,
         560
       ],
       "id": "768daebd-6cb3-4b63-aad0-7962b2a6fe20",
@@ -772,7 +772,7 @@
       "credentials": {
         "httpHeaderAuth": {
           "id": "O4KVT34b9pU08047",
-          "name": "Header Auth account"
+          "name": "clé API Groq"
         }
       }
     },
@@ -783,7 +783,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1248,
+        1664,
         560
       ],
       "id": "07b680d0-e5df-4633-a8c0-7630f5309b9f",
@@ -848,7 +848,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        848,
+        1264,
         1056
       ],
       "id": "8993191b-325d-4374-a1c7-0e60fe396ecf",
@@ -869,7 +869,7 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1648,
+        2064,
         816
       ],
       "id": "15baba54-7c29-4cc9-a9d0-a0a5d00168b0",
@@ -905,7 +905,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        496,
+        912,
         976
       ],
       "id": "aaedda8e-0de6-46f1-8b1d-39c07678e0a9",
@@ -928,7 +928,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        944,
+        1360,
         880
       ],
       "id": "125a27b8-01de-4d4e-9d91-9debe0d1e29f",
@@ -953,7 +953,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1440,
+        1856,
         800
       ],
       "id": "bcfc6bd7-2afb-40a7-9c83-7a3b36399641",
@@ -983,7 +983,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        272,
+        688,
         976
       ],
       "id": "75769064-dcba-46b0-89fc-05ae65ba1c94",
@@ -1039,7 +1039,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1872,
+        2288,
         816
       ],
       "id": "4cd35455-179f-4726-847f-6524547f51e3",
@@ -1192,7 +1192,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        720,
+        1136,
         880
       ],
       "id": "813ccbed-c4a1-46c8-800d-1333fc062253",
@@ -1227,7 +1227,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1168,
+        1584,
         880
       ],
       "id": "b8679149-f48b-409d-a1df-5866c84d17fd",
@@ -1256,7 +1256,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1168,
+        1584,
         1056
       ],
       "id": "3d4f5761-ab26-4117-b475-e554ceff5e00",
@@ -1286,7 +1286,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1440,
+        1856,
         560
       ],
       "id": "2369a551-0678-40d8-a368-7319e814699d",
@@ -1299,7 +1299,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1840,
+        2256,
         560
       ],
       "id": "a0006d1e-1e7c-49f3-b12b-426c9733a94c",
@@ -1323,14 +1323,14 @@
     {
       "parameters": {
         "content": "",
-        "height": 368,
+        "height": 480,
         "width": 1184,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         816,
-        368
+        256
       ],
       "typeVersion": 1,
       "id": "1b015264-43d3-4be4-8986-1879e5c68808",
@@ -1367,6 +1367,29 @@
       "typeVersion": 1,
       "id": "9384988d-82c1-4ff6-9d29-a06d7fc9e9bd",
       "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://dpyexafgnmdobjeenaok.supabase.co/storage/v1/object/invoices/{{ $execution.id }}_{{ encodeURIComponent($binary.data0.fileName) }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -272,
+        512
+      ],
+      "id": "032fc389-a2c0-468f-9eb0-786850cb2c5d",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Yzp2nS2Tfmyi8pQf",
+          "name": "supabase"
+        }
+      }
     }
   ],
   "connections": {
@@ -1609,7 +1632,7 @@
       "main": [
         [
           {
-            "node": "Switch",
+            "node": "HTTP Request1",
             "type": "main",
             "index": 0
           }
@@ -1788,6 +1811,17 @@
           }
         ]
       ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1799,7 +1833,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "3e5db09e-759d-45be-a4a4-3794375821af",
+  "versionId": "564d8faf-9a68-47b4-93fb-77296a728e37",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

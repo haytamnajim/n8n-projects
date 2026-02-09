@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-26T19:54:38.523Z",
+  "updatedAt": "2026-02-07T21:40:36.417Z",
   "createdAt": "2026-01-26T19:53:11.638Z",
   "id": "bxEx87XmjvQz2GGs",
   "name": "Résumé de réunion par IA",
@@ -18,47 +18,20 @@
         "triggerOn": "specificFolder",
         "folderToWatch": {
           "__rl": true,
-          "value": "YOUR_FOLDER_ID_HERE",
+          "value": "1GUdufujwJYNKWDRQoxrCI5NoTxP9lqRn",
           "mode": "list",
-          "cachedResultName": "Meetings-Recording",
-          "cachedResultUrl": "https://drive.google.com/drive/folders/YOUR_FOLDER_ID_HERE"
+          "cachedResultName": "Réunions IA",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1GUdufujwJYNKWDRQoxrCI5NoTxP9lqRn"
         },
-        "event": "folderUpdated"
+        "event": "fileCreated",
+        "options": {}
       },
       "id": "12d39db0-07c8-473d-9289-ff527e44bc3a",
       "name": "Google Drive Trigger",
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
       "position": [
-        -1296,
-        208
-      ],
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "fWLS289ikMPUjkaF",
-          "name": "Google Drive account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "fileFolder",
-        "filter": {
-          "folderId": {
-            "__rl": true,
-            "value": "={{ $json.id }}",
-            "mode": "id"
-          },
-          "whatToSearch": "files"
-        },
-        "options": {}
-      },
-      "id": "d7629994-be81-40f6-8a69-ca8015c81b16",
-      "name": "Find Audio File",
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        -1040,
+        -992,
         208
       ],
       "credentials": {
@@ -83,7 +56,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -608,
+        -768,
         208
       ],
       "credentials": {
@@ -109,7 +82,7 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1.1,
       "position": [
-        -352,
+        -544,
         208
       ],
       "id": "6b71408b-5e78-4ef6-99a8-368763210902",
@@ -152,152 +125,69 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -128,
+        -272,
         208
       ]
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.9,
-      "position": [
-        64,
-        208
-      ],
-      "id": "6dfb996c-e2a1-4907-be4e-8780c189ca8f",
-      "name": "Analyze Meeting"
-    },
-    {
-      "parameters": {
-        "model": "google/gemini-2.0-flash-001",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-      "typeVersion": 1,
-      "position": [
-        32,
-        400
-      ],
-      "id": "e7ee3505-7573-4da0-8c06-02ba5d63d857",
-      "name": "OpenRouter Chat Model"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "4c89f194-9876-4a64-a2a0-1040c32325b5",
-              "leftValue": "={{ $json.name }}",
-              "rightValue": "m4a",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.3,
-      "position": [
-        -800,
-        208
-      ],
-      "id": "53c10fd8-a1c3-4489-a351-c4993c10296d",
-      "name": "Filter"
     },
     {
       "parameters": {
         "resource": "databasePage",
         "databaseId": {
           "__rl": true,
-          "value": "YOUR_NOTION_DATABASE_ID",
+          "value": "300edf2a-2a1f-8011-9457-e1784e9321e1",
           "mode": "list",
-          "cachedResultName": "Meeting Notes",
-          "cachedResultUrl": "https://www.notion.so/YOUR_NOTION_DATABASE_ID"
+          "cachedResultName": "Réunions par IA",
+          "cachedResultUrl": "https://www.notion.so/300edf2a2a1f80119457e1784e9321e1"
         },
         "title": "={{ $('Extract Transcription').item.json.fileName }}",
-        "blockUi": {
-          "blockValues": [
+        "propertiesUi": {
+          "propertyValues": [
             {
-              "type": "heading_1",
-              "textContent": "={{ $('Extract Transcription').item.json.fileName }}"
-            },
-            {},
-            {
-              "type": "heading_2",
-              "textContent": "📋 Meeting Summary"
-            },
-            {
+              "key": "Résumé|rich_text",
               "textContent": "={{ $json.output.meeting_summary }}"
             },
-            {},
             {
-              "type": "heading_2",
-              "textContent": "💡 Key Discussion Points"
-            },
-            {
+              "key": "Points clés\t|rich_text",
               "textContent": "={{ $json.output.key_discussion_points }}"
             },
-            {},
             {
-              "type": "heading_2",
-              "textContent": "✅ Action Items"
-            },
-            {
-              "textContent": "={{ $json.output.action_items }}"
-            },
-            {},
-            {
-              "type": "heading_2",
-              "textContent": "🎯 Decisions Made"
-            },
-            {
-              "textContent": "={{ $json.output.decisions_made }}"
-            },
-            {},
-            {
-              "type": "heading_2",
-              "textContent": "👥 Participants & Contributions"
-            },
-            {
-              "textContent": "={{ $json.output.participants_contributions }}"
-            },
-            {},
-            {
-              "type": "heading_2",
-              "textContent": "🤖 Automation Opportunities"
-            },
-            {
+              "key": "Automatisations\t|rich_text",
               "textContent": "={{ $json.output.automation_opportunities }}"
             },
-            {},
             {
-              "textContent": "🔗 Recording: ={{ $('Extract Transcription').item.json.driveLink }}"
+              "key": "Nom|title",
+              "title": "={{ $node[\"Google Drive Trigger\"].json.name }}"
+            },
+            {
+              "key": "Tâches à faire\t|rich_text",
+              "textContent": "={{ $json.output.action_items }}"
+            },
+            {
+              "key": "Participants\t|rich_text",
+              "textContent": "={{ $json.output.participants_contributions }}"
+            },
+            {
+              "key": "Décisions|rich_text",
+              "textContent": "={{ $json.output.decisions_made }}"
             }
           ]
         },
-        "options": {
-          "iconType": "emoji",
-          "icon": "🎙️"
-        }
+        "options": {}
       },
       "type": "n8n-nodes-base.notion",
       "typeVersion": 2.2,
       "position": [
-        480,
+        368,
         208
       ],
       "id": "3719b4a7-c7a0-4195-8c5a-5f9bc911bac9",
-      "name": "Create a database page"
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "q2TFDg3r1RNDNJBq",
+          "name": "Notion account"
+        }
+      }
     },
     {
       "parameters": {
@@ -307,23 +197,23 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        256,
-        384
+        160,
+        432
       ],
       "id": "fa142c23-6952-417f-b28c-aa9e9f4f0ff0",
       "name": "Structured Output Parser"
     },
     {
       "parameters": {
-        "content": "## Download Recording Audio\nWatches your Google Drive folder for new Zoom recordings and downloads them automatically.",
-        "height": 272,
-        "width": 912,
+        "content": "Récupération (Download Recording Audio)\nGoogle Drive Trigger : Le guetteur qui attend l'arrivée d'un audio.\nDownload Audio : Le bras qui va chercher le fichier pour le donner à l'IA.",
+        "height": 304,
+        "width": 400,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1376,
-        128
+        -1048,
+        64
       ],
       "typeVersion": 1,
       "id": "247fe4fa-c165-4e7e-915c-25e5b430d3e1",
@@ -331,13 +221,13 @@
     },
     {
       "parameters": {
-        "content": "## Audio Transcription\n**Using Gemini 2.5 Flash**\n\nTranscribes audio in ANY language including Darija, Arabic, French, and English mixed together!",
-        "height": 336,
+        "content": "Écoute (Audio Transcription)\nTranscribe Audio : L'oreille qui transforme le son en texte écrit grâce à Gemini Flash.",
+        "height": 320,
         "width": 272
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -448,
+        -632,
         48
       ],
       "typeVersion": 1,
@@ -346,19 +236,110 @@
     },
     {
       "parameters": {
-        "content": "## Extract Meeting Details\nAI analyzes the transcription and extracts:\n• Summary\n• Key Points\n• Action Items\n• Decisions\n• Participants\n• Automation Opportunities",
-        "height": 544,
-        "width": 384,
+        "content": "Intelligence (Extract Meeting Details)\nExtract Transcription : La préparation du texte.\nAI Agent : Le cerveau qui analyse, résume et extrait les tâches à faire.\nNote : Ce bloc englobe aussi le Parser (qui crée les \"tiroirs\" de données) et la Mémoire.",
+        "height": 608,
+        "width": 592,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        0,
-        0
+        -336,
+        -32
       ],
       "typeVersion": 1,
       "id": "834c5e11-c877-4825-9744-96207ee75cc5",
       "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Voici la transcription d'une réunion. Analyse-la et extrais les informations suivantes pour notre base de données :\n- Résumé (vue d'ensemble)\n- Points clés (moments forts)\n- Tâches à faire (qui fait quoi)\n- Décisions (ce qui a été validé)\n- Participants (noms des personnes)\n- Automatisations (opportunités détectées)\n\nTranscription : {{ $json.Transcription }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Tu es un assistant expert en analyse de réunions. Ton rôle est d'extraire de manière structurée les points essentiels d'une transcription audio. Tu dois être précis, concis et professionnel."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -40,
+        208
+      ],
+      "id": "8d3dca2f-7166-4ee7-aa7e-8c2fb1cb28d5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        432
+      ],
+      "id": "4c504cff-4d75-47ef-841c-e9570991b37c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "bxEx87XmjvQz2GGs"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        432
+      ],
+      "id": "7f743180-17bb-431e-bf9a-ced768a29f5b",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "chatId": "5507847449",
+        "text": "=🚀 <b>NOUVELLE RÉUNION ANALYSÉE</b> 🚀\n\n📁 <b>Fichier</b> : {{ $json.property_nom }}\n📅 <b>Date</b> : {{ new Date().toLocaleDateString('fr-FR') }}\n\n_________________________________\n\n📑 <b>RÉSUMÉ</b>\n{{ $json.property_r_sum }}\n\n💡 <b>POINTS CLÉS</b>\n{{ $json.property_points_cl_s }}\n\n✅ <b>ACTIONS À FAIRE</b>\n{{ $json.property_t_ches_faire }}\n\n📌 <b>DÉCISIONS</b>\n{{ $json.property_d_cisions }}\n\n👥 <b>PARTICIPANTS</b>\n{{ $json.property_participants }}\n\n_________________________________\n\n🔗 <a href=\"{{ $json.url }}\">Ouvrir sur Notion</a>",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        592,
+        208
+      ],
+      "id": "f021aa80-86b7-417a-a22c-9c0e94be6b17",
+      "name": "Send a text message",
+      "webhookId": "f3923b1b-7073-46b7-831d-65c5bd22e255",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Sorties Finales (Hors carte)\nNotion : Votre bibliothèque où tout est archivé proprement.\nTelegram : Votre assistant qui vous envoie le résumé sur votre téléphone.",
+        "height": 288,
+        "width": 496,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        280,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "f84f9c54-72b2-459b-8b80-5c43794a84c9",
+      "name": "Sticky Note3"
     }
   ],
   "connections": {
@@ -366,18 +347,7 @@
       "main": [
         [
           {
-            "node": "Find Audio File",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Find Audio File": {
-      "main": [
-        [
-          {
-            "node": "Filter",
+            "node": "Download Audio",
             "type": "main",
             "index": 0
           }
@@ -406,11 +376,66 @@
         ]
       ]
     },
-    "Filter": {
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Transcription": {
       "main": [
         [
           {
-            "node": "Download Audio",
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
             "type": "main",
             "index": 0
           }
@@ -423,9 +448,11 @@
     "availableInMCP": false
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
-  "versionId": "c64a6005-31a2-42f1-b6d6-b51450fd5a23",
+  "versionId": "8af77d0b-ecb0-49c7-af2e-8905db7ba9ed",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

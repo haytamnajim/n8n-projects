@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-27T19:13:56.086Z",
+  "updatedAt": "2026-02-10T11:02:56.460Z",
   "createdAt": "2026-01-22T10:04:31.383Z",
   "id": "kMEyCKuurbIiCljj",
   "name": "classification-email",
@@ -66,7 +66,7 @@
       "type": "@n8n/n8n-nodes-langchain.textClassifier",
       "typeVersion": 1.1,
       "position": [
-        -96,
+        -128,
         16
       ],
       "id": "db617aab-bce8-4d66-a20a-998dec1e4d9c",
@@ -256,7 +256,7 @@
     },
     {
       "parameters": {
-        "sendTo": "={{ $('Gmail Trigger').json.From }}",
+        "sendTo": "={{ $('Gmail Trigger').item.json.From }}",
         "subject": "={{ $('Gmail Trigger').item.json.Subject }}",
         "message": "={{ $('AI Agent').item.json.output }}",
         "options": {}
@@ -324,6 +324,83 @@
           "name": "Groq account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "🎯 OBJECTIF : CAPTURE & ANALYSE\n\nDétection automatique des nouveaux emails.\nUtilisation de l'IA (Groq) pour classifier l'intention.\nIdentification du type de demande (Facture, Support, Priorité).",
+        "height": 368,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -336,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "158b5024-1adf-4d97-8e3b-bce85ec9785c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "🏷️ OBJECTIF : ORGANISATION GMAIL\n\nApplication automatique des labels dans votre boîte Gmail.\nPermet un suivi visuel direct sans ouvrir n8n.\nTri automatique par catégories.",
+        "height": 1120,
+        "width": 272,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        -560
+      ],
+      "typeVersion": 1,
+      "id": "8b2caa17-bfe9-406f-a419-c382ad03e90d",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "🤖 OBJECTIF : GÉNÉRATION DE RÉPONSE\n\nAnalyse du contenu par l'agent IA.\nRédaction d'une réponse personnalisée et polie.\nCréation d'un brouillon (Draft) sans envoyer pour garder le contrôle.",
+        "height": 304,
+        "width": 528,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        464,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "56698f11-4cf5-42d5-8380-7324f95c8363",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "kMEyCKuurbIiCljj"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        240
+      ],
+      "id": "b4433c3e-1ae2-4414-ae99-7b407b01c7a6",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "content": "🛡️ OBJECTIF : CONTRÔLE HUMAIN (HITL)\n\nAlerte Telegram pour validation.\nChoix : [Approuver] ou [Décliner].\nEnvoi final du mail uniquement après feu vert.",
+        "height": 304,
+        "width": 400,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1008,
+        -112
+      ],
+      "typeVersion": 1,
+      "id": "97f7bf53-64c3-4ab2-84b9-c67f8748aeb1",
+      "name": "Sticky Note3"
     }
   ],
   "connections": {
@@ -486,6 +563,17 @@
           }
         ]
       ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -497,7 +585,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "7e1caade-fb12-46e6-9620-db7e7493f560",
+  "versionId": "8370158d-2bb0-4888-9626-582cbe302436",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

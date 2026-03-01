@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-07T21:40:36.417Z",
+  "updatedAt": "2026-02-10T20:00:27.282Z",
   "createdAt": "2026-01-26T19:53:11.638Z",
   "id": "bxEx87XmjvQz2GGs",
   "name": "Résumé de réunion par IA",
@@ -197,7 +197,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        160,
+        128,
         432
       ],
       "id": "fa142c23-6952-417f-b28c-aa9e9f4f0ff0",
@@ -212,7 +212,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1048,
+        -1056,
         64
       ],
       "typeVersion": 1,
@@ -227,7 +227,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -632,
+        -640,
         48
       ],
       "typeVersion": 1,
@@ -238,12 +238,12 @@
       "parameters": {
         "content": "Intelligence (Extract Meeting Details)\nExtract Transcription : La préparation du texte.\nAI Agent : Le cerveau qui analyse, résume et extrait les tâches à faire.\nNote : Ce bloc englobe aussi le Parser (qui crée les \"tiroirs\" de données) et la Mémoire.",
         "height": 608,
-        "width": 592,
+        "width": 608,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -336,
+        -352,
         -32
       ],
       "typeVersion": 1,
@@ -262,7 +262,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -40,
+        -48,
         208
       ],
       "id": "8d3dca2f-7166-4ee7-aa7e-8c2fb1cb28d5",
@@ -275,7 +275,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -96,
+        -144,
         432
       ],
       "id": "4c504cff-4d75-47ef-841c-e9570991b37c",
@@ -295,7 +295,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        32,
+        -16,
         432
       ],
       "id": "7f743180-17bb-431e-bf9a-ced768a29f5b",
@@ -334,7 +334,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        280,
+        272,
         80
       ],
       "typeVersion": 1,
@@ -452,7 +452,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "8af77d0b-ecb0-49c7-af2e-8905db7ba9ed",
+  "versionId": "d3ad0aca-5dd4-4c2c-9cf8-4a8b4a05eb20",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

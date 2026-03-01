@@ -1,0 +1,140 @@
+{
+  "updatedAt": "2026-02-15T18:06:23.000Z",
+  "createdAt": "2026-02-14T23:09:40.178Z",
+  "id": "acvoPr40GdUahDzl",
+  "name": "botola-pro",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "botola-matches",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        208
+      ],
+      "id": "c3c8c068-3eca-492c-967f-8c2ad779af60",
+      "name": "Webhook",
+      "webhookId": "e7d1eb77-d18a-4b28-902c-ba02429386fc"
+    },
+    {
+      "parameters": {
+        "jsCode": "// On importe Cheerio (inclus dans n8n)\nconst cheerio = require('cheerio');\n\n// On récupère le HTML renvoyé par le noeud précédent (HTTP Request)\n// Note: Assurez-vous que \"Response Format\" du HTTP Request est bien sur \"String\"\nconst html = $input.item.json.data || Object.values($input.item.json)[0]; \n\nconst $ = cheerio.load(html);\nconst matches = [];\n\n// Date du jour pour l'affichage\nconst today = new Date().toISOString().split('T')[0];\n\ntry {\n    // Sélecteurs pour Elbotola.com (à adapter si le site change)\n    // On cherche les lignes de match\n    $('.matchs_group .match_row').each((i, el) => {\n        \n        let homeTeam = $(el).find('.club_name_home').text().trim();\n        let awayTeam = $(el).find('.club_name_away').text().trim();\n        let score = $(el).find('.result').text().trim(); // Ex: \"1 - 0\"\n        let time = $(el).find('.match_time').text().trim(); // Ex: \"20:00\" ou \"90'\"\n\n        // Si on a des noms d'équipes, c'est un match valide\n        if (homeTeam && awayTeam) {\n            \n            let status = 'UPCOMING';\n            \n            // Logique pour déterminer le statut\n            if (score.includes('-')) {\n                // Si le temps contient des minutes (ex: 35') ou \"Live\", c'est en direct\n                if (time.includes(\"'\") || $(el).html().includes('live')) {\n                    status = 'LIVE';\n                } else {\n                    status = 'FINISHED';\n                }\n            } else {\n                // Pas de tiret dans le score = Pas encore commencé\n                status = 'UPCOMING';\n                score = 'vs'; // On affiche \"vs\" au lieu de vide\n            }\n\n            matches.push({\n                home: homeTeam,\n                away: awayTeam,\n                score: score.replace(/\\s+/g, ''), // Nettoie le score\n                time: time,\n                status: status,\n                date: today\n            });\n        }\n    });\n\n} catch (error) {\n    console.log(\"Erreur de parsing : \" + error.message);\n}\n\n// === FILE DE SECURITÉ ===\n// Si le site a changé ou bloque le scraping, on envoie des fausses données\n// pour ne pas casser votre site web.\nif (matches.length === 0) {\n    return [\n        {\n            home: \"Raja CA (Test)\", \n            away: \"Wydad AC\", \n            score: \"0 - 0\", \n            time: \"20:00\", \n            status: \"UPCOMING\", \n            date: today\n        },\n        {\n            home: \"RS Berkane\", \n            away: \"FUS Rabat\", \n            score: \"Live\", \n            time: \"En direct\", \n            status: \"LIVE\", \n            date: today\n        }\n    ];\n}\n\nreturn matches;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "9bcd22d1-e26a-4f8c-8d18-b4f64e8631b4",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "https://v3.football.api-sports.io/fixtures",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "league",
+              "value": "200"
+            },
+            {
+              "name": "season ",
+              "value": "2024"
+            },
+            {
+              "name": "date ",
+              "value": "2026-02-15"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-apisports-key",
+              "value": "3de4456e621de9f8ece8161b45f40668"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "24976e78-bec3-48f4-b584-203cbecb64fb",
+      "name": "HTTP Request",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -16
+      ],
+      "id": "9455a70d-a784-460b-8166-1c800649e310",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "7a4acf87-3a49-43c1-9bf7-24f97d2e8568",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-14T23:09:40.194Z",
+      "createdAt": "2026-02-14T23:09:40.194Z",
+      "role": "workflow:owner",
+      "workflowId": "acvoPr40GdUahDzl",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

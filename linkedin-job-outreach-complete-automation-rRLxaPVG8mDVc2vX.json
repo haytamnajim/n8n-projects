@@ -1,0 +1,837 @@
+{
+  "updatedAt": "2026-03-01T18:06:46.390Z",
+  "createdAt": "2026-03-01T17:13:23.245Z",
+  "id": "rRLxaPVG8mDVc2vX",
+  "name": "LinkedIn Job Outreach Complete Automation",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        688
+      ],
+      "id": "bf1a17c5-f655-41f3-9909-1a4886a58b3d"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Set input parameters for the workflow\nreturn {\n  company_domain: '{{ $json.company_domain || \"tesla.com\" }}',\n  spreadsheet_id: '{{ $json.spreadsheet_id }}',\n  search_keywords: '{{ $json.search_keywords || \"Software Engineer\" }}'\n};"
+      },
+      "name": "Setup Input Variables",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -480,
+        688
+      ],
+      "id": "08085223-997e-462e-b507-cec71042bceb"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse jobs from Apify LinkedIn Scraper response\nconst jobs = $input.all().map(item => ({\n  jobId: item.json.id || item.json.trackingId || '',\n  title: item.json.title || '',\n  company: item.json.companyName || 'Unknown',\n  companyId: item.json.companyId || '',\n  location: item.json.location || '',\n  url: item.json.link || '',\n  postedDate: item.json.postedAt ? new Date(item.json.postedAt).toLocaleDateString('en-US') : '',\n  postedDateUnix: item.json.postedAt || '',\n  description: item.json.descriptionHtml || item.json.description || '',\n  salary: item.json.salary || 'Not specified',\n  applicationStatus: 'Pending',\n  hiringManager: '',\n  hiringManagerId: '',\n  hiringEmail: '',\n  hiringLinkedIn: '',\n  linkedinMessageSent: 'No',\n  appliedDate: '',\n  notes: ''\n}));\n\nreturn jobs;"
+      },
+      "name": "Parse Jobs Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        688
+      ],
+      "id": "48c3a178-ad92-4a4d-b787-9f9ef8fdd0a0"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter jobs posted this week only\nconst now = new Date();\nconst weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);\n\nconst filteredJobs = $input.all().filter(item => {\n  const jobDate = new Date(item.json.postedDateUnix);\n  return jobDate > weekAgo;\n});\n\nconsole.log(`Found ${filteredJobs.length} jobs posted this week out of ${$input.all().length} total`);\nreturn filteredJobs;"
+      },
+      "name": "Filter Week Jobs Only",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        688
+      ],
+      "id": "bea3c30d-5c47-41a4-bf83-de3cbdae8e76"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Check if job is older than 30 days (backup filter)\nconst thirtyDaysAgo = new Date();\nthirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);\n\nreturn $input.all().filter(item => {\n  const jobDate = new Date(item.json.postedDateUnix);\n  return jobDate > thirtyDaysAgo;\n});"
+      },
+      "name": "Filter - Remove Old Jobs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        688
+      ],
+      "id": "9c56d530-a86b-44e9-b4fc-5f03c1eccb4c"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1J7lMf2lB_GiJGohMEW998gTmkbuOVvn-gxHw87qkZp4",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Job Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1J7lMf2lB_GiJGohMEW998gTmkbuOVvn-gxHw87qkZp4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Job Listings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1J7lMf2lB_GiJGohMEW998gTmkbuOVvn-gxHw87qkZp4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "name": "Get Existing Jobs (Check Duplicates)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        640,
+        688
+      ],
+      "id": "7ea4ac7b-53e5-4595-b444-749d021c27fc",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Remove duplicate jobs\nconst existingJobs = $node['Get Existing Jobs (Check Duplicates)'].json.values || [];\nconst existingUrls = existingJobs.slice(1).map(row => row[4]); // URL column (index 4)\n\nconst newJobs = $input.all().filter(item => {\n  return !existingUrls.includes(item.json.url);\n});\n\nconsole.log(`Found ${newJobs.length} new unique jobs`);\nreturn newJobs;"
+      },
+      "name": "Filter - Remove Duplicates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        688
+      ],
+      "id": "104619a8-d551-4f96-a6e5-3cc5d282719b"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Format data for Google Sheets\nreturn $input.all().map(item => ({\n  json: {\n    'Job ID': item.json.jobId || '',\n    'Job Title': item.json.title || '',\n    'Company': item.json.company || '',\n    'Location': item.json.location || '',\n    'Job URL': item.json.url || '',\n    'Posted Date': item.json.postedDate || '',\n    'Salary': item.json.salary || '',\n    'Job Description': (item.json.description || '').substring(0, 200) + '...',\n    'Hiring Manager': item.json.hiringManager || '',\n    'Hiring Email': item.json.hiringEmail || '',\n    'Hiring LinkedIn': item.json.hiringLinkedIn || '',\n    'Application Status': item.json.applicationStatus || 'Pending',\n    'LinkedIn Message Sent': item.json.linkedinMessageSent || 'No',\n    'Added Date': new Date().toLocaleDateString('en-US')\n  }\n}));"
+      },
+      "name": "Format For Google Sheets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        688
+      ],
+      "id": "b5123686-d84b-4aa7-a231-e25906b59ad5"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1J7lMf2lB_GiJGohMEW998gTmkbuOVvn-gxHw87qkZp4",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Job Tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1J7lMf2lB_GiJGohMEW998gTmkbuOVvn-gxHw87qkZp4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Job Listings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1J7lMf2lB_GiJGohMEW998gTmkbuOVvn-gxHw87qkZp4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Job URL",
+              "displayName": "Job URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Posted Date",
+              "displayName": "Posted Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Salary",
+              "displayName": "Salary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Job Description",
+              "displayName": "Job Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Hiring Manager",
+              "displayName": "Hiring Manager",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Hiring Email",
+              "displayName": "Hiring Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Hiring LinkedIn",
+              "displayName": "Hiring LinkedIn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Application Status",
+              "displayName": "Application Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "LinkedIn Message Sent",
+              "displayName": "LinkedIn Message Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Added Date",
+              "displayName": "Added Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "name": "Step 2A: Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1312,
+        688
+      ],
+      "id": "6f7cc799-78db-4a95-aaaf-0d48082ee782",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apollo.io/v1/people/search",
+        "authentication": "genericCredentialType",
+        "sendBody": true,
+        "contentType": "application/json",
+        "options": {}
+      },
+      "name": "Step 3A: Apollo - Find HR Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1536,
+        688
+      ],
+      "id": "c51c2c1b-96b9-4a3b-8e9d-3a681887cb24",
+      "credentials": {
+        "apollo_auth": {
+          "id": null,
+          "name": "apollo_key_token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract and enrich with Apollo contact data\nconst apolloResponse = $input.item().json;\nconst contacts = apolloResponse.people || [];\n\nif (contacts.length > 0) {\n  const topContact = contacts[0]; // Get top match\n  return {\n    hiringManager: `${topContact.first_name} ${topContact.last_name}`,\n    hiringManagerId: topContact.id,\n    hiringEmail: topContact.email,\n    hiringLinkedIn: topContact.linkedin_url,\n    hiringManagerTitle: topContact.title,\n    hiringManagerPhone: topContact.phone || 'N/A'\n  };\n} else {\n  return {\n    hiringManager: 'Not found',\n    hiringManagerId: '',\n    hiringEmail: '',\n    hiringLinkedIn: '',\n    hiringManagerTitle: '',\n    hiringManagerPhone: ''\n  };\n}"
+      },
+      "name": "Parse Apollo Contacts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        688
+      ],
+      "id": "afb9e877-df83-43a1-a835-079113861e85"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Analyze job description and generate personalized bullet points\nconst jobDesc = $json.description || '';\nconst jobTitle = $json.title || '';\nconst company = $json.company || '';\n\nconst techKeywords = [\n  'Python', 'JavaScript', 'TypeScript', 'SQL', 'AWS', 'GCP', 'Azure',\n  'React', 'Node.js', 'Kubernetes', 'Docker', 'CI/CD',\n  'Machine Learning', 'AI', 'Data Analytics', 'DevOps'\n];\n\nconst softSkills = [\n  'Leadership', 'Management', 'Communication', 'Agile',\n  'Cross-functional', 'Problem-solving', 'Strategic'\n];\n\nconst matchedTechSkills = techKeywords.filter(skill => \n  jobDesc.toUpperCase().includes(skill.toUpperCase())\n).slice(0, 3);\n\nconst matchedSoftSkills = softSkills.filter(skill =>\n  jobDesc.toUpperCase().includes(skill.toUpperCase())\n).slice(0, 2);\n\nconst bulletPoints = [\n  matchedTechSkills.length > 0 ? `Delivered solutions using ${matchedTechSkills.join(', ')} at scale` : null,\n  matchedSoftSkills.length > 0 ? `${matchedSoftSkills[0]} leader driving team performance and innovation` : null,\n  `Optimized critical processes reducing operational costs by 40%+`,\n  `Successfully shipped 15+ major features impacting 100K+ users`,\n  `Mentored junior engineers and established engineering best practices`\n].filter(Boolean).slice(0, 4);\n\nreturn {\n  ...{{$json}},\n  matchedTechSkills,\n  matchedSoftSkills,\n  bulletPoints,\n  personalizedSummary: bulletPoints.join(' | ')\n};"
+      },
+      "name": "Step 4: Analyze & Personalize",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        688
+      ],
+      "id": "17aa1292-f24d-4097-a2e9-9809f3362c8d"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "nodeOutputs": {
+              "output": [
+                {
+                  "key": "hiringLinkedIn",
+                  "value": "exists",
+                  "condition": "exists"
+                }
+              ]
+            }
+          }
+        },
+        "options": {}
+      },
+      "name": "Check LinkedIn Profile Found",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2208,
+        688
+      ],
+      "alwaysOutputData": true,
+      "id": "ff10362d-8dc4-491e-b527-7fc994653dab"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate personalized LinkedIn message\nconst hiringManager = $json.hiringManager || 'Hiring Manager';\nconst company = $json.company;\nconst role = $json.title;\nconst matchedSkills = $json.matchedTechSkills || [];\n\nconst linkedinMessage = `Hi ${hiringManager},\\n\\nI came across the ${role} opening at ${company} and was impressed by your company's innovation.\\n\\nWith my 5+ years in software development and expertise in ${matchedSkills.join(', ')}, I believe I can drive significant impact on your team.\\n\\nWould love to discuss how my background aligns with your needs.\\n\\nBest,\\nHaitam Najim`;\n\nreturn {\n  ...{{$json}},\n  linkedinMessage,\n  linkedinMessageLength: linkedinMessage.length\n};"
+      },
+      "name": "Step 5: Generate LinkedIn Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        624
+      ],
+      "id": "c955159f-1eff-4edb-8ea9-c9657e0023b2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linkedin.com/v2/messaging/messages",
+        "authentication": "linkedinOAuth2",
+        "sendBody": true,
+        "contentType": "application/json",
+        "options": {}
+      },
+      "name": "Send LinkedIn Message to Recruiter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2656,
+        624
+      ],
+      "id": "a78e32f2-76bf-4065-9ad8-e4a8870a8f7a",
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate email content for application\nconst hiringManager = $json.hiringManager || 'Hiring Manager';\nconst company = $json.company;\nconst role = $json.title;\nconst bulletPoints = $json.bulletPoints || [];\n\nconst emailBody = `Hi ${hiringManager},\n\nI came across the ${role} position at ${company} and was impressed by your company's innovation in this space.\n\nWith my 5+ years of experience in software development and proven track record of delivering high-impact solutions, I believe I can contribute significantly to your team.\n\nKey highlights:\n${bulletPoints.map(point => `• ${point}`).join('\\n')}\n\nI've attached my personalized resume and would love to discuss how my background aligns with your needs.\n\nBest regards,\nHaitam Najim\nhaytamnajim07@gmail.com`;\n\nreturn {\n  ...{{$json}},\n  emailSubject: `Application: ${role} at ${company}`,\n  emailBody: emailBody,\n  emailTo: {{$json.hiringEmail}}\n};"
+      },
+      "name": "Step 6A: Draft Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        688
+      ],
+      "id": "97dfc9f0-0b6b-406e-a4d0-7a2f830595a1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "nodeOutputs": {
+              "output": [
+                {
+                  "key": "emailTo",
+                  "value": "exists",
+                  "condition": "exists"
+                }
+              ]
+            }
+          }
+        },
+        "options": {}
+      },
+      "name": "Check Email Exists",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3104,
+        688
+      ],
+      "alwaysOutputData": true,
+      "id": "a334acfa-b805-4db5-89a7-12a72920fa1a"
+    },
+    {
+      "parameters": {
+        "subject": "={{ $json.emailSubject }}",
+        "options": {}
+      },
+      "name": "Send Application Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        3328,
+        592
+      ],
+      "id": "52b7f5b5-5888-4934-bf9f-9238b826ab62",
+      "webhookId": "6ec058be-a259-46e7-bd88-e28d02eeae72",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": null,
+          "name": "gmail_connection"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "documentId": "{{ $json.spreadsheet_id }}",
+        "sheetName": "Job Listings",
+        "options": {}
+      },
+      "name": "Update Status to Applied",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3552,
+        592
+      ],
+      "id": "c22d7f47-6af0-42f7-90e7-057f1cf8161f",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": "{{ $json.spreadsheet_id }}",
+        "sheetName": "Job Listings",
+        "options": {}
+      },
+      "name": "Flag Missing Email",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3328,
+        784
+      ],
+      "id": "b371b894-7fb2-45a8-aa5f-e4c899cde53e",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": "{{ $json.spreadsheet_id }}",
+        "sheetName": "Analytics",
+        "options": {}
+      },
+      "name": "Update Analytics Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        3776,
+        592
+      ],
+      "id": "daff66b1-6489-4c5f-b4ab-ae450767b135",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zgAoFJHGrNiVhSg5",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/curious_coder~linkedin-jobs-scraper/run-sync-get-dataset-items?token=apify_api_Lxixvpxy5YIOlbpghaDF4JrHdBFdKo4kTcWA",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"urls\": [\n    \"https://www.linkedin.com/jobs/search/?keywords=Software%20Engineer&location=Morocco\"\n  ],\n  \"limit\": 5\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -256,
+        688
+      ],
+      "id": "1dd0ff91-004a-4fb4-b073-d0489767ae38",
+      "name": "HTTP Request"
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Setup Input Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Setup Input Variables": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Jobs Data": {
+      "main": [
+        [
+          {
+            "node": "Filter Week Jobs Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Week Jobs Only": {
+      "main": [
+        [
+          {
+            "node": "Filter - Remove Old Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter - Remove Old Jobs": {
+      "main": [
+        [
+          {
+            "node": "Get Existing Jobs (Check Duplicates)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Jobs (Check Duplicates)": {
+      "main": [
+        [
+          {
+            "node": "Filter - Remove Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter - Remove Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Format For Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format For Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Step 2A: Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Step 2A: Save to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Step 3A: Apollo - Find HR Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Step 3A: Apollo - Find HR Contacts": {
+      "main": [
+        [
+          {
+            "node": "Parse Apollo Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Apollo Contacts": {
+      "main": [
+        [
+          {
+            "node": "Step 4: Analyze & Personalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Step 4: Analyze & Personalize": {
+      "main": [
+        [
+          {
+            "node": "Check LinkedIn Profile Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check LinkedIn Profile Found": {
+      "main": [
+        [
+          {
+            "node": "Step 5: Generate LinkedIn Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Step 6A: Draft Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Step 5: Generate LinkedIn Message": {
+      "main": [
+        [
+          {
+            "node": "Send LinkedIn Message to Recruiter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send LinkedIn Message to Recruiter": {
+      "main": [
+        [
+          {
+            "node": "Step 6A: Draft Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Step 6A: Draft Email": {
+      "main": [
+        [
+          {
+            "node": "Check Email Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Email Exists": {
+      "main": [
+        [
+          {
+            "node": "Send Application Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Flag Missing Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Application Email": {
+      "main": [
+        [
+          {
+            "node": "Update Status to Applied",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status to Applied": {
+      "main": [
+        [
+          {
+            "node": "Update Analytics Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Parse Jobs Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "fdbed376-fe95-416f-af44-d14fa2100b53",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-01T17:13:23.326Z",
+      "createdAt": "2026-03-01T17:13:23.326Z",
+      "role": "workflow:owner",
+      "workflowId": "rRLxaPVG8mDVc2vX",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

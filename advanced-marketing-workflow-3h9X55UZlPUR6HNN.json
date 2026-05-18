@@ -1,0 +1,1342 @@
+{
+  "updatedAt": "2026-05-05T19:17:36.659Z",
+  "createdAt": "2026-05-05T19:16:45.721Z",
+  "id": "3h9X55UZlPUR6HNN",
+  "name": "Advanced Marketing workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Dynamic brand profile generator with proper binary data handling\n//const formData = $input.first().json;\nconst binaryData = $input.first().binary;\n\n// Extract product information\nconst productName = $input.first().json.product_name || '';\nconst productTagline =  '';\nconst productDescription =  $input.first().json.product_desc || '';\nconst productCategory =  $input.first().json.product_category || 'Other';\nconst highlightedBenefit = '';\n\n// Find the uploaded image binary data\nlet imageBinary = null;\nif (binaryData) {\n  // Try different possible field names for the uploaded image\n  imageBinary = binaryData['Product Image'] || \n                binaryData['product_image'] || \n                binaryData['data'] ||\n                binaryData['Product_Image'] ||\n                binaryData[Object.keys(binaryData)[0]]; // Use first available binary\n}\n\n// Validate we have image data\nif (!imageBinary) {\n  throw new Error('No image file found. Please ensure you upload a product image.');\n}\n\n// Convert to base64 for AI processing later\nlet imageBase64 = '';\nif (Buffer.isBuffer(imageBinary)) {\n  imageBase64 = imageBinary.toString('base64');\n} else if (imageBinary.data && Buffer.isBuffer(imageBinary.data)) {\n  imageBase64 = imageBinary.data.toString('base64');\n}\n\n// Create dynamic brand profile\nconst dynamicBrandProfile = {\n  // AI will populate this based on product analysis\n  brandName: productName || \"DYNAMIC BRAND\",\n  brandTone: \"Will be determined by AI based on product analysis\",\n  colorTheme: \"AI will extract from product image and market analysis\",\n  backgroundStyle: \"AI will determine optimal style for product category\",\n  lightingStyle: \"AI will optimize for product type and target audience\",\n  productPlacement: \"AI will create placement rules based on product characteristics\",\n  typographyStyle: \"AI will match typography to brand personality\",\n  compositionGuidelines: \"AI will generate composition rules for brand consistency\",\n  \n  // Metadata for AI processing\n  productInfo: {\n    name: productName,\n    tagline: productTagline,\n    description: productDescription,\n    category: productCategory,\n    benefit: highlightedBenefit,\n    imageBase64: imageBase64\n  },\n  \n  // Processing flags\n  needsAIProcessing: true,\n  timestamp: new Date().toISOString()\n};\n\n// CRITICAL: Return both JSON and binary data\nreturn [{\n  json: dynamicBrandProfile,\n  binary: {\n    data: imageBinary  // Google Drive expects 'data' key\n  }\n}];"
+      },
+      "id": "74c0d041-f1cd-416e-b6e9-94ca68f8aeb0",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -512,
+        480
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=data",
+        "name": "=",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp",
+          "mode": "list",
+          "cachedResultName": "Cyborg",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp"
+        },
+        "options": {}
+      },
+      "id": "9dfd913d-a6a3-42d1-aa51-69aa85b03c3d",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -304,
+        144
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process AI Agent output with robust error handling\nconst input = $input.first();\n\n// Debug: Check what we're getting\nconsole.log('Input structure:', input ? Object.keys(input) : 'input is null');\nconsole.log('Input JSON exists:', !!input?.json);\n\n// Safely get form data\nlet formData = {};\nlet originalBinary = {};\n\ntry {\n  originalBinary = $('Telegram Trigger').first()?.binary;\n  console.log('Binary data keys:', Object.keys(originalBinary));\n} \ncatch (e) {\n  console.log('Error accessing form data:', e.message);\n}\n\n// Safely extract AI Agent output\nlet aiOutput = {};\ntry {\n  if (input?.json?.output?.output) {\n    aiOutput = input.json.output.output;\n  } else if (input?.json?.output) {\n    aiOutput = input.json.output;\n  } else if (input?.json) {\n    aiOutput = input.json;\n  } else {\n    throw new Error('No AI output found');\n  }\n  console.log('AI Output keys:', Object.keys(aiOutput));\n} catch (e) {\n  console.log('Error accessing AI output:', e.message);\n  console.log('Full input:', JSON.stringify(input, null, 2));\n  throw new Error('Cannot access AI Agent output: ' + e.message);\n}\n\n// Safely extract assets and other data\nconst assets = aiOutput.assets || [];\nconst brandStrategy = aiOutput.brandStrategy || {};\nconst campaignStrategy = aiOutput.campaignStrategy || {};\n\nconsole.log('Assets found:', assets.length);\n\nif (assets.length === 0) {\n  console.log('No assets in AI output. Full aiOutput:', JSON.stringify(aiOutput, null, 2));\n  throw new Error('No assets generated by AI Agent');\n}\n\n// Safely prepare product info\nconst productInfo = {\n  name: $('Edit Fields').first().json.productInfo.name || 'Unknown Product',\n  tagline: $('Edit Fields').first().json.productInfo.tagline || '',\n  description: $('Edit Fields').first().json.productInfo.description || '',\n  category: $('Edit Fields').first().json.productInfo.category || 'General',\n  benefit:  $('Edit Fields').first().json.productInfo.benefit || ''\n};\n\n// Safely get binary data\nlet productImageBinary = null;\ntry {\n  if (originalBinary && Object.keys(originalBinary).length > 0) {\n    productImageBinary = originalBinary['Product Image'] || \n                        originalBinary['data'] || \n                        originalBinary[Object.keys(originalBinary)[0]];\n  }\n} catch (e) {\n  console.log('Error accessing binary data:', e.message);\n}\n\nif (!productImageBinary) {\n  console.log('Available binary keys:', Object.keys(originalBinary || {}));\n  throw new Error('Product image binary data not found');\n}\n\n// Create outputs with safe property access\nconst processedAssets = assets.map((asset, index) => {\n  const safeAsset = asset || {};\n  return {\n    json: {\n      assetIndex: index,\n      assetType: safeAsset.assetType || `Asset ${index + 1}`,\n      purpose: safeAsset.purpose || 'Marketing',\n      backgroundTone: safeAsset.backgroundTone || 'neutral background',\n      surfaceType: safeAsset.surfaceType || 'clean surface',\n      accentProp: safeAsset.accentProp || 'minimal styling',\n      lighting: safeAsset.lighting || 'natural lighting',\n      cameraAngle: safeAsset.cameraAngle || 'straight-on angle',\n      overlayText: safeAsset.overlayText || 'Premium Quality',\n      priority: safeAsset.priority || 'medium',\n      product: productInfo,\n      brand: brandStrategy,\n      campaignTheme: campaignStrategy.campaignTheme || 'Product Launch',\n      timestamp: new Date().toISOString()\n    },\n    binary: {\n      image: productImageBinary\n    }\n  };\n});\n\nconsole.log('Successfully processed assets:', processedAssets.length);\n\nreturn processedAssets;"
+      },
+      "id": "1f3a898f-3069-4696-8191-52111ede4cd1",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        80,
+        480
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 1,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "be2c4f8d-18f4-48d8-b66d-e44445dfc93e",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.assetType }}",
+                    "rightValue": "Instagram Post"
+                  }
+                ]
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 1,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "35895613-ac88-462d-8761-f9d05a530182",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.assetType }}",
+                    "rightValue": "=Instagram Story"
+                  }
+                ]
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 1,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "c4419368-e947-4b71-9dc6-b52c9167c500",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.assetType }}",
+                    "rightValue": "Website Banner"
+                  }
+                ]
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 1,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "8cfd9c5d-8529-47c8-b15a-2d68e77e4026",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.assetType }}",
+                    "rightValue": "Ad Creative"
+                  }
+                ]
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 1,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "15440eae-ac70-41a2-81e7-908ee7b3b90b",
+                    "operator": {
+                      "name": "filter.operator.equals",
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.assetType }}",
+                    "rightValue": "Testimonial Graphic"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cc0bc269-c2ad-48ed-bbce-59eee62bcc97",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        224,
+        432
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "name": "Instagram Story",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+          "cachedResultName": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp",
+          "mode": "list",
+          "cachedResultName": "Cyborg",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp"
+        },
+        "options": {}
+      },
+      "id": "e3e0dfdf-a2f9-4123-94a1-3eb864c6c7e0",
+      "name": "Google Drive2",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        976,
+        288
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Website banner ",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+          "cachedResultName": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp",
+          "mode": "list",
+          "cachedResultName": "Cyborg",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp"
+        },
+        "options": {}
+      },
+      "id": "3d94b4ee-ca47-45c9-8009-82cdf50b593f",
+      "name": "Google Drive3",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        976,
+        480
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Ad_Creative",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+          "cachedResultName": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp",
+          "mode": "list",
+          "cachedResultName": "Cyborg",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp"
+        },
+        "options": {}
+      },
+      "id": "131609b0-b60f-4bca-9971-69c877dc7cbc",
+      "name": "Google Drive4",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        976,
+        752
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Testimonials",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+          "cachedResultName": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp",
+          "mode": "list",
+          "cachedResultName": "Cyborg",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp"
+        },
+        "options": {}
+      },
+      "id": "50a20ab6-f881-4656-b925-6eac6a43ed9c",
+      "name": "Google Drive5",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        976,
+        1024
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "88c4a692-833f-41ab-9908-061a435cb0d3",
+      "name": "Convert to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        752,
+        96
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "name": "Instagram_Post",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+          "cachedResultName": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp",
+          "mode": "list",
+          "cachedResultName": "Cyborg",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xCXhVpxlzTSksUcxRHLZXJaWpm482jUp"
+        },
+        "options": {}
+      },
+      "id": "1eda4474-92a1-4896-b8b5-b998961532e0",
+      "name": "Google Drive6",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        976,
+        96
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fWLS289ikMPUjkaF",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "eddb762c-87fc-472b-a607-745c2fc6e2a1",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -272,
+        704
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "2w5q5wVeG11Ww2pu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"productAnalysis\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"category\": {\"type\": \"string\"},\n        \"pricePoint\": {\"type\": \"string\"},\n        \"targetAudience\": {\"type\": \"string\"},\n        \"brandPersonality\": {\"type\": \"string\"},\n        \"competitivePosition\": {\"type\": \"string\"},\n        \"keyDifferentiators\": {\n          \"type\": \"array\",\n          \"items\": {\"type\": \"string\"}\n        }\n      }\n    },\n    \"brandStrategy\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"brandName\": {\"type\": \"string\"},\n        \"brandTone\": {\"type\": \"string\"},\n        \"brandVoice\": {\"type\": \"string\"},\n        \"colorTheme\": {\"type\": \"string\"},\n        \"backgroundStyle\": {\"type\": \"string\"},\n        \"lightingStyle\": {\"type\": \"string\"},\n        \"productPlacement\": {\"type\": \"string\"},\n        \"typographyStyle\": {\"type\": \"string\"},\n        \"compositionGuidelines\": {\"type\": \"string\"}\n      }\n    },\n    \"campaignStrategy\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"primaryObjective\": {\"type\": \"string\"},\n        \"secondaryObjectives\": {\n          \"type\": \"array\",\n          \"items\": {\"type\": \"string\"}\n        },\n        \"targetChannels\": {\n          \"type\": \"array\",\n          \"items\": {\"type\": \"string\"}\n        },\n        \"messagingPillars\": {\n          \"type\": \"array\",\n          \"items\": {\"type\": \"string\"}\n        },\n        \"campaignTheme\": {\"type\": \"string\"}\n      }\n    },\n    \"assets\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"assetType\": {\"type\": \"string\"},\n          \"purpose\": {\"type\": \"string\"},\n          \"backgroundTone\": {\"type\": \"string\"},\n          \"surfaceType\": {\"type\": \"string\"},\n          \"accentProp\": {\"type\": \"string\"},\n          \"lighting\": {\"type\": \"string\"},\n          \"cameraAngle\": {\"type\": \"string\"},\n          \"overlayText\": {\"type\": \"string\"},\n          \"priority\": {\"type\": \"string\"}\n        }\n      }\n    }\n  }\n}"
+      },
+      "id": "c9ab5d2e-bc05-42af-98dc-e46ee770cf26",
+      "name": "Structured Output Parser1",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        -128,
+        704
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "b80af268-7558-41c5-9c88-743116d69871",
+      "name": "Convert to File1",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        752,
+        288
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "d8b40dce-c680-48bc-91dd-9f77e8b45e4f",
+      "name": "Convert to File2",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        752,
+        480
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "b1cd32ae-3c51-4e07-a4e5-bb2aa2f9ff88",
+      "name": "Convert to File3",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        768,
+        752
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "d4ba5806-eb0e-4c55-be97-361ac408f227",
+      "name": "Convert to File4",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        784,
+        1024
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/edits",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "=image"
+            },
+            {
+              "name": "prompt",
+              "value": "=Generate a photorealistic Instagram Post of {{ $json.product.name }} on {{ $json.backgroundTone }} background with {{ $json.surfaceType }} surface. Add {{ $json.accentProp }} as accent. Use {{ $json.lighting }} lighting from {{ $json.cameraAngle }}. Brand: {{ $json.brand.brandTone }}. Text: '{{ $json.overlayText }}'. Keep exact product from reference image."
+            },
+            {
+              "name": "size",
+              "value": "auto"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "id": "0ed00aa8-6d52-47fd-acca-44bc0d10efc8",
+      "name": "Instagram_Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        528,
+        96
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "2w5q5wVeG11Ww2pu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/edits",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "=image"
+            },
+            {
+              "name": "prompt",
+              "value": "=Generate a photorealistic Instagram Post of {{ $json.product.name }} on {{ $json.backgroundTone }} background with {{ $json.surfaceType }} surface. Add {{ $json.accentProp }} as accent. Use {{ $json.lighting }} lighting from {{ $json.cameraAngle }}. Brand: {{ $json.brand.brandTone }}. Text: '{{ $json.overlayText }}'. Keep exact product from reference image."
+            },
+            {
+              "name": "size",
+              "value": "auto"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "id": "0073d5aa-0ad5-47c8-9635-111606620c91",
+      "name": "Instagram_Story",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        528,
+        288
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "2w5q5wVeG11Ww2pu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/edits",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "=image"
+            },
+            {
+              "name": "prompt",
+              "value": "=Generate a photorealistic Instagram Post of {{ $json.product.name }} on {{ $json.backgroundTone }} background with {{ $json.surfaceType }} surface. Add {{ $json.accentProp }} as accent. Use {{ $json.lighting }} lighting from {{ $json.cameraAngle }}. Brand: {{ $json.brand.brandTone }}. Text: '{{ $json.overlayText }}'. Keep exact product from reference image."
+            },
+            {
+              "name": "size",
+              "value": "auto"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "id": "4bf7a5e8-809d-41ba-9cbe-5f532a3dff50",
+      "name": "Website_Banner",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        528,
+        480
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "2w5q5wVeG11Ww2pu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/edits",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "=image"
+            },
+            {
+              "name": "prompt",
+              "value": "=Generate a photorealistic Instagram Post of {{ $json.product.name }} on {{ $json.backgroundTone }} background with {{ $json.surfaceType }} surface. Add {{ $json.accentProp }} as accent. Use {{ $json.lighting }} lighting from {{ $json.cameraAngle }}. Brand: {{ $json.brand.brandTone }}. Text: '{{ $json.overlayText }}'. Keep exact product from reference image."
+            },
+            {
+              "name": "size",
+              "value": "auto"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "id": "8187c962-3569-40e6-9b3b-2ed207458451",
+      "name": "Ad_Creative",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        576,
+        752
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "2w5q5wVeG11Ww2pu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/edits",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "=image"
+            },
+            {
+              "name": "prompt",
+              "value": "=Generate a photorealistic Instagram Post of {{ $json.product.name }} on {{ $json.backgroundTone }} background with {{ $json.surfaceType }} surface. Add {{ $json.accentProp }} as accent. Use {{ $json.lighting }} lighting from {{ $json.cameraAngle }}. Brand: {{ $json.brand.brandTone }}. Text: '{{ $json.overlayText }}'. Keep exact product from reference image."
+            },
+            {
+              "name": "size",
+              "value": "auto"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 90000
+        }
+      },
+      "id": "3541d71e-ae34-4682-81db-4f94e43ae684",
+      "name": "Testimonials",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        560,
+        1024
+      ],
+      "typeVersion": 4.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "2w5q5wVeG11Ww2pu",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=VISUAL & TEXT ANALYSIS: \nAnalyze the uploaded product image to extract exact colors, materials, styling, and any visible branding. Then combine this with the provided product information.\n\nProduct Name:{{ $json.productInfo.name }}\nTagline: {{ $json.productInfo.tagline }}\nDescription: {{ $json.productInfo.description }}\nCategory: {{ $json.productInfo.category }}\nBenefit:{{ $json.productInfo.benefit }}\n\nBased on BOTH the visual analysis of the image AND the text information above, create a comprehensive marketing campaign strategy.\n\n**CRITICAL**: You must include all sections in your response:\n1. productAnalysis\n2. brandStrategy (using colors from the actual image)\n3. campaignStrategy  \n4. **assets** (REQUIRED: Generate exactly 5 marketing assets)\n\nThe assets array must include these 5 asset types with complete creative direction:\n- Instagram Post\n- Instagram Story  \n- Website Banner\n- Ad Creative\n- Testimonial Graphic\n\nFor each asset, provide: assetType, purpose, backgroundTone, surfaceType, accentProp, lighting, cameraAngle, overlayText, priority\n\nReturn the complete JSON structure as specified in the schema.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an advanced AI marketing strategist and visual analyst. You can see and analyze product images to create comprehensive marketing campaigns.\n\nIMPORTANT: You will receive a product image along with text information. Analyze both the visual and textual data to create the most accurate marketing strategy.\n\nVISUAL ANALYSIS: Use the uploaded image to extract exact colors, materials, style, and branding elements.\n\nYOUR TASK: Create a complete marketing campaign strategy that includes:\n1. Product analysis based on visual and text data\n2. Brand strategy with colors extracted from the image\n3. Campaign strategy \n4. MOST IMPORTANT: Generate 5 specific marketing assets with detailed creative direction\n\nYou MUST return the complete JSON structure including the assets array with all 5 asset types.",
+          "passthroughBinaryImages": true
+        }
+      },
+      "id": "44a8c171-ebb1-4df6-b672-fc7027f41eb0",
+      "name": "Image & Text Analyzer",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -272,
+        480
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "content": "5head marketing expert",
+        "height": 484,
+        "width": 352
+      },
+      "id": "2ec5e93f-ee4b-4c67-a142-e4cbe3345ed3",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        384
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "download": true
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1120,
+        464
+      ],
+      "id": "b6f1e95a-5338-471f-a52b-7a327ebeed39",
+      "name": "Telegram Trigger",
+      "webhookId": "77ba3b8b-3996-4187-aa65-548d0f6e0ff0",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "# Get input text\ntext = _items[0][\"json\"][\"message\"][\"caption\"]\n\n\n# Split into lines and clean empty ones\nlines = [line.strip() for line in text.split(\"\\n\") if line.strip()]\n\n# Extract first three lines safely\nproduct_name = lines[0] if len(lines) > 0 else \"\"\nproduct_desc = lines[1] if len(lines) > 1 else \"\"\nproduct_category = lines[2] if len(lines) > 2 else \"\"\n\n# Return structured output\nreturn {\n    \"product_name\": product_name,\n    \"product_desc\": product_desc,\n    \"product_category\": product_category\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -736,
+        752
+      ],
+      "id": "c5653349-f611-4325-80b2-5511eef2eb79",
+      "name": "Code in Python",
+      "notesInFlow": false,
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo[1].file_id }}",
+        "additionalFields": {
+          "mimeType": "image/jpeg"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -736,
+        240
+      ],
+      "id": "8848daaa-89ff-404e-b047-bce33569fc15",
+      "name": "Get a file",
+      "webhookId": "926e25fa-f006-4414-b0aa-82b5508d1222",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "666454854",
+        "binaryData": true,
+        "binaryPropertyName": "={{ $('Convert to File').item.binary.data }}",
+        "additionalFields": {
+          "caption": "Instagram Post"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        96
+      ],
+      "id": "17032c2e-eb57-4726-97d1-16b4c7308aed",
+      "name": "Send a photo message",
+      "webhookId": "191c7a82-0ad2-4758-b75e-3d3ab2bade90",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "666454854",
+        "binaryData": true,
+        "binaryPropertyName": "={{ $('Convert to File1').item.binary.data }}",
+        "additionalFields": {
+          "caption": "Instagram Story"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        288
+      ],
+      "id": "80e31b09-2d32-47a6-b2b8-92a796951421",
+      "name": "Send a photo message1",
+      "webhookId": "191c7a82-0ad2-4758-b75e-3d3ab2bade90",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "666454854",
+        "binaryData": true,
+        "binaryPropertyName": "={{ $('Convert to File2').item.binary.data }}",
+        "additionalFields": {
+          "caption": "Website Banner"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        480
+      ],
+      "id": "303a6ce8-657b-4b22-b4a6-872d38a3ebdc",
+      "name": "Send a photo message2",
+      "webhookId": "191c7a82-0ad2-4758-b75e-3d3ab2bade90",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "666454854",
+        "binaryData": true,
+        "binaryPropertyName": "={{ $('Convert to File3').item.binary.data }}",
+        "additionalFields": {
+          "caption": "Ad Creative"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1184,
+        752
+      ],
+      "id": "2a36bb8f-d2d1-4359-bf87-ebf36b37beed",
+      "name": "Send a photo message3",
+      "webhookId": "191c7a82-0ad2-4758-b75e-3d3ab2bade90",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "666454854",
+        "binaryData": true,
+        "binaryPropertyName": "={{ $('Convert to File4').item.binary.data }}",
+        "additionalFields": {
+          "caption": "Testimonials"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1200,
+        1024
+      ],
+      "id": "0a552bdc-8cc9-4bef-90c8-a7da31554c53",
+      "name": "Send a photo message4",
+      "webhookId": "191c7a82-0ad2-4758-b75e-3d3ab2bade90",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## marketing strategist workflow",
+        "height": 80,
+        "width": 384
+      },
+      "id": "4caab02a-9f4e-47d4-a0db-6f9a616fedab",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Instagram_Post",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Instagram_Story",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Website_Banner",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ad_Creative",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Testimonials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ad_Creative": {
+      "main": [
+        [
+          {
+            "node": "Convert to File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Image & Text Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Testimonials": {
+      "main": [
+        [
+          {
+            "node": "Convert to File4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram_Post": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Website_Banner": {
+      "main": [
+        [
+          {
+            "node": "Convert to File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Google Drive6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram_Story": {
+      "main": [
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "Google Drive2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File2": {
+      "main": [
+        [
+          {
+            "node": "Google Drive3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File3": {
+      "main": [
+        [
+          {
+            "node": "Google Drive4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File4": {
+      "main": [
+        [
+          {
+            "node": "Google Drive5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image & Text Analyzer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image & Text Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Image & Text Analyzer",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in Python",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in Python": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive6": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive2": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive3": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive4": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive5": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "a414ff4b-c446-4f43-b0c3-f2691abf194c",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-05-05T19:16:45.732Z",
+      "createdAt": "2026-05-05T19:16:45.732Z",
+      "role": "workflow:owner",
+      "workflowId": "3h9X55UZlPUR6HNN",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

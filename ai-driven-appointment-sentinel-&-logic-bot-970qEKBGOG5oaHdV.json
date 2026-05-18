@@ -1,0 +1,31 @@
+{
+  "updatedAt": "2026-04-29T20:00:06.139Z",
+  "createdAt": "2026-04-29T20:00:06.139Z",
+  "id": "970qEKBGOG5oaHdV",
+  "name": "AI-Driven Appointment Sentinel & Logic Bot",
+  "active": false,
+  "isArchived": false,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "c2971a1a-f435-4d34-8522-39b54f8d7733",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-04-29T20:00:06.155Z",
+      "createdAt": "2026-04-29T20:00:06.155Z",
+      "role": "workflow:owner",
+      "workflowId": "970qEKBGOG5oaHdV",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

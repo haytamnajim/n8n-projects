@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-05T19:17:36.659Z",
+  "updatedAt": "2026-05-19T21:23:10.439Z",
   "createdAt": "2026-05-05T19:16:45.721Z",
   "id": "3h9X55UZlPUR6HNN",
   "name": "Advanced Marketing workflow",
@@ -14,7 +14,7 @@
       "name": "Edit Fields",
       "type": "n8n-nodes-base.code",
       "position": [
-        -512,
+        -672,
         480
       ],
       "typeVersion": 2
@@ -43,8 +43,8 @@
       "name": "Google Drive",
       "type": "n8n-nodes-base.googleDrive",
       "position": [
-        -304,
-        144
+        -672,
+        240
       ],
       "typeVersion": 3,
       "credentials": {
@@ -62,7 +62,7 @@
       "name": "Code",
       "type": "n8n-nodes-base.code",
       "position": [
-        80,
+        -96,
         480
       ],
       "typeVersion": 2
@@ -193,7 +193,7 @@
       "name": "Switch",
       "type": "n8n-nodes-base.switch",
       "position": [
-        224,
+        128,
         432
       ],
       "typeVersion": 3
@@ -221,7 +221,7 @@
       "name": "Google Drive2",
       "type": "n8n-nodes-base.googleDrive",
       "position": [
-        976,
+        800,
         288
       ],
       "typeVersion": 3,
@@ -255,7 +255,7 @@
       "name": "Google Drive3",
       "type": "n8n-nodes-base.googleDrive",
       "position": [
-        976,
+        800,
         480
       ],
       "typeVersion": 3,
@@ -289,8 +289,8 @@
       "name": "Google Drive4",
       "type": "n8n-nodes-base.googleDrive",
       "position": [
-        976,
-        752
+        800,
+        672
       ],
       "typeVersion": 3,
       "credentials": {
@@ -323,8 +323,8 @@
       "name": "Google Drive5",
       "type": "n8n-nodes-base.googleDrive",
       "position": [
-        976,
-        1024
+        800,
+        864
       ],
       "typeVersion": 3,
       "credentials": {
@@ -344,7 +344,7 @@
       "name": "Convert to File",
       "type": "n8n-nodes-base.convertToFile",
       "position": [
-        752,
+        576,
         96
       ],
       "typeVersion": 1.1
@@ -372,7 +372,7 @@
       "name": "Google Drive6",
       "type": "n8n-nodes-base.googleDrive",
       "position": [
-        976,
+        800,
         96
       ],
       "typeVersion": 3,
@@ -396,7 +396,7 @@
       "name": "OpenAI Chat Model1",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "position": [
-        -272,
+        -440,
         704
       ],
       "typeVersion": 1.2,
@@ -416,7 +416,7 @@
       "name": "Structured Output Parser1",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "position": [
-        -128,
+        -312,
         704
       ],
       "typeVersion": 1.2
@@ -431,7 +431,7 @@
       "name": "Convert to File1",
       "type": "n8n-nodes-base.convertToFile",
       "position": [
-        752,
+        576,
         288
       ],
       "typeVersion": 1.1
@@ -446,7 +446,7 @@
       "name": "Convert to File2",
       "type": "n8n-nodes-base.convertToFile",
       "position": [
-        752,
+        576,
         480
       ],
       "typeVersion": 1.1
@@ -461,8 +461,8 @@
       "name": "Convert to File3",
       "type": "n8n-nodes-base.convertToFile",
       "position": [
-        768,
-        752
+        576,
+        672
       ],
       "typeVersion": 1.1
     },
@@ -476,8 +476,8 @@
       "name": "Convert to File4",
       "type": "n8n-nodes-base.convertToFile",
       "position": [
-        784,
-        1024
+        576,
+        864
       ],
       "typeVersion": 1.1
     },
@@ -527,7 +527,7 @@
       "name": "Instagram_Post",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        528,
+        352,
         96
       ],
       "typeVersion": 4.2,
@@ -584,7 +584,7 @@
       "name": "Instagram_Story",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        528,
+        352,
         288
       ],
       "typeVersion": 4.2,
@@ -641,7 +641,7 @@
       "name": "Website_Banner",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        528,
+        352,
         480
       ],
       "typeVersion": 4.2,
@@ -698,8 +698,8 @@
       "name": "Ad_Creative",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        576,
-        752
+        352,
+        672
       ],
       "typeVersion": 4.2,
       "credentials": {
@@ -755,8 +755,8 @@
       "name": "Testimonials",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        560,
-        1024
+        352,
+        864
       ],
       "typeVersion": 4.2,
       "credentials": {
@@ -780,7 +780,7 @@
       "name": "Image & Text Analyzer",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        -272,
+        -448,
         480
       ],
       "typeVersion": 1.9
@@ -795,8 +795,8 @@
       "name": "Sticky Note6",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -320,
-        384
+        -512,
+        364
       ],
       "typeVersion": 1
     },
@@ -813,7 +813,7 @@
       "typeVersion": 1.2,
       "position": [
         -1120,
-        464
+        384
       ],
       "id": "b6f1e95a-5338-471f-a52b-7a327ebeed39",
       "name": "Telegram Trigger",
@@ -833,8 +833,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -736,
-        752
+        -896,
+        528
       ],
       "id": "c5653349-f611-4325-80b2-5511eef2eb79",
       "name": "Code in Python",
@@ -853,8 +853,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -736,
-        240
+        -896,
+        288
       ],
       "id": "8848daaa-89ff-404e-b047-bce33569fc15",
       "name": "Get a file",
@@ -879,7 +879,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1200,
+        1024,
         96
       ],
       "id": "17032c2e-eb57-4726-97d1-16b4c7308aed",
@@ -905,7 +905,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1200,
+        1024,
         288
       ],
       "id": "80e31b09-2d32-47a6-b2b8-92a796951421",
@@ -931,7 +931,7 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1200,
+        1024,
         480
       ],
       "id": "303a6ce8-657b-4b22-b4a6-872d38a3ebdc",
@@ -957,8 +957,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1184,
-        752
+        1024,
+        672
       ],
       "id": "2a36bb8f-d2d1-4359-bf87-ebf36b37beed",
       "name": "Send a photo message3",
@@ -983,8 +983,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1200,
-        1024
+        1024,
+        864
       ],
       "id": "0a552bdc-8cc9-4bef-90c8-a7da31554c53",
       "name": "Send a photo message4",
@@ -1325,7 +1325,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "a414ff4b-c446-4f43-b0c3-f2691abf194c",
+  "versionId": "b3691a0b-89d1-499e-832f-1192f223b0fc",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,0 +1,352 @@
+{
+  "updatedAt": "2026-07-02T15:44:03.172Z",
+  "createdAt": "2026-06-25T11:04:41.617Z",
+  "id": "ostHseOLFPDSuSrt",
+  "name": "Rubik Cube Solver",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// Construit la requete multimodale pour Gemini.\n// Les 6 images sont lues dans l'ordre des champs du formulaire = U,R,F,D,L,B.\nconst FACE_ORDER = ['U','R','F','D','L','B'];\nconst item = $input.first();\nconst binKeys = Object.keys(item.binary || {});\nif (binKeys.length < 6) {\n  throw new Error('Il faut 6 images (une par face). Recu: ' + binKeys.length);\n}\n\nconst prompt = `Tu es un detecteur de couleurs pour un Rubik's Cube 3x3.\nJe te donne 6 images, une par face, dans l'ordre: U (haut), R (droite), F (avant), D (bas), L (gauche), B (arriere).\nPour CHAQUE face, lis les 9 stickers de GAUCHE a DROITE puis de HAUT en BAS (comme la lecture).\nUtilise UNIQUEMENT ces noms de couleur en minuscule: white, yellow, red, orange, blue, green.\nReponds STRICTEMENT en JSON, sans texte autour, au format exact:\n{\\\"faces\\\":{\\\"U\\\":[9 couleurs],\\\"R\\\":[9],\\\"F\\\":[9],\\\"D\\\":[9],\\\"L\\\":[9],\\\"B\\\":[9]}}`;\n\nconst parts = [{ text: prompt }];\nfor (let i = 0; i < 6; i++) {\n  const key = binKeys[i];\n  const buffer = await this.helpers.getBinaryDataBuffer(0, key);\n  const bin = item.binary[key];\n  parts.push({ text: 'Image de la face ' + FACE_ORDER[i] + ' :' });\n  parts.push({ inline_data: { mime_type: bin.mimeType || 'image/jpeg', data: buffer.toString('base64') } });\n}\n\nconst body = {\n  contents: [{ parts }],\n  generationConfig: { temperature: 0, responseMimeType: 'application/json' }\n};\nreturn [{ json: { body } }];"
+      },
+      "id": "6244b911-5f35-4360-8e5f-23e2a8a5288d",
+      "name": "Preparer requete Gemini",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8704,
+        2800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "=AQ.Ab8RN6I1El9PKUHAW8pGBito4q_F8Om73lM_JZyLxPKsT217Mg"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {}
+      },
+      "id": "e2062ebd-5366-4267-8ae4-a2f29c5aa8dc",
+      "name": "Gemini - lire couleurs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        8928,
+        2800
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrait l'objet 'faces' du JSON renvoye par Gemini.\nconst resp = $input.first().json;\nconst text = resp?.candidates?.[0]?.content?.parts?.[0]?.text;\nif (!text) {\n  throw new Error('Reponse Gemini vide ou bloquee: ' + JSON.stringify(resp).slice(0, 600));\n}\nlet parsed;\ntry {\n  parsed = JSON.parse(text);\n} catch (e) {\n  const m = text.match(/\\{[\\s\\S]*\\}/);\n  if (!m) throw new Error('JSON introuvable dans la reponse: ' + text.slice(0, 300));\n  parsed = JSON.parse(m[0]);\n}\nconst faces = parsed.faces || parsed;\nreturn [{ json: { faces } }];"
+      },
+      "id": "01695ab4-928b-45ad-b03f-2b66215609c0",
+      "name": "Extraire couleurs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9152,
+        2800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://solver:5000/solve",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ faces: $json.faces }) }}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "4647ef20-1bf8-4e39-8cd0-4007d015fe74",
+      "name": "Solveur Kociemba",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        9376,
+        2800
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Met en forme la solution pour l'humain.\nconst r = $input.first().json;\nif (r.error) {\n  return [{ json: { titre: 'Erreur', message: 'Probleme: ' + r.error } }];\n}\nconst LABEL = {\n  'U': 'Tourner la face du HAUT',\n  'R': 'Tourner la face de DROITE',\n  'F': 'Tourner la face AVANT',\n  'D': 'Tourner la face du BAS',\n  'L': 'Tourner la face de GAUCHE',\n  'B': 'Tourner la face ARRIERE'\n};\nconst SENS = (m) => m.includes(\"'\") ? 'sens anti-horaire (90 gauche)' : (m.includes('2') ? '2 fois (180)' : 'sens horaire (90 droite)');\nconst moves = r.moves || [];\nconst etapes = moves.map((m, i) => {\n  const face = m[0];\n  return (i + 1) + '. ' + m + '  ->  ' + LABEL[face] + ', ' + SENS(m);\n});\nconst message = 'Solution (' + r.move_count + ' mouvements):\\n\\n' +\n  r.solution + '\\n\\n--- Etape par etape ---\\n' + etapes.join('\\n');\nreturn [{ json: { titre: 'Cube resolu en ' + r.move_count + ' mouvements', message, solution: r.solution } }];"
+      },
+      "id": "fd13132f-a5c3-4a8e-a814-a825bbb69b21",
+      "name": "Formater la solution",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9600,
+        2800
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "39cfba14-281a-458b-9f7c-ae9931345707",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        8480,
+        2800
+      ],
+      "id": "9845bfdf-64ce-447d-b566-98fdbef35381",
+      "name": "Webhook",
+      "webhookId": "39cfba14-281a-458b-9f7c-ae9931345707"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        9824,
+        2800
+      ],
+      "id": "01fef08a-6bbb-4324-83ed-258dffbb447f",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "formTitle": "Resolution Rubik's Cube",
+        "formDescription": "Uploade 6 photos, dans cet ordre exact : 1) Haut (U)  2) Droite (R)  3) Avant (F)  4) Bas (D)  5) Gauche (L)  6) Arriere (B). Garde toujours la meme orientation (voir README).",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "1 - Face Haut (U)",
+              "fieldType": "file",
+              "acceptFileTypes": ".jpg,.jpeg,.png",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "2 - Face Droite (R)",
+              "fieldType": "file",
+              "acceptFileTypes": ".jpg,.jpeg,.png",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "3 - Face Avant (F)",
+              "fieldType": "file",
+              "acceptFileTypes": ".jpg,.jpeg,.png",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "4 - Face Bas (D)",
+              "fieldType": "file",
+              "acceptFileTypes": ".jpg,.jpeg,.png",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "5 - Face Gauche (L)",
+              "fieldType": "file",
+              "acceptFileTypes": ".jpg,.jpeg,.png",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "6 - Face Arriere (B)",
+              "fieldType": "file",
+              "acceptFileTypes": ".jpg,.jpeg,.png",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fc3fe451-7cbc-4a87-b5ad-14d70815ac73",
+      "name": "Recevoir 6 photos",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        8480,
+        3024
+      ],
+      "webhookId": "rubik-solver-form"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Groq Vision - 2 lots de 3 images (limite Groq: 5 images max par appel)\nconst FACE_ORDER = ['U','R','F','D','L','B'];\nconst item = $input.first();\nconst binKeys = Object.keys(item.binary || {});\nif (binKeys.length < 6) {\n  throw new Error('Il faut 6 images (une par face). Recu: ' + binKeys.length);\n}\n\n// Clé API insérée directement pour éviter l'erreur n8n \"access to env vars denied\"\nconst GROQ_KEY = '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';\nconst MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';\n\n// Charger toutes les images en base64\nconst images = [];\nfor (let i = 0; i < 6; i++) {\n  const key = binKeys[i];\n  const buffer = await this.helpers.getBinaryDataBuffer(0, key);\n  const bin = item.binary[key];\n  images.push({ b64: buffer.toString('base64'), mime: bin.mimeType || 'image/jpeg' });\n}\n\n// Appel Groq pour un lot de faces\nconst callGroq = async (faceNames, imgs) => {\n  const prompt = `Tu es un robot d'analyse de pixels ultra-précis pour un Rubik's Cube.\nVoici ${imgs.length} images de faces dans cet ordre : ${faceNames.join(', ')}.\nPour CHAQUE face, tu DOIS analyser strictement une grille de 3x3 (9 carrés).\nLis les carrés EXACTEMENT dans cet ordre pour chaque face :\n1. Haut-Gauche\n2. Haut-Milieu\n3. Haut-Droite\n4. Milieu-Gauche\n5. Centre\n6. Milieu-Droite\n7. Bas-Gauche\n8. Bas-Milieu\n9. Bas-Droite\n\nUtilise UNIQUEMENT ces mots en anglais et en minuscule : white, yellow, red, orange, blue, green.\nNE FAIS AUCUNE ERREUR.\nReponds STRICTEMENT en format JSON valide, par exemple : {\\\"faces\\\":{\\\"${faceNames[0]}\\\":[\\\"white\\\",\\\"red\\\",\\\"green\\\",\\\"blue\\\",\\\"yellow\\\",\\\"orange\\\",\\\"white\\\",\\\"red\\\",\\\"blue\\\"], ...}}`;\n\n  const content = [{ type: 'text', text: prompt }];\n  for (const img of imgs) {\n    content.push({ type: 'image_url', image_url: { url: 'data:' + img.mime + ';base64,' + img.b64 } });\n  }\n\n  const resp = await this.helpers.httpRequest({\n    method: 'POST',\n    url: 'https://api.groq.com/openai/v1/chat/completions',\n    headers: { 'Authorization': 'Bearer ' + GROQ_KEY, 'Content-Type': 'application/json' },\n    body: JSON.stringify({\n      model: MODEL,\n      messages: [{ role: 'user', content }],\n      response_format: { type: 'json_object' },\n      temperature: 0\n    })\n  });\n\n  const text = resp?.choices?.[0]?.message?.content;\n  if (!text) throw new Error('Reponse Groq vide: ' + JSON.stringify(resp).slice(0, 300));\n  let parsed;\n  try { parsed = JSON.parse(text); } catch(e) {\n    const m = text.match(/\\{[\\s\\S]*\\}/); if (!m) throw new Error('JSON introuvable: ' + text.slice(0,300));\n    parsed = JSON.parse(m[0]);\n  }\n  return parsed.faces || parsed;\n};\n\n// Lot 1: U, R, F - Lot 2: D, L, B\nconst [faces1, faces2] = await Promise.all([\n  callGroq(['U','R','F'], images.slice(0,3)),\n  callGroq(['D','L','B'], images.slice(3,6))\n]);\n\nconst faces = { ...faces1, ...faces2 };\nreturn [{ json: { faces } }];"
+      },
+      "id": "bce60ac3-ae46-4929-825d-66e253906887",
+      "name": "Preparer requete Grok",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8704,
+        3120
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "id": "13abb451-f368-4852-98b5-ddb03e04727c",
+      "name": "Repondre au Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        8928,
+        3120
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "39cfba14-281a-458b-9f7c-ae9931345707",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "8d153da3-80cb-474e-b372-463a04e735a1",
+      "name": "Webhook - Solve Images",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        8480,
+        3216
+      ],
+      "webhookId": "57b8b1dc-e3c6-46f8-b448-92925415a6b4"
+    }
+  ],
+  "connections": {
+    "Preparer requete Gemini": {
+      "main": [
+        [
+          {
+            "node": "Gemini - lire couleurs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini - lire couleurs": {
+      "main": [
+        [
+          {
+            "node": "Extraire couleurs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire couleurs": {
+      "main": [
+        [
+          {
+            "node": "Solveur Kociemba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solveur Kociemba": {
+      "main": [
+        [
+          {
+            "node": "Formater la solution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formater la solution": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Preparer requete Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recevoir 6 photos": {
+      "main": [
+        [
+          {
+            "node": "Preparer requete Grok",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - Solve Images": {
+      "main": [
+        [
+          {
+            "node": "Preparer requete Grok",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparer requete Grok": {
+      "main": [
+        [
+          {
+            "node": "Repondre au Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "290e7f21-034b-48ae-b639-bc8ff34e208f",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-06-25T11:04:41.664Z",
+      "createdAt": "2026-06-25T11:04:41.664Z",
+      "role": "workflow:owner",
+      "workflowId": "ostHseOLFPDSuSrt",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

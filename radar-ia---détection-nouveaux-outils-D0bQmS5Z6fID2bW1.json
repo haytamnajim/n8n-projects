@@ -1,0 +1,301 @@
+{
+  "updatedAt": "2026-07-05T12:42:09.059Z",
+  "createdAt": "2026-07-05T11:18:32.620Z",
+  "id": "D0bQmS5Z6fID2bW1",
+  "name": "Radar IA - Détection Nouveaux Outils",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        92
+      ],
+      "id": "af51e48d-b008-4112-a995-7294da5b1219",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "=https://hn.algolia.com/api/v1/search_by_date?query=AI&tags=story&numericFilters=created_at_i>{{ Math.floor(Date.now()/1000) - 7*86400 }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        92
+      ],
+      "id": "8a7ef2e9-88b2-46d7-8ce2-f0723573a476",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c358a60-7bc8-4ca7-a29f-c9f6f37bc54e",
+              "name": "titre ",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "0fc9c0ac-5a57-40c3-82ef-d98e408df86c",
+              "name": "url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "d991c7f8-5908-4f2b-a08f-afff465aba8f",
+              "name": "points ",
+              "value": "={{ $json.points }}",
+              "type": "string"
+            },
+            {
+              "id": "20bba39a-d09e-44d5-b835-aa3dcbf50e73",
+              "name": "date_creation",
+              "value": "={{ $json.created_at }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        92
+      ],
+      "id": "85d5f52c-c0c7-4bda-b3ed-3db74fe11228",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "hits",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        448,
+        92
+      ],
+      "id": "bca54d32-b125-4248-a24f-e40e9b72d24d",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ \"Titre: \" + $json.titre + \" | URL: \" + $json.url + \" | Points: \" + $json.points }}",
+        "options": {
+          "systemMessage": "Tu es un expert en veille technologique IA. Analyse l'article donné et réponds UNIQUEMENT en JSON strict, sans texte avant ou après, avec ce format exact: {\"pertinent\": true ou false, \"score\": nombre de 1 à 10, \"categorie\": \"Outil\" ou \"Modèle\" ou \"Recherche\" ou \"Financement\" ou \"Autre\", \"resume\": \"résumé en 2 phrases max en français\"}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1120,
+        -32
+      ],
+      "id": "051eabae-81d3-4153-98ea-4350734893c4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1128,
+        192
+      ],
+      "id": "4065c925-cbda-44e3-8750-80e5d7a90da0",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "D0bQmS5Z6fID2bW1"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1256,
+        192
+      ],
+      "id": "a6b0cf8c-0b84-4ba8-9a6b-660575880d57",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1472,
+        92
+      ],
+      "id": "44b3c738-41e4-42d3-9046-fff94a9ba04b",
+      "name": "Wait",
+      "webhookId": "ae08be70-77f9-4c68-a7f4-d7c29cb0776f"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        896,
+        92
+      ],
+      "id": "028ab1cb-9b59-4dfd-a7cb-b8f51a3c0fa6",
+      "name": "Loop Over Items"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "46ab4e35-94f0-441b-8eaa-b567c3009d52",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-07-05T11:18:32.635Z",
+      "createdAt": "2026-07-05T11:18:32.635Z",
+      "role": "workflow:owner",
+      "workflowId": "D0bQmS5Z6fID2bW1",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

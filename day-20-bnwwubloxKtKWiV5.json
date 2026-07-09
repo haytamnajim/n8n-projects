@@ -94,6 +94,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
+  "nodeGroups": [],
   "pinData": {},
   "versionId": "be095900-05d4-4e31-8155-7208f47b2c2c",
   "activeVersionId": "be095900-05d4-4e31-8155-7208f47b2c2c",
@@ -194,6 +195,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "HAITAM NAJIM",
     "name": null,
     "description": null,

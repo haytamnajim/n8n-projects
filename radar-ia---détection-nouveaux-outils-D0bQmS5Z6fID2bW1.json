@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-08T11:30:43.254Z",
+  "updatedAt": "2026-07-09T12:23:57.849Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -618,6 +618,107 @@
       "typeVersion": 1,
       "id": "0d2334bb-b24a-44a7-9566-9fe03f5b8a88",
       "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "url": "http://export.arxiv.org/api/query?search_query=cat:cs.AI&sortBy=submittedDate&sortOrder=descending&max_results=25",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1312,
+        640
+      ],
+      "id": "9596d253-f93c-48df-8285-e8201bf7c7a9",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        640
+      ],
+      "id": "8cee81cd-d15e-4121-8c02-c8828a9e9e25",
+      "name": "XML"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "feed.entry",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        640
+      ],
+      "id": "69a9648d-c3e1-49dd-ae1d-dec477a04e34",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12eb6f5e-0a87-478b-aea1-dc4574c94121",
+              "name": "titre",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "3279b63a-2563-4063-a463-9234f29f2837",
+              "name": "url",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "4f29fdaf-04a9-4b0e-89be-cfbd043d3fbf",
+              "name": "points",
+              "value": "0",
+              "type": "string"
+            },
+            {
+              "id": "89bf512b-3146-46a5-bb56-3f210ebe7c58",
+              "name": "date_creation",
+              "value": "={{ $json.updated }}",
+              "type": "string"
+            },
+            {
+              "id": "55f93af4-ff50-401a-9833-2286698a77b3",
+              "name": "resume_source",
+              "value": "={{ $json.summary }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1936,
+        640
+      ],
+      "id": "e693ac54-e07c-467e-a03f-a6000b934956",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupère le tableau des URLs existantes depuis le nœud Aggregate\nconst existingUrls = $('Aggregate').first().json.url.map(u => u.trim());\n\n// Filtre les nouveaux articles pour ne garder que ceux dont l'URL n'existe pas déjà\nconst newItems = $input.all().filter(item => {\n  const cleanUrl = (item.json.url || '').trim();\n  return !existingUrls.includes(cleanUrl);\n});\n\nreturn newItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        720
+      ],
+      "id": "3174cbcb-c88f-4fb7-92db-f1cdfc3f8d7b",
+      "name": "Code in JavaScript1"
     }
   ],
   "connections": {
@@ -868,6 +969,50 @@
           }
         ]
       ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -883,7 +1028,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "e525f39f-948e-4432-9769-e26989697ade",
+  "versionId": "803cd7cb-9e67-4896-844f-3a8c527e8dcf",
   "activeVersionId": "e525f39f-948e-4432-9769-e26989697ade",
   "triggerCount": 2,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-09T12:23:57.849Z",
+  "updatedAt": "2026-07-09T16:10:40.507Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -200,8 +200,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2016,
-        368
+        2000,
+        448
       ],
       "id": "6d3056d3-2f33-45b8-9c52-1b08f16d98aa",
       "name": "Edit Fields1"
@@ -234,7 +234,7 @@
       "typeVersion": 2.3,
       "position": [
         2304,
-        368
+        448
       ],
       "id": "d923b246-5a42-499e-9699-f8b7da92857b",
       "name": "Filter"
@@ -249,7 +249,7 @@
       "typeVersion": 1.2,
       "position": [
         2496,
-        256
+        272
       ],
       "id": "7d1a433e-89e3-4d85-9f04-1715cef09916",
       "name": "Send a text message",
@@ -528,13 +528,13 @@
     {
       "parameters": {
         "content": "## 🔁 Déduplication\nRécupère les articles déjà stockés dans l'API \net extrait leurs URLs pour éviter les doublons \nplus loin dans le flux.",
-        "height": 304,
+        "height": 352,
         "width": 800
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -48,
-        128
+        80
       ],
       "typeVersion": 1,
       "id": "35b8fa48-dac8-488a-b4c3-eced3642b0ec",
@@ -543,14 +543,14 @@
     {
       "parameters": {
         "content": "## 📥 Collecte Hacker News\nRécupère les articles \"AI\" des 7 derniers jours, \nextrait titre/url/points/date, puis filtre \nles doublons via le nœud Code (comparaison URLs).",
-        "height": 304,
+        "height": 352,
         "width": 864,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         768,
-        128
+        80
       ],
       "typeVersion": 1,
       "id": "4732fac1-6c80-4510-a8b6-12f8a2653af2",
@@ -559,14 +559,14 @@
     {
       "parameters": {
         "content": "## 🤖 Analyse IA\nChaque article est analysé par l'IA (Groq principal, \nGemini en fallback) qui renvoie pertinence, score, \ncatégorie et résumé en JSON.",
-        "height": 464,
+        "height": 528,
         "width": 848,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1824,
-        -224
+        -272
       ],
       "typeVersion": 1,
       "id": "68f052e2-5860-4ebb-bb97-4340a43bfaae",
@@ -591,14 +591,14 @@
     {
       "parameters": {
         "content": "## 💬 Chatbot Radar IA\nWorkflow séparé : reçoit les messages du widget \nfrontend, répond via Groq/Gemini avec mémoire \npersistante Redis (session_id).",
-        "height": 496,
+        "height": 544,
         "width": 912,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -48,
-        544
+        496
       ],
       "typeVersion": 1,
       "id": "44d39c1e-e595-4eab-b318-c2e6f624aaba",
@@ -608,7 +608,7 @@
       "parameters": {
         "content": "# 🤖 Radar IA — Pipeline de Veille Technologique Automatisée",
         "height": 96,
-        "width": 1024
+        "width": 608
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
@@ -1017,7 +1017,8 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -1034,7 +1035,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "803cd7cb-9e67-4896-844f-3a8c527e8dcf",
+  "versionId": "9d218eb3-fc07-4925-a407-254766e79720",
   "activeVersionId": "e525f39f-948e-4432-9769-e26989697ade",
   "triggerCount": 2,
   "shared": [

@@ -1021,12 +1021,18 @@
   },
   "staticData": {
     "node:Schedule Trigger": {
-      "recurrenceRules": []
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
     }
   },
   "meta": {
     "templateCredsSetupCompleted": true
   },
+  "nodeGroups": [],
   "pinData": {},
   "versionId": "803cd7cb-9e67-4896-844f-3a8c527e8dcf",
   "activeVersionId": "e525f39f-948e-4432-9769-e26989697ade",
@@ -1910,6 +1916,7 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "HAITAM NAJIM",
     "name": "Version e525f39f",
     "description": "",

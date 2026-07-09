@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-07-05T12:42:09.059Z",
+  "updatedAt": "2026-07-08T11:30:43.254Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
@@ -20,7 +20,7 @@
       "typeVersion": 1.3,
       "position": [
         0,
-        92
+        272
       ],
       "id": "af51e48d-b008-4112-a995-7294da5b1219",
       "name": "Schedule Trigger"
@@ -33,8 +33,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        224,
-        92
+        848,
+        272
       ],
       "id": "8a7ef2e9-88b2-46d7-8ce2-f0723573a476",
       "name": "HTTP Request"
@@ -74,8 +74,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        672,
-        92
+        1296,
+        272
       ],
       "id": "85d5f52c-c0c7-4bda-b3ed-3db74fe11228",
       "name": "Edit Fields"
@@ -88,8 +88,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        448,
-        92
+        1072,
+        272
       ],
       "id": "bca54d32-b125-4248-a24f-e40e9b72d24d",
       "name": "Split Out"
@@ -98,6 +98,7 @@
       "parameters": {
         "promptType": "define",
         "text": "={{ \"Titre: \" + $json.titre + \" | URL: \" + $json.url + \" | Points: \" + $json.points }}",
+        "needsFallback": true,
         "options": {
           "systemMessage": "Tu es un expert en veille technologique IA. Analyse l'article donné et réponds UNIQUEMENT en JSON strict, sans texte avant ou après, avec ce format exact: {\"pertinent\": true ou false, \"score\": nombre de 1 à 10, \"categorie\": \"Outil\" ou \"Modèle\" ou \"Recherche\" ou \"Financement\" ou \"Autre\", \"resume\": \"résumé en 2 phrases max en français\"}"
         }
@@ -105,31 +106,11 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        1120,
-        -32
+        2032,
+        -96
       ],
       "id": "051eabae-81d3-4153-98ea-4350734893c4",
       "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "model": "llama-3.3-70b-versatile",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-      "typeVersion": 1,
-      "position": [
-        1128,
-        192
-      ],
-      "id": "4065c925-cbda-44e3-8750-80e5d7a90da0",
-      "name": "Groq Chat Model",
-      "credentials": {
-        "groqApi": {
-          "id": "NV2G0Pzzp9SCJQEe",
-          "name": "Groq account"
-        }
-      }
     },
     {
       "parameters": {
@@ -139,8 +120,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        1256,
-        192
+        2288,
+        96
       ],
       "id": "a6b0cf8c-0b84-4ba8-9a6b-660575880d57",
       "name": "Simple Memory"
@@ -152,8 +133,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1472,
-        92
+        2448,
+        64
       ],
       "id": "44b3c738-41e4-42d3-9046-fff94a9ba04b",
       "name": "Wait",
@@ -166,11 +147,477 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        896,
-        92
+        1728,
+        272
       ],
       "id": "028ab1cb-9b59-4dfd-a7cb-b8f51a3c0fa6",
       "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bba779fb-dab6-4f8c-a244-011bb977db0e",
+              "name": "pertinent ",
+              "value": "= {{ JSON.parse($json.output).pertinent }}",
+              "type": "string"
+            },
+            {
+              "id": "196f6d21-54cb-4cad-91ea-985c1e939d73",
+              "name": "score ",
+              "value": "={{ JSON.parse($json.output).score }}",
+              "type": "string"
+            },
+            {
+              "id": "6a33d757-b388-4f2c-8dc6-243aa0a47681",
+              "name": "categorie ",
+              "value": "={{ JSON.parse($json.output).categorie }}",
+              "type": "string"
+            },
+            {
+              "id": "4bce4200-b8e9-4c3e-ad5e-028083ac67c1",
+              "name": "resume ",
+              "value": "={{ JSON.parse($json.output).resume }}",
+              "type": "string"
+            },
+            {
+              "id": "12412962-41e6-4cbc-ab5a-618b66141d98",
+              "name": "titre ",
+              "value": "={{ $('Edit Fields').item.json['titre '] }}",
+              "type": "string"
+            },
+            {
+              "id": "b9ca4259-bf64-41ef-bd25-3e40d7f24c5e",
+              "name": "url ",
+              "value": "={{ $('Edit Fields').item.json.url }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2016,
+        368
+      ],
+      "id": "6d3056d3-2f33-45b8-9c52-1b08f16d98aa",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "cfeb341e-d855-4b3d-a20c-b20ec9b031f6",
+              "leftValue": "={{ Number($json['score ']) }}",
+              "rightValue": 7,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        2304,
+        368
+      ],
+      "id": "d923b246-5a42-499e-9699-f8b7da92857b",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "chatId": "5507847449",
+        "text": "={{ \"🤖 *\" + ($json['titre '] || $json.titre) + \"*\\n\\n📊 Score: \" + ($json['score '] || $json.score) + \"/10 | \" + ($json['categorie '] || $json.categorie) + \"\\n\\n\" + ($json['resume '] || $json.resume) + \"\\n\\n🔗 \" + ($json['url '] || $json.url) }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2496,
+        256
+      ],
+      "id": "7d1a433e-89e3-4d85-9f04-1715cef09916",
+      "name": "Send a text message",
+      "webhookId": "912af2ee-4ece-4887-9bbc-a6f210f0b101",
+      "credentials": {
+        "telegramApi": {
+          "id": "BTAfJjLV3Qx64FLR",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.1.21:3000/api/articles",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "titre",
+              "value": "={{ $json['titre '] || $json.titre }}"
+            },
+            {
+              "name": "url",
+              "value": "={{ $json['url '] }}"
+            },
+            {
+              "name": "score",
+              "value": "={{ Number($json['score '] || $json.score) }}"
+            },
+            {
+              "name": "categorie",
+              "value": "={{ $json['categorie '] }}"
+            },
+            {
+              "name": "resume",
+              "value": "={{ $json['resume '] }}"
+            },
+            {
+              "name": "date_creation",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2496,
+        464
+      ],
+      "id": "59ed81bf-ec1d-45e6-b5a8-a7be84da18d5",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        96
+      ],
+      "id": "9ffef905-8896-4c3c-9e7b-76fccb93409a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chat-radar-ia",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        80,
+        688
+      ],
+      "id": "e0e2cb4a-f109-4d58-9903-32dba00d41e7",
+      "name": "Webhook",
+      "webhookId": "4f180279-4e76-4b7b-bc60-d0d47cf76b70"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "Tu es l'assistant du dashboard \"Radar IA\", un outil de veille technologique sur l'intelligence artificielle. Ton rôle est d'aider l'utilisateur à mieux comprendre les articles et résumés qu'il consulte, et de répondre à ses questions de manière claire, chaleureuse et pédagogique.\n\nIMPORTANT — LANGUE DE RÉPONSE : Réponds TOUJOURS dans la même langue que celle utilisée par l'utilisateur dans sa question (français, arabe, darija, anglais, ou toute autre langue). Si l'utilisateur écrit en arabe, réponds en arabe. S'il écrit en darija (arabe marocain), réponds en darija. S'il écrit en français, réponds en français. Ne traduis jamais automatiquement vers une autre langue sauf si l'utilisateur le demande explicitement.\n\nSi l'utilisateur te donne le contexte d'un article (titre, résumé), utilise-le pour répondre précisément. Reste concis mais utile, comme un collègue expert qui explique simplement.\n\nContexte de l'article actuel (si fourni) : {{ $json.body.contexte_article }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        304,
+        688
+      ],
+      "id": "531ff895-cac1-4b53-b41c-0e7198b57090",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        96,
+        896
+      ],
+      "id": "6ebfa7bc-d6c3-41ee-9a2a-b70bca120546",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "NV2G0Pzzp9SCJQEe",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { reply: $json.output } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        656,
+        688
+      ],
+      "id": "c663c340-5c77-42df-817e-9e3ac1967ef3",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.1.21:3000/api/articles",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        272
+      ],
+      "id": "e34e980f-6ea1-4368-bc12-68ae60390d85",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0054edef-2ed7-41a8-909f-a8735dca6cc4",
+              "name": "url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        272
+      ],
+      "id": "04d24302-0aed-41fc-86a6-7fd0c65b24da",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "url"
+            }
+          ]
+        },
+        "options": {
+          "includeBinaries": false
+        }
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        624,
+        272
+      ],
+      "id": "36b6b113-fd97-4ac1-aac8-5e74e4135c71",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupère le tableau des URLs existantes depuis le nœud Aggregate\nconst existingUrls = $('Aggregate').first().json.url.map(u => u.trim());\n\n// Filtre les nouveaux articles pour ne garder que ceux dont l'URL n'existe pas déjà\nconst newItems = $input.all().filter(item => {\n  const cleanUrl = (item.json.url || '').trim();\n  return !existingUrls.includes(cleanUrl);\n});\n\nreturn newItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1504,
+        272
+      ],
+      "id": "4bef13f2-2cff-4c09-8d7d-a401626a0406",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        96
+      ],
+      "id": "f0fdfb36-9f16-4ccc-8b3a-519033b1d7de",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.session_id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        896
+      ],
+      "id": "372bd634-fa1e-49b3-bd01-36f10b895f4d",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "UDVNSzR6SwV1pANs",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        256,
+        896
+      ],
+      "id": "8cf66fd7-b2f1-413b-aa31-9b4a54fbb52b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 🔁 Déduplication\nRécupère les articles déjà stockés dans l'API \net extrait leurs URLs pour éviter les doublons \nplus loin dans le flux.",
+        "height": 304,
+        "width": 800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "35b8fa48-dac8-488a-b4c3-eced3642b0ec",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## 📥 Collecte Hacker News\nRécupère les articles \"AI\" des 7 derniers jours, \nextrait titre/url/points/date, puis filtre \nles doublons via le nœud Code (comparaison URLs).",
+        "height": 304,
+        "width": 864,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        768,
+        128
+      ],
+      "typeVersion": 1,
+      "id": "4732fac1-6c80-4510-a8b6-12f8a2653af2",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 🤖 Analyse IA\nChaque article est analysé par l'IA (Groq principal, \nGemini en fallback) qui renvoie pertinence, score, \ncatégorie et résumé en JSON.",
+        "height": 464,
+        "width": 848,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1824,
+        -224
+      ],
+      "typeVersion": 1,
+      "id": "68f052e2-5860-4ebb-bb97-4340a43bfaae",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 📤 Diffusion\nNe garde que les articles avec score ≥ 7, \npuis envoie sur Telegram et vers l'API du dashboard.",
+        "height": 368,
+        "width": 768,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1904,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "a9cfded9-576d-40a5-9ef9-872776dace36",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## 💬 Chatbot Radar IA\nWorkflow séparé : reçoit les messages du widget \nfrontend, répond via Groq/Gemini avec mémoire \npersistante Redis (session_id).",
+        "height": 496,
+        "width": 912,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -48,
+        544
+      ],
+      "typeVersion": 1,
+      "id": "44d39c1e-e595-4eab-b318-c2e6f624aaba",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# 🤖 Radar IA — Pipeline de Veille Technologique Automatisée",
+        "height": 96,
+        "width": 1024
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        496,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "0d2334bb-b24a-44a7-9566-9fe03f5b8a88",
+      "name": "Sticky Note5"
     }
   ],
   "connections": {
@@ -178,7 +625,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "HTTP Request2",
             "type": "main",
             "index": 0
           }
@@ -211,19 +658,8 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Code in JavaScript",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Groq Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -253,7 +689,13 @@
     },
     "Loop Over Items": {
       "main": [
-        [],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "AI Agent",
@@ -273,20 +715,177 @@
           }
         ]
       ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        []
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "46ab4e35-94f0-441b-8eaa-b567c3009d52",
-  "activeVersionId": null,
-  "triggerCount": 0,
+  "versionId": "e525f39f-948e-4432-9769-e26989697ade",
+  "activeVersionId": "e525f39f-948e-4432-9769-e26989697ade",
+  "triggerCount": 2,
   "shared": [
     {
       "updatedAt": "2026-07-05T11:18:32.635Z",
@@ -296,6 +895,880 @@
       "projectId": "lCqcgfePm2KDotZq"
     }
   ],
-  "activeVersion": null,
+  "activeVersion": {
+    "updatedAt": "2026-07-08T15:38:15.000Z",
+    "createdAt": "2026-07-08T11:30:43.264Z",
+    "versionId": "e525f39f-948e-4432-9769-e26989697ade",
+    "workflowId": "D0bQmS5Z6fID2bW1",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          0,
+          272
+        ],
+        "id": "af51e48d-b008-4112-a995-7294da5b1219",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "url": "=https://hn.algolia.com/api/v1/search_by_date?query=AI&tags=story&numericFilters=created_at_i>{{ Math.floor(Date.now()/1000) - 7*86400 }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          848,
+          272
+        ],
+        "id": "8a7ef2e9-88b2-46d7-8ce2-f0723573a476",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "1c358a60-7bc8-4ca7-a29f-c9f6f37bc54e",
+                "name": "titre ",
+                "value": "={{ $json.title }}",
+                "type": "string"
+              },
+              {
+                "id": "0fc9c0ac-5a57-40c3-82ef-d98e408df86c",
+                "name": "url",
+                "value": "={{ $json.url }}",
+                "type": "string"
+              },
+              {
+                "id": "d991c7f8-5908-4f2b-a08f-afff465aba8f",
+                "name": "points ",
+                "value": "={{ $json.points }}",
+                "type": "string"
+              },
+              {
+                "id": "20bba39a-d09e-44d5-b835-aa3dcbf50e73",
+                "name": "date_creation",
+                "value": "={{ $json.created_at }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1296,
+          272
+        ],
+        "id": "85d5f52c-c0c7-4bda-b3ed-3db74fe11228",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "hits",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1072,
+          272
+        ],
+        "id": "bca54d32-b125-4248-a24f-e40e9b72d24d",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ \"Titre: \" + $json.titre + \" | URL: \" + $json.url + \" | Points: \" + $json.points }}",
+          "needsFallback": true,
+          "options": {
+            "systemMessage": "Tu es un expert en veille technologique IA. Analyse l'article donné et réponds UNIQUEMENT en JSON strict, sans texte avant ou après, avec ce format exact: {\"pertinent\": true ou false, \"score\": nombre de 1 à 10, \"categorie\": \"Outil\" ou \"Modèle\" ou \"Recherche\" ou \"Financement\" ou \"Autre\", \"resume\": \"résumé en 2 phrases max en français\"}"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          2032,
+          -96
+        ],
+        "id": "051eabae-81d3-4153-98ea-4350734893c4",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "D0bQmS5Z6fID2bW1"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          2288,
+          96
+        ],
+        "id": "a6b0cf8c-0b84-4ba8-9a6b-660575880d57",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2448,
+          64
+        ],
+        "id": "44b3c738-41e4-42d3-9046-fff94a9ba04b",
+        "name": "Wait",
+        "webhookId": "ae08be70-77f9-4c68-a7f4-d7c29cb0776f"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          1728,
+          272
+        ],
+        "id": "028ab1cb-9b59-4dfd-a7cb-b8f51a3c0fa6",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "bba779fb-dab6-4f8c-a244-011bb977db0e",
+                "name": "pertinent ",
+                "value": "= {{ JSON.parse($json.output).pertinent }}",
+                "type": "string"
+              },
+              {
+                "id": "196f6d21-54cb-4cad-91ea-985c1e939d73",
+                "name": "score ",
+                "value": "={{ JSON.parse($json.output).score }}",
+                "type": "string"
+              },
+              {
+                "id": "6a33d757-b388-4f2c-8dc6-243aa0a47681",
+                "name": "categorie ",
+                "value": "={{ JSON.parse($json.output).categorie }}",
+                "type": "string"
+              },
+              {
+                "id": "4bce4200-b8e9-4c3e-ad5e-028083ac67c1",
+                "name": "resume ",
+                "value": "={{ JSON.parse($json.output).resume }}",
+                "type": "string"
+              },
+              {
+                "id": "12412962-41e6-4cbc-ab5a-618b66141d98",
+                "name": "titre ",
+                "value": "={{ $('Edit Fields').item.json['titre '] }}",
+                "type": "string"
+              },
+              {
+                "id": "b9ca4259-bf64-41ef-bd25-3e40d7f24c5e",
+                "name": "url ",
+                "value": "={{ $('Edit Fields').item.json.url }}\n",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2016,
+          368
+        ],
+        "id": "6d3056d3-2f33-45b8-9c52-1b08f16d98aa",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "cfeb341e-d855-4b3d-a20c-b20ec9b031f6",
+                "leftValue": "={{ Number($json['score ']) }}",
+                "rightValue": 7,
+                "operator": {
+                  "type": "number",
+                  "operation": "gte"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          2304,
+          368
+        ],
+        "id": "d923b246-5a42-499e-9699-f8b7da92857b",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "chatId": "5507847449",
+          "text": "={{ \"🤖 *\" + ($json['titre '] || $json.titre) + \"*\\n\\n📊 Score: \" + ($json['score '] || $json.score) + \"/10 | \" + ($json['categorie '] || $json.categorie) + \"\\n\\n\" + ($json['resume '] || $json.resume) + \"\\n\\n🔗 \" + ($json['url '] || $json.url) }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          2496,
+          256
+        ],
+        "id": "7d1a433e-89e3-4d85-9f04-1715cef09916",
+        "name": "Send a text message",
+        "webhookId": "912af2ee-4ece-4887-9bbc-a6f210f0b101",
+        "credentials": {
+          "telegramApi": {
+            "id": "BTAfJjLV3Qx64FLR",
+            "name": "Telegram account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://192.168.1.21:3000/api/articles",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "titre",
+                "value": "={{ $json['titre '] || $json.titre }}"
+              },
+              {
+                "name": "url",
+                "value": "={{ $json['url '] }}"
+              },
+              {
+                "name": "score",
+                "value": "={{ Number($json['score '] || $json.score) }}"
+              },
+              {
+                "name": "categorie",
+                "value": "={{ $json['categorie '] }}"
+              },
+              {
+                "name": "resume",
+                "value": "={{ $json['resume '] }}"
+              },
+              {
+                "name": "date_creation",
+                "value": "={{ $now.toISO() }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          2496,
+          464
+        ],
+        "id": "59ed81bf-ec1d-45e6-b5a8-a7be84da18d5",
+        "name": "HTTP Request1"
+      },
+      {
+        "parameters": {
+          "model": "llama-3.3-70b-versatile",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          2000,
+          96
+        ],
+        "id": "9ffef905-8896-4c3c-9e7b-76fccb93409a",
+        "name": "Groq Chat Model",
+        "credentials": {
+          "groqApi": {
+            "id": "NV2G0Pzzp9SCJQEe",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "chat-radar-ia",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          80,
+          688
+        ],
+        "id": "e0e2cb4a-f109-4d58-9903-32dba00d41e7",
+        "name": "Webhook",
+        "webhookId": "4f180279-4e76-4b7b-bc60-d0d47cf76b70"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.body.message }}",
+          "needsFallback": true,
+          "options": {
+            "systemMessage": "Tu es l'assistant du dashboard \"Radar IA\", un outil de veille technologique sur l'intelligence artificielle. Ton rôle est d'aider l'utilisateur à mieux comprendre les articles et résumés qu'il consulte, et de répondre à ses questions de manière claire, chaleureuse et pédagogique.\n\nIMPORTANT — LANGUE DE RÉPONSE : Réponds TOUJOURS dans la même langue que celle utilisée par l'utilisateur dans sa question (français, arabe, darija, anglais, ou toute autre langue). Si l'utilisateur écrit en arabe, réponds en arabe. S'il écrit en darija (arabe marocain), réponds en darija. S'il écrit en français, réponds en français. Ne traduis jamais automatiquement vers une autre langue sauf si l'utilisateur le demande explicitement.\n\nSi l'utilisateur te donne le contexte d'un article (titre, résumé), utilise-le pour répondre précisément. Reste concis mais utile, comme un collègue expert qui explique simplement.\n\nContexte de l'article actuel (si fourni) : {{ $json.body.contexte_article }}"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          304,
+          688
+        ],
+        "id": "531ff895-cac1-4b53-b41c-0e7198b57090",
+        "name": "AI Agent1"
+      },
+      {
+        "parameters": {
+          "model": "llama-3.3-70b-versatile",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          96,
+          896
+        ],
+        "id": "6ebfa7bc-d6c3-41ee-9a2a-b70bca120546",
+        "name": "Groq Chat Model1",
+        "credentials": {
+          "groqApi": {
+            "id": "NV2G0Pzzp9SCJQEe",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ { reply: $json.output } }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          656,
+          688
+        ],
+        "id": "c663c340-5c77-42df-817e-9e3ac1967ef3",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "url": "http://192.168.1.21:3000/api/articles",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          208,
+          272
+        ],
+        "id": "e34e980f-6ea1-4368-bc12-68ae60390d85",
+        "name": "HTTP Request2"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "0054edef-2ed7-41a8-909f-a8735dca6cc4",
+                "name": "url",
+                "value": "={{ $json.url }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          416,
+          272
+        ],
+        "id": "04d24302-0aed-41fc-86a6-7fd0c65b24da",
+        "name": "Edit Fields2"
+      },
+      {
+        "parameters": {
+          "fieldsToAggregate": {
+            "fieldToAggregate": [
+              {
+                "fieldToAggregate": "url"
+              }
+            ]
+          },
+          "options": {
+            "includeBinaries": false
+          }
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          624,
+          272
+        ],
+        "id": "36b6b113-fd97-4ac1-aac8-5e74e4135c71",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Récupère le tableau des URLs existantes depuis le nœud Aggregate\nconst existingUrls = $('Aggregate').first().json.url.map(u => u.trim());\n\n// Filtre les nouveaux articles pour ne garder que ceux dont l'URL n'existe pas déjà\nconst newItems = $input.all().filter(item => {\n  const cleanUrl = (item.json.url || '').trim();\n  return !existingUrls.includes(cleanUrl);\n});\n\nreturn newItems;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1504,
+          272
+        ],
+        "id": "4bef13f2-2cff-4c09-8d7d-a401626a0406",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          2144,
+          96
+        ],
+        "id": "f0fdfb36-9f16-4ccc-8b3a-519033b1d7de",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "LxG8UkEyW5ofJq1B",
+            "name": "Google Gemini(PaLM) Api account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $json.body.session_id }}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+        "typeVersion": 1.5,
+        "position": [
+          416,
+          896
+        ],
+        "id": "372bd634-fa1e-49b3-bd01-36f10b895f4d",
+        "name": "Redis Chat Memory",
+        "credentials": {
+          "redis": {
+            "id": "UDVNSzR6SwV1pANs",
+            "name": "Redis account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          256,
+          896
+        ],
+        "id": "8cf66fd7-b2f1-413b-aa31-9b4a54fbb52b",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "LxG8UkEyW5ofJq1B",
+            "name": "Google Gemini(PaLM) Api account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## 🔁 Déduplication\nRécupère les articles déjà stockés dans l'API \net extrait leurs URLs pour éviter les doublons \nplus loin dans le flux.",
+          "height": 304,
+          "width": 800
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -48,
+          128
+        ],
+        "typeVersion": 1,
+        "id": "35b8fa48-dac8-488a-b4c3-eced3642b0ec",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## 📥 Collecte Hacker News\nRécupère les articles \"AI\" des 7 derniers jours, \nextrait titre/url/points/date, puis filtre \nles doublons via le nœud Code (comparaison URLs).",
+          "height": 304,
+          "width": 864,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          768,
+          128
+        ],
+        "typeVersion": 1,
+        "id": "4732fac1-6c80-4510-a8b6-12f8a2653af2",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "content": "## 🤖 Analyse IA\nChaque article est analysé par l'IA (Groq principal, \nGemini en fallback) qui renvoie pertinence, score, \ncatégorie et résumé en JSON.",
+          "height": 464,
+          "width": 848,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1824,
+          -224
+        ],
+        "typeVersion": 1,
+        "id": "68f052e2-5860-4ebb-bb97-4340a43bfaae",
+        "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "content": "## 📤 Diffusion\nNe garde que les articles avec score ≥ 7, \npuis envoie sur Telegram et vers l'API du dashboard.",
+          "height": 368,
+          "width": 768,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1904,
+          256
+        ],
+        "typeVersion": 1,
+        "id": "a9cfded9-576d-40a5-9ef9-872776dace36",
+        "name": "Sticky Note3"
+      },
+      {
+        "parameters": {
+          "content": "## 💬 Chatbot Radar IA\nWorkflow séparé : reçoit les messages du widget \nfrontend, répond via Groq/Gemini avec mémoire \npersistante Redis (session_id).",
+          "height": 496,
+          "width": 912,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -48,
+          544
+        ],
+        "typeVersion": 1,
+        "id": "44d39c1e-e595-4eab-b318-c2e6f624aaba",
+        "name": "Sticky Note4"
+      },
+      {
+        "parameters": {
+          "content": "# 🤖 Radar IA — Pipeline de Veille Technologique Automatisée",
+          "height": 96,
+          "width": 1024
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          496,
+          -160
+        ],
+        "typeVersion": 1,
+        "id": "0d2334bb-b24a-44a7-9566-9fe03f5b8a88",
+        "name": "Sticky Note5"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request1": {
+        "main": [
+          []
+        ]
+      },
+      "Groq Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent1": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request2": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields2": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Redis Chat Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "HAITAM NAJIM",
+    "name": "Version e525f39f",
+    "description": "",
+    "autosaved": false
+  },
   "tags": []
 }

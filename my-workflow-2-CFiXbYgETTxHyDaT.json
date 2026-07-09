@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-09T15:35:29.480Z",
+  "updatedAt": "2026-07-09T16:17:08.454Z",
   "createdAt": "2026-07-09T15:10:17.172Z",
   "id": "CFiXbYgETTxHyDaT",
   "name": "My workflow 2",
@@ -22,56 +22,6 @@
       ],
       "id": "f28e69cc-dcac-479d-9478-44838820e623",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://zoom.us/oauth/token",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpBasicAuth",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "grant_type",
-              "value": "account_credentials"
-            },
-            {
-              "name": "account_id",
-              "value": "-0OtkmR6SMqi5muc-xgwhg"
-            }
-          ]
-        },
-        "sendBody": true,
-        "contentType": "form-urlencoded",
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "grant_type",
-              "value": "account_credentials"
-            },
-            {
-              "name": "account_id",
-              "value": "-0OtkmR6SMqi5muc-xgwhg"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        416,
-        0
-      ],
-      "id": "cb671be0-f272-4716-86ad-933c10a3215a",
-      "name": "HTTP Request",
-      "credentials": {
-        "httpBasicAuth": {
-          "id": "BbxIm5n6LIypPcG5",
-          "name": "Unnamed credential"
-        }
-      }
     },
     {
       "parameters": {
@@ -109,13 +59,7 @@
     },
     "Get many meetings": {
       "main": [
-        [
-          {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
@@ -130,7 +74,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "84f50032-8ee1-4659-a4a4-72b22b3e2d7f",
+  "versionId": "7c55d0a9-596a-4f2c-90bb-febed7949fc6",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

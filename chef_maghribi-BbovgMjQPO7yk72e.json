@@ -3,7 +3,7 @@
   "createdAt": "2026-03-25T12:18:32.390Z",
   "id": "BbovgMjQPO7yk72e",
   "name": "chef_maghribi",
-  "active": true,
+  "active": false,
   "isArchived": false,
   "nodes": [
     {
@@ -185,7 +185,7 @@
   },
   "pinData": {},
   "versionId": "18c7dd42-83a3-409d-a006-916296358a68",
-  "activeVersionId": "18c7dd42-83a3-409d-a006-916296358a68",
+  "activeVersionId": null,
   "triggerCount": 2,
   "shared": [
     {
@@ -196,185 +196,6 @@
       "projectId": "lCqcgfePm2KDotZq"
     }
   ],
-  "activeVersion": {
-    "updatedAt": "2026-04-04T20:39:02.000Z",
-    "createdAt": "2026-04-04T20:39:00.842Z",
-    "versionId": "18c7dd42-83a3-409d-a006-916296358a68",
-    "workflowId": "BbovgMjQPO7yk72e",
-    "nodes": [
-      {
-        "parameters": {
-          "httpMethod": "POST",
-          "path": "food",
-          "responseMode": "responseNode",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.webhook",
-        "typeVersion": 2.1,
-        "position": [
-          1184,
-          80
-        ],
-        "id": "2463a3b2-b13c-492e-a1d8-833448f6a3f7",
-        "name": "Webhook",
-        "webhookId": "c19e50f2-b19d-471f-bfca-0f2fe64fbd32"
-      },
-      {
-        "parameters": {
-          "respondWith": "allIncomingItems",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.respondToWebhook",
-        "typeVersion": 1.5,
-        "position": [
-          1888,
-          80
-        ],
-        "id": "76c7b41f-7dc3-4c56-90bf-f3d25f0098b7",
-        "name": "Respond to Webhook"
-      },
-      {
-        "parameters": {
-          "resource": "image",
-          "operation": "analyze",
-          "modelId": {
-            "__rl": true,
-            "value": "models/gemini-2.5-flash",
-            "mode": "list",
-            "cachedResultName": "models/gemini-2.5-flash"
-          },
-          "text": "Analyse cette image. Agis comme un Chef Marocain expert nommé \"Chef Maghribi\".\nTa mission est d'identifier de manière précise TOUS les ingrédients visibles sur l'image (fruits, légumes, viandes, épices, etc.).\n\nTu DOIS répondre EXCLUSIVEMENT au format JSON strict en respectant exactement cette structure :\n\n{\n  \"ingredients\": [\"Ingrédient 1\", \"Ingrédient 2\", \"Ingrédient 3\"]\n}\n",
-          "inputType": "binary",
-          "binaryPropertyName": "attachment_0",
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.googleGemini",
-        "typeVersion": 1.1,
-        "position": [
-          1584,
-          80
-        ],
-        "id": "8ce02187-1313-48dd-9d93-2337862e55a8",
-        "name": "Analyze an image1",
-        "credentials": {
-          "googlePalmApi": {
-            "id": "LxG8UkEyW5ofJq1B",
-            "name": "Google Gemini(PaLM) Api account 2"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "httpMethod": "POST",
-          "path": "food",
-          "responseMode": "responseNode",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.webhook",
-        "typeVersion": 2.1,
-        "position": [
-          1168,
-          304
-        ],
-        "id": "f6f21bd2-2b3c-4979-b518-abd6f8f512e0",
-        "name": "Webhook1",
-        "webhookId": "c19e50f2-b19d-471f-bfca-0f2fe64fbd32"
-      },
-      {
-        "parameters": {
-          "respondWith": "allIncomingItems",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.respondToWebhook",
-        "typeVersion": 1.5,
-        "position": [
-          1872,
-          304
-        ],
-        "id": "7f1cdd80-abe9-4cf1-889b-cbf069bb1b45",
-        "name": "Respond to Webhook1"
-      },
-      {
-        "parameters": {
-          "resource": "image",
-          "operation": "analyze",
-          "modelId": {
-            "__rl": true,
-            "value": "models/gemini-2.5-flash",
-            "mode": "list",
-            "cachedResultName": "models/gemini-2.5-flash"
-          },
-          "text": "Voici une liste d'ingrédients : {{ $json.ingredients }}.\nEn tant que Chef Maghribi, propose exactement 4 plats marocains réalisables avec ces éléments. \n\nTu DOIS répondre EXCLUSIVEMENT au format JSON strict suivant :\n[\n  {\n    \"name\": \"Nom du plat\",\n    \"name_ar\": \"الاسم بالعربية\",\n    \"description\": \"Une phrase appétissante\",\n    \"main_ingredients\": [\"Ingrédient 1\", \"Ingrédient 2\"],\n    \"tag\": \"🥘 Dîner\",\n    \"time\": \"30 min\",\n    \"difficulty\": \"Facile\",\n    \"match_percentage\": \"95%\"\n  }\n]\n",
-          "inputType": "binary",
-          "binaryPropertyName": "attachment_0",
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.googleGemini",
-        "typeVersion": 1.1,
-        "position": [
-          1568,
-          304
-        ],
-        "id": "1c7a4f93-ed68-4f9d-9946-7218f8224faa",
-        "name": "Analyze an image",
-        "credentials": {
-          "googlePalmApi": {
-            "id": "LxG8UkEyW5ofJq1B",
-            "name": "Google Gemini(PaLM) Api account 2"
-          }
-        }
-      }
-    ],
-    "connections": {
-      "Webhook": {
-        "main": [
-          [
-            {
-              "node": "Analyze an image1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Analyze an image1": {
-        "main": [
-          [
-            {
-              "node": "Respond to Webhook",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Webhook1": {
-        "main": [
-          [
-            {
-              "node": "Analyze an image",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Analyze an image": {
-        "main": [
-          [
-            {
-              "node": "Respond to Webhook1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      }
-    },
-    "authors": "HAITAM NAJIM",
-    "name": "Version 18c7dd42",
-    "description": "",
-    "autosaved": false
-  },
+  "activeVersion": null,
   "tags": []
 }

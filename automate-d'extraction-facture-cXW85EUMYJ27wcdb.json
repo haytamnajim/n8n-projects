@@ -1832,6 +1832,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
+  "nodeGroups": [],
   "pinData": {},
   "versionId": "564d8faf-9a68-47b4-93fb-77296a728e37",
   "activeVersionId": null,

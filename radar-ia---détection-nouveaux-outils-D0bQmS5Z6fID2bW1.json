@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-09T16:10:40.507Z",
+  "updatedAt": "2026-07-09T16:15:27.968Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -627,8 +627,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1312,
-        640
+        1152,
+        752
       ],
       "id": "9596d253-f93c-48df-8285-e8201bf7c7a9",
       "name": "HTTP Request3"
@@ -640,8 +640,8 @@
       "type": "n8n-nodes-base.xml",
       "typeVersion": 1,
       "position": [
-        1520,
-        640
+        1360,
+        752
       ],
       "id": "8cee81cd-d15e-4121-8c02-c8828a9e9e25",
       "name": "XML"
@@ -654,8 +654,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1728,
-        640
+        1568,
+        752
       ],
       "id": "69a9648d-c3e1-49dd-ae1d-dec477a04e34",
       "name": "Split Out1"
@@ -701,8 +701,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1936,
-        640
+        1776,
+        752
       ],
       "id": "e693ac54-e07c-467e-a03f-a6000b934956",
       "name": "Edit Fields3"
@@ -714,8 +714,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2144,
-        720
+        1984,
+        832
       ],
       "id": "3174cbcb-c88f-4fb7-92db-f1cdfc3f8d7b",
       "name": "Code in JavaScript1"
@@ -1035,7 +1035,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "9d218eb3-fc07-4925-a407-254766e79720",
+  "versionId": "d67eaa61-49b7-4f58-9f23-f3c1704ce952",
   "activeVersionId": "e525f39f-948e-4432-9769-e26989697ade",
   "triggerCount": 2,
   "shared": [

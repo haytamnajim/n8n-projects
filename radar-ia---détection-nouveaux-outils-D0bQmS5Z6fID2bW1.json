@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-09T16:15:27.968Z",
+  "updatedAt": "2026-07-10T11:59:05.348Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -20,7 +20,7 @@
       "typeVersion": 1.3,
       "position": [
         0,
-        272
+        208
       ],
       "id": "af51e48d-b008-4112-a995-7294da5b1219",
       "name": "Schedule Trigger"
@@ -33,8 +33,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        848,
-        272
+        1120,
+        128
       ],
       "id": "8a7ef2e9-88b2-46d7-8ce2-f0723573a476",
       "name": "HTTP Request"
@@ -74,8 +74,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1296,
-        272
+        1568,
+        128
       ],
       "id": "85d5f52c-c0c7-4bda-b3ed-3db74fe11228",
       "name": "Edit Fields"
@@ -88,8 +88,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1072,
-        272
+        1344,
+        128
       ],
       "id": "bca54d32-b125-4248-a24f-e40e9b72d24d",
       "name": "Split Out"
@@ -106,7 +106,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        2032,
+        2528,
         -96
       ],
       "id": "051eabae-81d3-4153-98ea-4350734893c4",
@@ -120,8 +120,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        2288,
-        96
+        2720,
+        128
       ],
       "id": "a6b0cf8c-0b84-4ba8-9a6b-660575880d57",
       "name": "Simple Memory"
@@ -133,8 +133,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2448,
-        64
+        2928,
+        16
       ],
       "id": "44b3c738-41e4-42d3-9046-fff94a9ba04b",
       "name": "Wait",
@@ -147,8 +147,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1728,
-        272
+        2240,
+        208
       ],
       "id": "028ab1cb-9b59-4dfd-a7cb-b8f51a3c0fa6",
       "name": "Loop Over Items"
@@ -200,8 +200,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2000,
-        448
+        2592,
+        304
       ],
       "id": "6d3056d3-2f33-45b8-9c52-1b08f16d98aa",
       "name": "Edit Fields1"
@@ -233,8 +233,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        2304,
-        448
+        2928,
+        304
       ],
       "id": "d923b246-5a42-499e-9699-f8b7da92857b",
       "name": "Filter"
@@ -248,8 +248,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        2496,
-        272
+        3152,
+        288
       ],
       "id": "7d1a433e-89e3-4d85-9f04-1715cef09916",
       "name": "Send a text message",
@@ -299,8 +299,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2496,
-        464
+        3152,
+        480
       ],
       "id": "59ed81bf-ec1d-45e6-b5a8-a7be84da18d5",
       "name": "HTTP Request1"
@@ -313,8 +313,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        2000,
-        96
+        2464,
+        128
       ],
       "id": "9ffef905-8896-4c3c-9e7b-76fccb93409a",
       "name": "Groq Chat Model",
@@ -335,8 +335,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        80,
-        688
+        0,
+        800
       ],
       "id": "e0e2cb4a-f109-4d58-9903-32dba00d41e7",
       "name": "Webhook",
@@ -354,8 +354,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        304,
-        688
+        288,
+        800
       ],
       "id": "531ff895-cac1-4b53-b41c-0e7198b57090",
       "name": "AI Agent1"
@@ -368,8 +368,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        96,
-        896
+        224,
+        1024
       ],
       "id": "6ebfa7bc-d6c3-41ee-9a2a-b70bca120546",
       "name": "Groq Chat Model1",
@@ -389,8 +389,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        656,
-        688
+        688,
+        800
       ],
       "id": "c663c340-5c77-42df-817e-9e3ac1967ef3",
       "name": "Respond to Webhook"
@@ -403,8 +403,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        208,
-        272
+        224,
+        208
       ],
       "id": "e34e980f-6ea1-4368-bc12-68ae60390d85",
       "name": "HTTP Request2"
@@ -426,8 +426,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        416,
-        272
+        448,
+        208
       ],
       "id": "04d24302-0aed-41fc-86a6-7fd0c65b24da",
       "name": "Edit Fields2"
@@ -448,8 +448,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        624,
-        272
+        672,
+        208
       ],
       "id": "36b6b113-fd97-4ac1-aac8-5e74e4135c71",
       "name": "Aggregate"
@@ -461,8 +461,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1504,
-        272
+        1792,
+        128
       ],
       "id": "4bef13f2-2cff-4c09-8d7d-a401626a0406",
       "name": "Code in JavaScript"
@@ -474,8 +474,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        2144,
-        96
+        2592,
+        128
       ],
       "id": "f0fdfb36-9f16-4ccc-8b3a-519033b1d7de",
       "name": "Google Gemini Chat Model1",
@@ -494,8 +494,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
       "typeVersion": 1.5,
       "position": [
-        416,
-        896
+        480,
+        1024
       ],
       "id": "372bd634-fa1e-49b3-bd01-36f10b895f4d",
       "name": "Redis Chat Memory",
@@ -513,8 +513,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        256,
-        896
+        352,
+        1024
       ],
       "id": "8cf66fd7-b2f1-413b-aa31-9b4a54fbb52b",
       "name": "Google Gemini Chat Model",
@@ -533,8 +533,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -48,
-        80
+        -16,
+        16
       ],
       "typeVersion": 1,
       "id": "35b8fa48-dac8-488a-b4c3-eced3642b0ec",
@@ -549,8 +549,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        768,
-        80
+        1072,
+        -64
       ],
       "typeVersion": 1,
       "id": "4732fac1-6c80-4510-a8b6-12f8a2653af2",
@@ -565,7 +565,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1824,
+        2416,
         -272
       ],
       "typeVersion": 1,
@@ -581,8 +581,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        1904,
-        256
+        2528,
+        272
       ],
       "typeVersion": 1,
       "id": "a9cfded9-576d-40a5-9ef9-872776dace36",
@@ -597,8 +597,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -48,
-        496
+        -64,
+        624
       ],
       "typeVersion": 1,
       "id": "44d39c1e-e595-4eab-b318-c2e6f624aaba",
@@ -627,8 +627,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1152,
-        752
+        896,
+        320
       ],
       "id": "9596d253-f93c-48df-8285-e8201bf7c7a9",
       "name": "HTTP Request3"
@@ -640,8 +640,8 @@
       "type": "n8n-nodes-base.xml",
       "typeVersion": 1,
       "position": [
-        1360,
-        752
+        1120,
+        320
       ],
       "id": "8cee81cd-d15e-4121-8c02-c8828a9e9e25",
       "name": "XML"
@@ -654,8 +654,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1568,
-        752
+        1344,
+        320
       ],
       "id": "69a9648d-c3e1-49dd-ae1d-dec477a04e34",
       "name": "Split Out1"
@@ -701,8 +701,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1776,
-        752
+        1568,
+        320
       ],
       "id": "e693ac54-e07c-467e-a03f-a6000b934956",
       "name": "Edit Fields3"
@@ -714,11 +714,22 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1984,
-        832
+        1792,
+        320
       ],
       "id": "3174cbcb-c88f-4fb7-92db-f1cdfc3f8d7b",
       "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2016,
+        208
+      ],
+      "id": "c8f1ce8e-13ec-4c23-890e-3e0c01a1a406",
+      "name": "Merge"
     }
   ],
   "connections": {
@@ -922,6 +933,11 @@
             "node": "HTTP Request",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -930,7 +946,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items",
+            "node": "Merge",
             "type": "main",
             "index": 0
           }
@@ -1013,6 +1029,28 @@
           }
         ]
       ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1035,7 +1073,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "d67eaa61-49b7-4f58-9f23-f3c1704ce952",
+  "versionId": "149ad61d-c9ef-42dc-a60f-8f9055beac82",
   "activeVersionId": "e525f39f-948e-4432-9769-e26989697ade",
   "triggerCount": 2,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-10T11:59:05.348Z",
+  "updatedAt": "2026-07-10T12:22:22.965Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -270,15 +270,15 @@
           "parameters": [
             {
               "name": "titre",
-              "value": "={{ $json['titre '] || $json.titre }}"
+              "value": "={{ $('Loop Over Items').item.json.titre }}"
             },
             {
               "name": "url",
-              "value": "={{ $json['url '] }}"
+              "value": "={{ $('Loop Over Items').item.json.url }}"
             },
             {
               "name": "score",
-              "value": "={{ Number($json['score '] || $json.score) }}"
+              "value": "={{ $json['score '] }}"
             },
             {
               "name": "categorie",
@@ -612,8 +612,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        496,
-        -160
+        1216,
+        -288
       ],
       "typeVersion": 1,
       "id": "0d2334bb-b24a-44a7-9566-9fe03f5b8a88",
@@ -1073,7 +1073,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "149ad61d-c9ef-42dc-a60f-8f9055beac82",
+  "versionId": "e6208943-5b09-42d9-8448-c2cf46b9bc92",
   "activeVersionId": "e525f39f-948e-4432-9769-e26989697ade",
   "triggerCount": 2,
   "shared": [

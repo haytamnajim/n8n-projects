@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-02T14:59:22.591Z",
+  "updatedAt": "2026-08-02T15:41:32.759Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -545,8 +545,8 @@
     {
       "parameters": {
         "content": "## 📥 Collecte Hacker News\nRécupère les articles \"AI\" des 7 derniers jours, \nextrait titre/url/points/date, puis filtre \nles doublons via le nœud Code (comparaison URLs).",
-        "height": 352,
-        "width": 864,
+        "height": 752,
+        "width": 896,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -568,7 +568,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         2320,
-        -256
+        -288
       ],
       "typeVersion": 1,
       "id": "68f052e2-5860-4ebb-bb97-4340a43bfaae",
@@ -576,15 +576,15 @@
     },
     {
       "parameters": {
-        "content": "## 📤 Diffusion\nNe garde que les articles avec score ≥ 7, \npuis envoie sur Telegram et vers l'API du dashboard.",
-        "height": 368,
-        "width": 768,
+        "content": "",
+        "height": 432,
+        "width": 816,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2528,
-        336
+        2544,
+        272
       ],
       "typeVersion": 1,
       "id": "a9cfded9-576d-40a5-9ef9-872776dace36",
@@ -809,6 +809,21 @@
         1792,
         496
       ]
+    },
+    {
+      "parameters": {
+        "content": "",
+        "height": 192,
+        "width": 800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1984,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "0bd993bc-bd2d-42b9-9b04-d0f7f64c6fe1",
+      "name": "Sticky Note6"
     }
   ],
   "connections": {
@@ -1190,7 +1205,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "42144784-f53d-426f-8775-b15ddb0f0a72",
+  "versionId": "ae5827d1-d067-4c66-bf2b-4ce286938ce4",
   "activeVersionId": "e6208943-5b09-42d9-8448-c2cf46b9bc92",
   "triggerCount": 2,
   "shared": [

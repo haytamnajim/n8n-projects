@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-07-10T11:38:52.387Z",
+  "updatedAt": "2026-08-02T15:42:14.000Z",
   "createdAt": "2026-07-09T15:10:17.172Z",
   "id": "CFiXbYgETTxHyDaT",
   "name": "zoom",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [
     {
       "parameters": {
@@ -74,7 +74,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "7c55d0a9-596a-4f2c-90bb-febed7949fc6",
+  "versionId": "52ee42f1-1c30-4b8e-b99a-8b11620f2f26",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

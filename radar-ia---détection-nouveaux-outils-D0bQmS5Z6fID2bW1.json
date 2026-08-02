@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-02T14:32:36.510Z",
+  "updatedAt": "2026-08-02T14:59:22.591Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -20,7 +20,7 @@
       "typeVersion": 1.3,
       "position": [
         0,
-        208
+        288
       ],
       "id": "af51e48d-b008-4112-a995-7294da5b1219",
       "name": "Schedule Trigger"
@@ -34,7 +34,7 @@
       "typeVersion": 4.3,
       "position": [
         1120,
-        128
+        112
       ],
       "id": "8a7ef2e9-88b2-46d7-8ce2-f0723573a476",
       "name": "HTTP Request"
@@ -75,7 +75,7 @@
       "typeVersion": 3.4,
       "position": [
         1568,
-        128
+        112
       ],
       "id": "85d5f52c-c0c7-4bda-b3ed-3db74fe11228",
       "name": "Edit Fields"
@@ -89,7 +89,7 @@
       "typeVersion": 1,
       "position": [
         1344,
-        128
+        112
       ],
       "id": "bca54d32-b125-4248-a24f-e40e9b72d24d",
       "name": "Split Out"
@@ -110,7 +110,9 @@
         -96
       ],
       "id": "051eabae-81d3-4153-98ea-4350734893c4",
-      "name": "AI Agent"
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -134,7 +136,7 @@
       "typeVersion": 1.1,
       "position": [
         2928,
-        16
+        80
       ],
       "id": "44b3c738-41e4-42d3-9046-fff94a9ba04b",
       "name": "Wait",
@@ -147,8 +149,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        2272,
-        208
+        2240,
+        288
       ],
       "id": "028ab1cb-9b59-4dfd-a7cb-b8f51a3c0fa6",
       "name": "Loop Over Items"
@@ -234,7 +236,7 @@
       "typeVersion": 2.3,
       "position": [
         2928,
-        304
+        384
       ],
       "id": "d923b246-5a42-499e-9699-f8b7da92857b",
       "name": "Filter"
@@ -249,7 +251,7 @@
       "typeVersion": 1.2,
       "position": [
         3152,
-        288
+        352
       ],
       "id": "7d1a433e-89e3-4d85-9f04-1715cef09916",
       "name": "Send a text message",
@@ -264,7 +266,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://192.168.1.20:3000/api/articles",
+        "url": "http://host.docker.internal:3000/api/articles",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
@@ -300,7 +302,7 @@
       "typeVersion": 4.3,
       "position": [
         3152,
-        480
+        544
       ],
       "id": "59ed81bf-ec1d-45e6-b5a8-a7be84da18d5",
       "name": "HTTP Request1"
@@ -336,7 +338,7 @@
       "typeVersion": 2.1,
       "position": [
         0,
-        1440
+        880
       ],
       "id": "e0e2cb4a-f109-4d58-9903-32dba00d41e7",
       "name": "Webhook",
@@ -355,7 +357,7 @@
       "typeVersion": 3.1,
       "position": [
         288,
-        1440
+        880
       ],
       "id": "531ff895-cac1-4b53-b41c-0e7198b57090",
       "name": "AI Agent1"
@@ -369,7 +371,7 @@
       "typeVersion": 1,
       "position": [
         224,
-        1664
+        1104
       ],
       "id": "6ebfa7bc-d6c3-41ee-9a2a-b70bca120546",
       "name": "Groq Chat Model1",
@@ -390,21 +392,21 @@
       "typeVersion": 1.5,
       "position": [
         688,
-        1440
+        880
       ],
       "id": "c663c340-5c77-42df-817e-9e3ac1967ef3",
       "name": "Respond to Webhook"
     },
     {
       "parameters": {
-        "url": "http://192.168.1.20:3000/api/articles",
+        "url": "http://host.docker.internal:3000/api/articles",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
         224,
-        208
+        288
       ],
       "id": "e34e980f-6ea1-4368-bc12-68ae60390d85",
       "name": "HTTP Request2"
@@ -427,7 +429,7 @@
       "typeVersion": 3.4,
       "position": [
         448,
-        208
+        288
       ],
       "id": "04d24302-0aed-41fc-86a6-7fd0c65b24da",
       "name": "Edit Fields2"
@@ -449,7 +451,7 @@
       "typeVersion": 1,
       "position": [
         672,
-        208
+        288
       ],
       "id": "36b6b113-fd97-4ac1-aac8-5e74e4135c71",
       "name": "Aggregate"
@@ -462,7 +464,7 @@
       "typeVersion": 2,
       "position": [
         1792,
-        128
+        112
       ],
       "id": "4bef13f2-2cff-4c09-8d7d-a401626a0406",
       "name": "Code in JavaScript"
@@ -495,7 +497,7 @@
       "typeVersion": 1.5,
       "position": [
         480,
-        1664
+        1104
       ],
       "id": "372bd634-fa1e-49b3-bd01-36f10b895f4d",
       "name": "Redis Chat Memory",
@@ -514,7 +516,7 @@
       "typeVersion": 1,
       "position": [
         352,
-        1664
+        1104
       ],
       "id": "8cf66fd7-b2f1-413b-aa31-9b4a54fbb52b",
       "name": "Google Gemini Chat Model",
@@ -534,7 +536,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -16,
-        16
+        96
       ],
       "typeVersion": 1,
       "id": "35b8fa48-dac8-488a-b4c3-eced3642b0ec",
@@ -550,7 +552,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1072,
-        -64
+        -80
       ],
       "typeVersion": 1,
       "id": "4732fac1-6c80-4510-a8b6-12f8a2653af2",
@@ -565,8 +567,8 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2416,
-        -272
+        2320,
+        -256
       ],
       "typeVersion": 1,
       "id": "68f052e2-5860-4ebb-bb97-4340a43bfaae",
@@ -582,7 +584,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         2528,
-        272
+        336
       ],
       "typeVersion": 1,
       "id": "a9cfded9-576d-40a5-9ef9-872776dace36",
@@ -598,7 +600,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -64,
-        1264
+        704
       ],
       "typeVersion": 1,
       "id": "44d39c1e-e595-4eab-b318-c2e6f624aaba",
@@ -628,7 +630,7 @@
       "typeVersion": 4.3,
       "position": [
         896,
-        320
+        304
       ],
       "id": "9596d253-f93c-48df-8285-e8201bf7c7a9",
       "name": "HTTP Request3"
@@ -641,7 +643,7 @@
       "typeVersion": 1,
       "position": [
         1120,
-        320
+        304
       ],
       "id": "8cee81cd-d15e-4121-8c02-c8828a9e9e25",
       "name": "XML"
@@ -655,7 +657,7 @@
       "typeVersion": 1,
       "position": [
         1344,
-        320
+        304
       ],
       "id": "69a9648d-c3e1-49dd-ae1d-dec477a04e34",
       "name": "Split Out1"
@@ -702,7 +704,7 @@
       "typeVersion": 3.4,
       "position": [
         1568,
-        320
+        304
       ],
       "id": "e693ac54-e07c-467e-a03f-a6000b934956",
       "name": "Edit Fields3"
@@ -715,7 +717,7 @@
       "typeVersion": 2,
       "position": [
         1792,
-        320
+        304
       ],
       "id": "3174cbcb-c88f-4fb7-92db-f1cdfc3f8d7b",
       "name": "Code in JavaScript1"
@@ -728,7 +730,7 @@
       "typeVersion": 3.2,
       "position": [
         2016,
-        208
+        272
       ],
       "id": "c8f1ce8e-13ec-4c23-890e-3e0c01a1a406",
       "name": "Merge"
@@ -752,8 +754,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        912,
-        672
+        1344,
+        496
       ]
     },
     {
@@ -791,8 +793,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1136,
-        672
+        1568,
+        496
       ]
     },
     {
@@ -804,20 +806,9 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1344,
-        672
+        1792,
+        496
       ]
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        2016,
-        384
-      ],
-      "id": "4fa81a56-8ee4-4a22-8410-3d3e9eff4812",
-      "name": "Merge1"
     }
   ],
   "connections": {
@@ -1136,7 +1127,13 @@
     },
     "Merge": {
       "main": [
-        []
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Select Topic (e.g. marketing)": {
@@ -1163,7 +1160,13 @@
     },
     "Format Repositories1": {
       "main": [
-        []
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
       ]
     }
   },
@@ -1187,7 +1190,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "e01ed46f-b02b-40fb-a0e9-aae92352dbec",
+  "versionId": "42144784-f53d-426f-8775-b15ddb0f0a72",
   "activeVersionId": "e6208943-5b09-42d9-8448-c2cf46b9bc92",
   "triggerCount": 2,
   "shared": [

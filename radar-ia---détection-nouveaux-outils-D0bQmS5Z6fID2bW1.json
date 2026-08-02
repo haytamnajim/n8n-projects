@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-29T10:26:39.103Z",
+  "updatedAt": "2026-08-02T14:32:36.510Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -147,7 +147,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        2240,
+        2272,
         208
       ],
       "id": "028ab1cb-9b59-4dfd-a7cb-b8f51a3c0fa6",
@@ -721,7 +721,9 @@
       "name": "Code in JavaScript1"
     },
     {
-      "parameters": {},
+      "parameters": {
+        "numberInputs": 3
+      },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
@@ -807,44 +809,15 @@
       ]
     },
     {
-      "parameters": {
-        "method": "POST",
-        "url": "http://192.168.1.21:3000/api/articles",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "title ",
-              "value": "={{ $json.name }}"
-            },
-            {
-              "name": "url",
-              "value": "={{ $json.url }}"
-            },
-            {
-              "name": "categorie",
-              "value": "={{ $('Select Topic (e.g. marketing)').item.json.topic }}"
-            },
-            {
-              "name": "resume",
-              "value": "={{ $json.description }}"
-            },
-            {
-              "name": "date_creation",
-              "value": "={{ $now.toISO() }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
       "position": [
-        1616,
-        672
+        2016,
+        384
       ],
-      "id": "665d4eb9-582f-4288-ba44-abb822ab52d7",
-      "name": "HTTP Request4"
+      "id": "4fa81a56-8ee4-4a22-8410-3d3e9eff4812",
+      "name": "Merge1"
     }
   ],
   "connections": {
@@ -1163,13 +1136,7 @@
     },
     "Merge": {
       "main": [
-        [
-          {
-            "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Select Topic (e.g. marketing)": {
@@ -1196,13 +1163,7 @@
     },
     "Format Repositories1": {
       "main": [
-        [
-          {
-            "node": "HTTP Request4",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
@@ -1226,7 +1187,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "229715bc-9fbc-4244-a386-1e410eb101f1",
+  "versionId": "e01ed46f-b02b-40fb-a0e9-aae92352dbec",
   "activeVersionId": "e6208943-5b09-42d9-8448-c2cf46b9bc92",
   "triggerCount": 2,
   "shared": [

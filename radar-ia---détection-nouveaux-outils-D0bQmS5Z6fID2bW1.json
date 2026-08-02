@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-28T16:00:16.796Z",
+  "updatedAt": "2026-07-29T10:26:39.103Z",
   "createdAt": "2026-07-05T11:18:32.620Z",
   "id": "D0bQmS5Z6fID2bW1",
   "name": "Radar IA - Détection Nouveaux Outils",
@@ -264,17 +264,17 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://192.168.1.21:3000/api/articles",
+        "url": "http://192.168.1.20:3000/api/articles",
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
             {
               "name": "titre",
-              "value": "={{ $('Loop Over Items').item.json.titre }}"
+              "value": "={{ $json['titre '] }}"
             },
             {
               "name": "url",
-              "value": "={{ $('Loop Over Items').item.json.url }}"
+              "value": "={{ $json['url '] }}"
             },
             {
               "name": "score",
@@ -397,7 +397,7 @@
     },
     {
       "parameters": {
-        "url": "http://localhost:3000/api/articles",
+        "url": "http://192.168.1.20:3000/api/articles",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -750,28 +750,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2480,
-        800
-      ]
-    },
-    {
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "field": "hours",
-              "hoursInterval": 24
-            }
-          ]
-        }
-      },
-      "id": "e7c53167-593e-4e80-a1ea-61878d8faf4c",
-      "name": "Schedule Trigger (Daily 9 AM)1",
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.2,
-      "position": [
-        2272,
-        800
+        912,
+        672
       ]
     },
     {
@@ -809,8 +789,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2704,
-        800
+        1136,
+        672
       ]
     },
     {
@@ -822,9 +802,49 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2912,
-        800
+        1344,
+        672
       ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.1.21:3000/api/articles",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title ",
+              "value": "={{ $json.name }}"
+            },
+            {
+              "name": "url",
+              "value": "={{ $json.url }}"
+            },
+            {
+              "name": "categorie",
+              "value": "={{ $('Select Topic (e.g. marketing)').item.json.topic }}"
+            },
+            {
+              "name": "resume",
+              "value": "={{ $json.description }}"
+            },
+            {
+              "name": "date_creation",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1616,
+        672
+      ],
+      "id": "665d4eb9-582f-4288-ba44-abb822ab52d7",
+      "name": "HTTP Request4"
     }
   ],
   "connections": {
@@ -1033,6 +1053,11 @@
             "node": "HTTP Request3",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Select Topic (e.g. marketing)",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -1158,17 +1183,6 @@
         ]
       ]
     },
-    "Schedule Trigger (Daily 9 AM)1": {
-      "main": [
-        [
-          {
-            "node": "Select Topic (e.g. marketing)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Search GitHub API1": {
       "main": [
         [
@@ -1184,7 +1198,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request1",
+            "node": "HTTP Request4",
             "type": "main",
             "index": 0
           }
@@ -1212,7 +1226,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "4b907bfd-3dfd-490a-8ea9-395f0c58a2e8",
+  "versionId": "229715bc-9fbc-4244-a386-1e410eb101f1",
   "activeVersionId": "e6208943-5b09-42d9-8448-c2cf46b9bc92",
   "triggerCount": 2,
   "shared": [

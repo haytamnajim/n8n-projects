@@ -1,0 +1,155 @@
+{
+  "updatedAt": "2026-08-08T12:56:16.073Z",
+  "createdAt": "2026-08-08T12:31:45.293Z",
+  "id": "xfG3fFjIebivU4WH",
+  "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "53d293c7-123a-4dd0-83f9-20d39e7baca3",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un créateur de contenu vidéo en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 45, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 10, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"english prompt, photorealistic, cinematic\\\"}]}. Génère 4 à 6 scènes, durée totale 30 à 60 secondes.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère un script vidéo captivant sur un sujet parmi : science, espace, nature, psychologie, histoire. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "00f3eef4-aedd-43c6-ae3d-4d50094fa082",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "O4KVT34b9pU08047",
+          "name": "clé API Groq"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.choices[0].message.content;\n\nconst data = JSON.parse(raw);\n\n// Narration complète pour ElevenLabs plus tard\ndata.full_narration = data.scenes.map(s => s.narration).join(' ');\n\nreturn { json: data };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "fccb510c-03f0-4f03-91f9-ab1eaa802f11",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.full_narration }}\",\n  \"model_id\": \"eleven_multilingual_v2\",\n  \"voice_settings\": {\n    \"stability\": 0.5,\n    \"similarity_boost\": 0.75\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        0
+      ],
+      "id": "cfc0a921-3c7d-4153-8f12-0d5a6d38243c",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "FMmc2hUKdflztrS0",
+          "name": "Header Auth account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "bc64942e-ed97-4ffc-9717-0c3d132ddc4e",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-08-08T12:31:45.300Z",
+      "createdAt": "2026-08-08T12:31:45.300Z",
+      "role": "workflow:owner",
+      "workflowId": "xfG3fFjIebivU4WH",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

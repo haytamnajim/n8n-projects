@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-08T12:21:04.281Z",
+  "updatedAt": "2026-08-08T14:24:36.375Z",
   "createdAt": "2026-08-08T12:15:19.189Z",
   "id": "KeYOiz2T7qw03pJG",
   "name": "Landing",
@@ -306,8 +306,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        4336,
-        240
+        4352,
+        192
       ],
       "id": "a71236cf-d7df-4eaa-83cc-1cb566e4c3d0",
       "name": "HTTP Request4",
@@ -7268,7 +7268,7 @@
       }
     ]
   },
-  "versionId": "726eeae8-b014-4c05-ab6d-1c810339ead3",
+  "versionId": "7854798f-099d-42d5-91b2-986896b9f6b0",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

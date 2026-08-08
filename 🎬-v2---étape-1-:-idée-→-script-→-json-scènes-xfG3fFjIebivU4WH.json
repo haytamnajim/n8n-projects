@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-08T12:56:16.073Z",
+  "updatedAt": "2026-08-08T13:26:25.898Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -68,7 +68,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.elevenlabs.io/v1/text-to-speech/aQROLel5sQbj1vuIVi6B",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
@@ -88,6 +88,80 @@
         "httpHeaderAuth": {
           "id": "FMmc2hUKdflztrS0",
           "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "uploadFile",
+        "resource_type_file": "video",
+        "additionalFieldsFile": {
+          "folder": "videos-ia/audio"
+        }
+      },
+      "type": "n8n-nodes-cloudinary.cloudinary",
+      "typeVersion": 1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "53193e61-7d15-4964-88d8-75bc8362feef",
+      "name": "Upload an asset from file data",
+      "credentials": {
+        "cloudinaryApi": {
+          "id": "uY0FNvmMra92ViBI",
+          "name": "Cloudinary account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "ee3a7062-1cc5-455f-aa10-b4a9f6b471ad",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupère l'URL audio depuis Cloudinary\nconst audioUrl = $('Upload an asset from file data').first().json.secure_url;\n\n// Récupère les scènes depuis le nœud Code précédent\nconst scenes = $('Code in JavaScript').first().json.scenes;\n\n// Retourne chaque scène comme un item séparé avec l'URL audio\nreturn scenes.map(scene => ({\n  json: {\n    ...scene,\n    audio_url: audioUrl\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "862444e6-36ba-431f-83bf-154f93a0a0df",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "url": "https://image.pollinations.ai/prompt/{{ encodeURIComponent($json.image_prompt) }}?width=1280&height=720&model=flux&nologo=true&seed={{ $json.scene }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"input\": {\n    \"prompt\": \"{{ $json.image_prompt }}\",\n    \"num_outputs\": 1,\n    \"aspect_ratio\": \"16:9\",\n    \"output_format\": \"jpg\",\n    \"num_inference_steps\": 4\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1456,
+        96
+      ],
+      "id": "e2b6a0f0-1622-4e56-9311-17625e086851",
+      "name": "HTTP Request2",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "QUrjr16MV98fpJ57",
+          "name": "Header Auth account 2"
         }
       }
     }
@@ -125,6 +199,51 @@
           }
         ]
       ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Upload an asset from file data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload an asset from file data": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -138,7 +257,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "bc64942e-ed97-4ffc-9717-0c3d132ddc4e",
+  "versionId": "f933a9ff-54ae-4778-a5b6-98d541bbe9a5",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

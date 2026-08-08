@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-08T13:26:25.898Z",
+  "updatedAt": "2026-08-08T14:43:01.709Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -143,11 +143,6 @@
     {
       "parameters": {
         "url": "https://image.pollinations.ai/prompt/{{ encodeURIComponent($json.image_prompt) }}?width=1280&height=720&model=flux&nologo=true&seed={{ $json.scene }}",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"input\": {\n    \"prompt\": \"{{ $json.image_prompt }}\",\n    \"num_outputs\": 1,\n    \"aspect_ratio\": \"16:9\",\n    \"output_format\": \"jpg\",\n    \"num_inference_steps\": 4\n  }\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -157,13 +152,90 @@
         96
       ],
       "id": "e2b6a0f0-1622-4e56-9311-17625e086851",
-      "name": "HTTP Request2",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "operation": "uploadFile",
+        "additionalFieldsFile": {
+          "folder": "videos-ia/images"
+        }
+      },
+      "type": "n8n-nodes-cloudinary.cloudinary",
+      "typeVersion": 1,
+      "position": [
+        1664,
+        96
+      ],
+      "id": "f84d9795-7818-40a6-91d5-229ab838804e",
+      "name": "Upload an asset from file data1",
       "credentials": {
-        "httpHeaderAuth": {
-          "id": "QUrjr16MV98fpJ57",
-          "name": "Header Auth account 2"
+        "cloudinaryApi": {
+          "id": "uY0FNvmMra92ViBI",
+          "name": "Cloudinary account"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupère l'URL de l'image depuis Cloudinary\nconst imageUrl = $('Upload an asset from file data1').first().json.secure_url;\n\n// Récupère les données de la scène depuis l'entrée de la boucle\nconst sceneData = $('Loop Over Items').first().json;\n\n// Retourne la scène mise à jour avec l'URL de l'image\nreturn {\n  json: {\n    ...sceneData,\n    image_url: imageUrl\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1872,
+        96
+      ],
+      "id": "b33cd1cf-a479-44f4-8691-1a0d6509280f",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupère toutes les scènes traitées par la boucle\nconst scenes = $input.all().map(item => item.json);\n\n// L'URL audio est la même pour toutes les scènes\nconst audioUrl = scenes[0].audio_url;\n\n// Construction des clips vidéo pour Shotstack\nconst videoClips = scenes.map(scene => {\n  return {\n    asset: {\n      type: \"image\",\n      src: scene.image_url\n    },\n    start: scene.start,\n    length: scene.duration,\n    effect: \"zoomIn\" // Petit effet de zoom pour dynamiser\n  };\n});\n\n// Construction du JSON Shotstack final\nconst shotstackJson = {\n  timeline: {\n    soundtrack: {\n      src: audioUrl,\n      effect: \"fadeOut\"\n    },\n    background: \"#000000\",\n    tracks: [\n      {\n        clips: videoClips\n      }\n    ]\n  },\n  output: {\n    format: \"mp4\",\n    resolution: \"hd\"\n  }\n};\n\nreturn { json: shotstackJson };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        -96
+      ],
+      "id": "4b93ba9e-9915-465c-8feb-c1eefe4283fd",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotstack.io/edit/stage/render",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "qQKayVuSQ7aHNML0FlfHu3fNNC3OGM1yWqgcTMqx"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"timeline\": {\n    \"background\": \"#000000\",\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"title\",\n              \"text\": \"Test Shotstack\",\n              \"style\": \"minimal\"\n            },\n            \"start\": 0,\n            \"length\": 5\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"sd\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1696,
+        -96
+      ],
+      "id": "7581410a-a604-48ec-9fb3-859d6096a5ed",
+      "name": "HTTP Request9"
     }
   ],
   "connections": {
@@ -224,7 +296,13 @@
     },
     "Loop Over Items": {
       "main": [
-        [],
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "HTTP Request2",
@@ -244,6 +322,50 @@
           }
         ]
       ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Upload an asset from file data1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload an asset from file data1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -257,7 +379,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "f933a9ff-54ae-4778-a5b6-98d541bbe9a5",
+  "versionId": "f895f3cc-3f4f-485a-9137-50fc71083233",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

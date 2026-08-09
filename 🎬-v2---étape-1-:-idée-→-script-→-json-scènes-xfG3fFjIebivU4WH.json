@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-09T12:58:38.482Z",
+  "updatedAt": "2026-08-09T14:53:58.074Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -21,7 +21,7 @@
       "typeVersion": 1.3,
       "position": [
         0,
-        0
+        96
       ],
       "id": "53d293c7-123a-4dd0-83f9-20d39e7baca3",
       "name": "Schedule Trigger"
@@ -34,14 +34,14 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un créateur de contenu vidéo en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 45, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 10, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"english prompt, photorealistic, cinematic\\\"}]}. Génère 4 à 6 scènes, durée totale 30 à 60 secondes.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère un script vidéo captivant sur un sujet parmi : science, espace, nature, psychologie, histoire. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
+        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un créateur de contenu vidéo en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 45, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 10, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"english prompt, photorealistic, cinematic\\\"}]}. Génère 4 à 6 scènes, durée totale 30 à 60 secondes. IMPORTANT FOR IMAGE_PROMPT: 1) ALWAYS in English 2) NO faces, NO people, NO characters 3) Each scene COMPLETELY DIFFERENT visual (landscape, space, nature, abstract) 4) Be very specific. Examples: 'vast spiral galaxy with colorful nebula clouds, deep space, 8k cinematic', 'extreme close-up of a black hole event horizon, light bending, dramatic'.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère un script vidéo captivant sur un sujet parmi : science, espace, nature, psychologie, histoire. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        208,
-        0
+        224,
+        96
       ],
       "id": "00f3eef4-aedd-43c6-ae3d-4d50094fa082",
       "name": "HTTP Request",
@@ -59,8 +59,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        416,
-        0
+        448,
+        96
       ],
       "id": "fccb510c-03f0-4f03-91f9-ab1eaa802f11",
       "name": "Code in JavaScript"
@@ -79,8 +79,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        624,
-        0
+        672,
+        96
       ],
       "id": "cfc0a921-3c7d-4153-8f12-0d5a6d38243c",
       "name": "HTTP Request1",
@@ -102,8 +102,8 @@
       "type": "n8n-nodes-cloudinary.cloudinary",
       "typeVersion": 1,
       "position": [
-        832,
-        0
+        896,
+        96
       ],
       "id": "53193e61-7d15-4964-88d8-75bc8362feef",
       "name": "Upload an asset from file data",
@@ -121,8 +121,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1248,
-        0
+        1344,
+        96
       ],
       "id": "ee3a7062-1cc5-455f-aa10-b4a9f6b471ad",
       "name": "Loop Over Items"
@@ -134,21 +134,21 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1040,
-        0
+        1120,
+        96
       ],
       "id": "862444e6-36ba-431f-83bf-154f93a0a0df",
       "name": "Code in JavaScript1"
     },
     {
       "parameters": {
-        "url": "https://image.pollinations.ai/prompt/{{ encodeURIComponent($json.image_prompt) }}?width=1280&height=720&model=flux&nologo=true&seed={{ $json.scene }}",
+        "url": "https://image.pollinations.ai/prompt/{{ $json.encoded_prompt }}?width=1280&height=720&model=flux&nologo=true&seed={{ $json.scene * 77777 }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1456,
+        1792,
         96
       ],
       "id": "e2b6a0f0-1622-4e56-9311-17625e086851",
@@ -164,7 +164,7 @@
       "type": "n8n-nodes-cloudinary.cloudinary",
       "typeVersion": 1,
       "position": [
-        1664,
+        2016,
         96
       ],
       "id": "f84d9795-7818-40a6-91d5-229ab838804e",
@@ -183,20 +183,20 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1872,
-        96
+        2240,
+        176
       ],
       "id": "b33cd1cf-a479-44f4-8691-1a0d6509280f",
       "name": "Code in JavaScript2"
     },
     {
       "parameters": {
-        "jsCode": "// Récupère toutes les scènes traitées par la boucle\nconst scenes = $input.all().map(item => item.json);\n\n// URL audio de la voix-off\nconst audioUrl = scenes[0].audio_url;\n\n// Construction des scènes pour JSON2Video (image complète nette et cadrée)\nconst json2videoScenes = scenes.map(scene => {\n  return {\n    duration: scene.duration,\n    elements: [\n      {\n        type: \"image\",\n        src: scene.image_url,\n        resize: \"cover\"\n      }\n    ]\n  };\n});\n\n// JSON final pour JSON2Video\nconst json2videoPayload = {\n  resolution: \"full-hd\",\n  quality: \"medium\",\n  scenes: json2videoScenes,\n  elements: [\n    {\n      type: \"audio\",\n      src: audioUrl\n    }\n  ]\n};\n\nreturn { json: json2videoPayload };\n"
+        "jsCode": "// Récupère toutes les scènes traitées par la boucle\nconst scenes = $input.all().map(item => item.json);\n\n// URL audio de la voix-off\nconst audioUrl = scenes[0].audio_url;\n\n// Construction des scènes pour JSON2Video (5 images différentes)\nconst json2videoScenes = scenes.map(scene => {\n  return {\n    duration: scene.duration,\n    elements: [\n      {\n        type: \"image\",\n        src: scene.image_url,\n        resize: \"cover\"\n      }\n    ]\n  };\n});\n\n// JSON final pour JSON2Video\nconst json2videoPayload = {\n  resolution: \"full-hd\",\n  quality: \"medium\",\n  scenes: json2videoScenes,\n  elements: [\n    {\n      type: \"audio\",\n      src: audioUrl\n    }\n  ]\n};\n\nreturn { json: json2videoPayload };\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1456,
+        1568,
         -96
       ],
       "id": "4b93ba9e-9915-465c-8feb-c1eefe4283fd",
@@ -231,7 +231,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1696,
+        1792,
         -96
       ],
       "id": "7581410a-a604-48ec-9fb3-859d6096a5ed",
@@ -244,7 +244,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1904,
+        2016,
         -96
       ],
       "id": "c09c7e93-2ff2-4897-b6f8-35a847845e07",
@@ -268,11 +268,24 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2112,
+        2240,
         -96
       ],
       "id": "a8974182-14f4-4166-b833-1f89d52dad2a",
       "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nreturn {\n  json: {\n    ...item,\n    encoded_prompt: encodeURIComponent(item.image_prompt + ', cinematic, 8k, no people')\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        96
+      ],
+      "id": "495f1019-ece1-47b0-b0bf-5d2b714abc51",
+      "name": "Code in JavaScript4"
     }
   ],
   "connections": {
@@ -342,7 +355,7 @@
         ],
         [
           {
-            "node": "HTTP Request2",
+            "node": "Code in JavaScript4",
             "type": "main",
             "index": 0
           }
@@ -425,6 +438,17 @@
           }
         ]
       ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -438,7 +462,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "795fc14d-7a1b-41e5-a432-0588bdd939f3",
+  "versionId": "06fe26b5-b2a8-4bc1-8b95-c60eb15cabca",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

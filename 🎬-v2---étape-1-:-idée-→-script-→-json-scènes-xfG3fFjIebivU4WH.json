@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-08T14:43:01.709Z",
+  "updatedAt": "2026-08-09T12:58:38.482Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -191,7 +191,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Récupère toutes les scènes traitées par la boucle\nconst scenes = $input.all().map(item => item.json);\n\n// L'URL audio est la même pour toutes les scènes\nconst audioUrl = scenes[0].audio_url;\n\n// Construction des clips vidéo pour Shotstack\nconst videoClips = scenes.map(scene => {\n  return {\n    asset: {\n      type: \"image\",\n      src: scene.image_url\n    },\n    start: scene.start,\n    length: scene.duration,\n    effect: \"zoomIn\" // Petit effet de zoom pour dynamiser\n  };\n});\n\n// Construction du JSON Shotstack final\nconst shotstackJson = {\n  timeline: {\n    soundtrack: {\n      src: audioUrl,\n      effect: \"fadeOut\"\n    },\n    background: \"#000000\",\n    tracks: [\n      {\n        clips: videoClips\n      }\n    ]\n  },\n  output: {\n    format: \"mp4\",\n    resolution: \"hd\"\n  }\n};\n\nreturn { json: shotstackJson };\n"
+        "jsCode": "// Récupère toutes les scènes traitées par la boucle\nconst scenes = $input.all().map(item => item.json);\n\n// URL audio de la voix-off\nconst audioUrl = scenes[0].audio_url;\n\n// Construction des scènes pour JSON2Video (image complète nette et cadrée)\nconst json2videoScenes = scenes.map(scene => {\n  return {\n    duration: scene.duration,\n    elements: [\n      {\n        type: \"image\",\n        src: scene.image_url,\n        resize: \"cover\"\n      }\n    ]\n  };\n});\n\n// JSON final pour JSON2Video\nconst json2videoPayload = {\n  resolution: \"full-hd\",\n  quality: \"medium\",\n  scenes: json2videoScenes,\n  elements: [\n    {\n      type: \"audio\",\n      src: audioUrl\n    }\n  ]\n};\n\nreturn { json: json2videoPayload };\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -205,13 +205,13 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.shotstack.io/edit/stage/render",
+        "url": "https://api.json2video.com/v2/movies",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
             {
               "name": "x-api-key",
-              "value": "qQKayVuSQ7aHNML0FlfHu3fNNC3OGM1yWqgcTMqx"
+              "value": "Qy3UHEcOVdpSEbw9Ay6rMBJ9SJhO6g4YJ29RLMce"
             },
             {
               "name": "Content-Type",
@@ -225,7 +225,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"timeline\": {\n    \"background\": \"#000000\",\n    \"tracks\": [\n      {\n        \"clips\": [\n          {\n            \"asset\": {\n              \"type\": \"title\",\n              \"text\": \"Test Shotstack\",\n              \"style\": \"minimal\"\n            },\n            \"start\": 0,\n            \"length\": 5\n          }\n        ]\n      }\n    ]\n  },\n  \"output\": {\n    \"format\": \"mp4\",\n    \"resolution\": \"sd\"\n  }\n}",
+        "jsonBody": "={{ JSON.stringify($json) }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -236,6 +236,43 @@
       ],
       "id": "7581410a-a604-48ec-9fb3-859d6096a5ed",
       "name": "HTTP Request9"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1904,
+        -96
+      ],
+      "id": "c09c7e93-2ff2-4897-b6f8-35a847845e07",
+      "name": "Wait",
+      "webhookId": "217b7f5c-e3fe-4154-890b-b9cf79993b0d"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.json2video.com/v2/movies?project={{ $json.project }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "Qy3UHEcOVdpSEbw9Ay6rMBJ9SJhO6g4YJ29RLMce"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2112,
+        -96
+      ],
+      "id": "a8974182-14f4-4166-b833-1f89d52dad2a",
+      "name": "HTTP Request3"
     }
   ],
   "connections": {
@@ -366,6 +403,28 @@
           }
         ]
       ]
+    },
+    "HTTP Request9": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -379,7 +438,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "f895f3cc-3f4f-485a-9137-50fc71083233",
+  "versionId": "795fc14d-7a1b-41e5-a432-0588bdd939f3",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

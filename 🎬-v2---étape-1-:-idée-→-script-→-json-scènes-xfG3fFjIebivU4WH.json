@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-09T14:53:58.074Z",
+  "updatedAt": "2026-08-09T15:52:06.822Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -34,7 +34,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un créateur de contenu vidéo en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 45, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 10, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"english prompt, photorealistic, cinematic\\\"}]}. Génère 4 à 6 scènes, durée totale 30 à 60 secondes. IMPORTANT FOR IMAGE_PROMPT: 1) ALWAYS in English 2) NO faces, NO people, NO characters 3) Each scene COMPLETELY DIFFERENT visual (landscape, space, nature, abstract) 4) Be very specific. Examples: 'vast spiral galaxy with colorful nebula clouds, deep space, 8k cinematic', 'extreme close-up of a black hole event horizon, light bending, dramatic'.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère un script vidéo captivant sur un sujet parmi : science, espace, nature, psychologie, histoire. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
+        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un conteur d'histoires émouvantes en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 25, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 5, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"simple stick figure drawing, 2d line art on white background, english description\\\"}]}. Génère 5 scènes, durée totale 25 secondes. IMPORTANT FOR IMAGE_PROMPT: 1) MUST BE STRICTLY IN ENGLISH ONLY (NO FRENCH WORDS) 2) MUST START WITH: 'simple stick figure drawing, 2d vector line art on white background' 3) Simple scene description in English. Examples: 'two stick figures sitting on bench watching sunset', 'stick figure holding flowers near grave marker', 'stick figure walking alone under rain'.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère une histoire émouvante sur l'amitié ou la vie. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -142,7 +142,16 @@
     },
     {
       "parameters": {
-        "url": "https://image.pollinations.ai/prompt/{{ $json.encoded_prompt }}?width=1280&height=720&model=flux&nologo=true&seed={{ $json.scene * 77777 }}",
+        "url": "={{ $json.pollinations_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -276,7 +285,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\nreturn {\n  json: {\n    ...item,\n    encoded_prompt: encodeURIComponent(item.image_prompt + ', cinematic, 8k, no people')\n  }\n};\n"
+        "jsCode": "const item = $input.first().json;\n\n// Force un prompt 100% en anglais et dépouillé\nlet promptText = item.image_prompt || 'stick figure walking';\npromptText = promptText.replace(/[^a-zA-Z0-9 ]/g, ' '); // Enlève caractères spéciaux\n\n// Style strict bonhomme allumette 2D\nconst finalPrompt = `simple stick figure drawing, 2d vector art, black ink line art, clean white background, minimalist cartoon, ${promptText}`;\nconst randomSeed = Math.floor(Math.random() * 999999);\n\nconst url = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1280&height=720&model=turbo&seed=${randomSeed}&nologo=true`;\n\nreturn {\n  json: {\n    ...item,\n    pollinations_url: url\n  }\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -462,7 +471,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "06fe26b5-b2a8-4bc1-8b95-c60eb15cabca",
+  "versionId": "c0d798a2-7be8-49c2-bb07-5bc17f597573",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

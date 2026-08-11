@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-11T15:50:19.507Z",
+  "updatedAt": "2026-08-11T16:52:26.668Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -34,7 +34,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un conteur d'histoires émouvantes en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 25, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 5, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"...\\\"}]}. Génère 5 scènes, durée totale 25 secondes. IMPORTANT FOR IMAGE_PROMPT: 1) MUST BE STRICTLY IN ENGLISH ONLY (NO FRENCH WORDS) 2) MUST START WITH: 'flat 2d cartoon style, Alan Becker stickman animation style, simple stick figure character with a white filled circular head, thick black outlines, simple expressive face, black line body and limbs' 3) MUST INCLUDE: 'simple 2d cartoon background, flat colors, thick outlines, webcomic style, no shading, no gradients, zero shadows, high contrast, clean vector' 4) Followed by a simple scene description in English.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère une histoire émouvante sur l'amitié ou la vie. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
+        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un conteur d'histoires émouvantes en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 25, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 5, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"...\\\"}]}. Génère 5 scènes, durée totale 25 secondes. IMPORTANT FOR IMAGE_PROMPT: 1) MUST BE STRICTLY IN ENGLISH ONLY 2) MUST START EXACTLY WITH: 'stick figure drawing, 2d line art on white background, thin black lines, simple geometric shapes, NOT realistic, NOT photographic, NOT 3d render, NO detailed face, NO shading, NO texture' 3) Then add a very short action description using ONLY these words: stick figure, walk, sit, stand, hold, run, hug. NEVER use words like: face, person, human, portrait, character, realistic, photo.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère une histoire émouvante sur l'amitié ou la vie. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -298,26 +298,13 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer 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"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"inputs\": \"{{ $json.image_prompt }}\"\n}\n",
+        "url": "=https://image.pollinations.ai/prompt/{{ $json.image_prompt }}?width=1280&height=720&model=stable-diffusion&nologo=true&enhance=false",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1776,
+        1840,
         256
       ],
       "id": "2eff3845-d999-496d-b7f7-cc2d3f3b2284",
@@ -503,7 +490,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "385ca8ee-fb78-41c6-bc96-06f79323f462",
+  "versionId": "f2c3e15c-c062-4926-a0e3-d0b0dccef429",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

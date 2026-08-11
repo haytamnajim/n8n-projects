@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-09T15:52:06.822Z",
+  "updatedAt": "2026-08-11T13:58:58.324Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -220,7 +220,7 @@
           "parameters": [
             {
               "name": "x-api-key",
-              "value": "Qy3UHEcOVdpSEbw9Ay6rMBJ9SJhO6g4YJ29RLMce"
+              "value": "VCDGmpngmfdhep1jOXeYfBZAiR0rNrGLFeKEF73d"
             },
             {
               "name": "Content-Type",
@@ -268,7 +268,7 @@
           "parameters": [
             {
               "name": "x-api-key",
-              "value": "Qy3UHEcOVdpSEbw9Ay6rMBJ9SJhO6g4YJ29RLMce"
+              "value": "VCDGmpngmfdhep1jOXeYfBZAiR0rNrGLFeKEF73d"
             }
           ]
         },
@@ -471,7 +471,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "c0d798a2-7be8-49c2-bb07-5bc17f597573",
+  "versionId": "682cfb21-fd78-4b70-a8a4-f9c5b56b3642",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

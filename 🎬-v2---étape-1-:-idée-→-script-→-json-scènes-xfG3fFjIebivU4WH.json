@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-11T14:53:52.113Z",
+  "updatedAt": "2026-08-11T15:50:19.507Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -295,6 +295,33 @@
       ],
       "id": "495f1019-ece1-47b0-b0bf-5d2b714abc51",
       "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"inputs\": \"{{ $json.image_prompt }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1776,
+        256
+      ],
+      "id": "2eff3845-d999-496d-b7f7-cc2d3f3b2284",
+      "name": "HTTP Request4"
     }
   ],
   "connections": {
@@ -446,6 +473,17 @@
       "main": [
         [
           {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
             "node": "Upload an asset from file data1",
             "type": "main",
             "index": 0
@@ -465,7 +503,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "0ca766b3-adf5-4931-b0e4-b6366d15f892",
+  "versionId": "385ca8ee-fb78-41c6-bc96-06f79323f462",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

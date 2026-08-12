@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-12T18:19:44.972Z",
+  "updatedAt": "2026-08-12T19:27:59.905Z",
   "createdAt": "2026-08-12T17:48:56.352Z",
   "id": "Qkb4j0aLMCL3mxYH",
   "name": "My workflow 3",
@@ -11,8 +11,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        -352,
+        48
       ],
       "id": "ff9e0edf-92d2-4a1e-a0ff-65be84266b94",
       "name": "When clicking ‘Execute workflow’"
@@ -29,11 +29,42 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        208,
-        0
+        -352,
+        -256
       ],
       "id": "9fdf2261-bdc0-47ba-ba1d-ed577ff2a17c",
       "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-fast-generate-preview:predictLongRunning",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-goog-api-key",
+              "value": "AQ.Ab8RN6JdzH-cWJ4C0XvyOsuEtAiiL5lW3EntCEvRRfYRSILT6Q"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"instances\": [\n    {\n      \"prompt\": \"A cinematic shot of a beautiful Moroccan desert at sunset, golden light, realistic camera movement, cinematic quality.\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -144,
+        48
+      ],
+      "id": "bf9ea837-6c83-44b3-b1af-99494a6c709c",
+      "name": "HTTP Request1"
     }
   ],
   "connections": {
@@ -41,7 +72,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "HTTP Request1",
             "type": "main",
             "index": 0
           }
@@ -58,7 +89,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "e776fb13-25e0-4776-a0b6-fb5969c68f53",
+  "versionId": "b9e54d2b-37e4-4959-be30-b7dfcf7130c3",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

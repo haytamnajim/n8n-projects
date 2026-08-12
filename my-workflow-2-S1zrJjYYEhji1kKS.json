@@ -1,0 +1,99 @@
+{
+  "updatedAt": "2026-08-12T15:21:33.022Z",
+  "createdAt": "2026-08-12T15:15:48.371Z",
+  "id": "S1zrJjYYEhji1kKS",
+  "name": "My workflow 2",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        16
+      ],
+      "id": "17424527-919c-4e7b-bfcf-db140587caf4",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.Ab8RN6JdzH-cWJ4C0XvyOsuEtAiiL5lW3EntCEvRRfYRSILT6Q",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": \"Write a pure narration script for a YouTube video, 1200 words, English, calm 2nd-person voice ('you', 'your brain'). Topic: why you can't stop checking your phone. Rules: NO markdown, NO headers, NO stage directions, NO music cues, NO speaker labels, NO asterisks, NO brackets. Just plain narration text, nothing else. Rhythm: short sentences, one longer sentence every few lines, a question every 4-6 sentences. Include 3 real named researchers or studies woven naturally into the text. Open with a hook. End with a line that echoes the opening, reframed.\"\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -288,
+        16
+      ],
+      "id": "e7df08c6-c066-4807-9c9c-a92ab55acf84",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.first().json.candidates[0].content.parts[0].text;\nreturn [{ json: { script: text } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        16
+      ],
+      "id": "2bad941a-b29a-4a20-b90a-f3c4a3fd5e72",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "65d2a423-0433-4cd9-81ba-9a20ac663b1a",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-08-12T15:15:48.379Z",
+      "createdAt": "2026-08-12T15:15:48.379Z",
+      "role": "workflow:owner",
+      "workflowId": "S1zrJjYYEhji1kKS",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

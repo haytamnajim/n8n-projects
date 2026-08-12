@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-12T18:53:57.367Z",
+  "updatedAt": "2026-08-12T19:13:14.146Z",
   "createdAt": "2026-08-12T15:15:48.371Z",
   "id": "S1zrJjYYEhji1kKS",
   "name": "My workflow 2",
@@ -50,7 +50,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const text = $input.first().json.script;\nconst maxLen = 200;\nconst sentences = text.match(/[^.!?]+[.!?]+/g) || [text];\n\nconst chunks = [];\nlet current = \"\";\n\nfor (const sentence of sentences) {\n  if ((current + sentence).length > maxLen) {\n    if (current) chunks.push(current.trim());\n    current = sentence;\n  } else {\n    current += sentence;\n  }\n}\nif (current) chunks.push(current.trim());\n\nreturn chunks.map((chunk, i) => ({\n  json: { chunkIndex: i, text: chunk }\n}));"
+        "jsCode": "const text = $input.first().json.script;\nconst maxLen = 400;\nconst sentences = text.match(/[^.!?]+[.!?]+/g) || [text];\n\nconst chunks = [];\nlet current = \"\";\n\nfor (const sentence of sentences) {\n  if ((current + sentence).length > maxLen) {\n    if (current) chunks.push(current.trim());\n    current = sentence;\n  } else {\n    current += sentence;\n  }\n}\nif (current) chunks.push(current.trim());\n\nreturn chunks.map((chunk, i) => ({\n  json: { chunkIndex: i, text: chunk }\n}));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -63,7 +63,7 @@
     },
     {
       "parameters": {
-        "url": "=https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q={{ encodeURIComponent($json.text) }}",
+        "url": "=https://api.streamelements.com/kappa/v2/speech?voice=Brian&text={{ encodeURIComponent($json.text) }}",
         "options": {
           "response": {
             "response": {
@@ -75,11 +75,25 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        336,
+        544,
         16
       ],
       "id": "62bc5e7d-4b75-40e8-b6e0-dfea8a4eb650",
       "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        336,
+        16
+      ],
+      "id": "bad887fc-e188-4a1c-92a6-9bb15a73110f",
+      "name": "Wait",
+      "webhookId": "a1dfb649-9f1f-47bf-a0af-7934dc796762"
     }
   ],
   "connections": {
@@ -120,6 +134,17 @@
       "main": [
         [
           {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
             "node": "HTTP Request1",
             "type": "main",
             "index": 0
@@ -137,7 +162,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "0f33e2e7-5e10-445b-9409-6b6371261413",
+  "versionId": "55b4272b-cbff-49aa-bab1-167a75cb13d7",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

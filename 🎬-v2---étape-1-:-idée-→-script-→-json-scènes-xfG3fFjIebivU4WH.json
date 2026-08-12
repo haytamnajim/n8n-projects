@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-11T16:52:26.668Z",
+  "updatedAt": "2026-08-12T13:41:05.546Z",
   "createdAt": "2026-08-08T12:31:45.293Z",
   "id": "xfG3fFjIebivU4WH",
   "name": "🎬 V2 - Étape 1 : Idée → Script → JSON Scènes",
@@ -21,7 +21,7 @@
       "typeVersion": 1.3,
       "position": [
         0,
-        256
+        368
       ],
       "id": "53d293c7-123a-4dd0-83f9-20d39e7baca3",
       "name": "Schedule Trigger"
@@ -34,14 +34,14 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un conteur d'histoires émouvantes en français. Retourne UNIQUEMENT un JSON valide sans texte autour avec ce format : {\\\"topic\\\": \\\"...\\\", \\\"title\\\": \\\"...\\\", \\\"total_duration\\\": 25, \\\"scenes\\\": [{\\\"scene\\\": 1, \\\"start\\\": 0, \\\"duration\\\": 5, \\\"narration\\\": \\\"texte français...\\\", \\\"image_prompt\\\": \\\"...\\\"}]}. Génère 5 scènes, durée totale 25 secondes. IMPORTANT FOR IMAGE_PROMPT: 1) MUST BE STRICTLY IN ENGLISH ONLY 2) MUST START EXACTLY WITH: 'stick figure drawing, 2d line art on white background, thin black lines, simple geometric shapes, NOT realistic, NOT photographic, NOT 3d render, NO detailed face, NO shading, NO texture' 3) Then add a very short action description using ONLY these words: stick figure, walk, sit, stand, hold, run, hug. NEVER use words like: face, person, human, portrait, character, realistic, photo.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère une histoire émouvante sur l'amitié ou la vie. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.8\n}\n",
+        "jsonBody": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Tu es un créateur de bandes dessinées animées en bonshommes allumettes (stick figures 2D). Pour le sujet donné, génère un JSON strict contenant le script et le code SVG sur mesure de chaque scène.\\n\\nFORMAT OBLIGATOIRE (JSON uniquement) :\\n{\\n  \\\"topic\\\": \\\"...\\\",\\n  \\\"title\\\": \\\"...\\\",\\n  \\\"total_duration\\\": 25,\\n  \\\"scenes\\\": [\\n    {\\n      \\\"scene\\\": 1,\\n      \\\"start\\\": 0,\\n      \\\"duration\\\": 5,\\n      \\\"narration\\\": \\\"Texte de la narration en français...\\\",\\n      \\\"svg_code\\\": \\\"<svg viewBox='0 0 1280 720' width='1280' height='720' xmlns='http://www.w3.org/2000/svg'><rect width='1280' height='720' fill='#ffffff'/><line x1='100' y1='600' x2='1180' y2='600' stroke='#000000' stroke-width='6'/><circle cx='640' cy='300' r='45' fill='#ffffff' stroke='#000000' stroke-width='8'/><line x1='640' y1='345' x2='640' y2='480' stroke='#000000' stroke-width='8'/><line x1='640' y1='390' x2='570' y2='440' stroke='#000000' stroke-width='8'/><line x1='640' y1='390' x2='710' y2='440' stroke='#000000' stroke-width='8'/><line x1='640' y1='480' x2='580' y2='600' stroke='#000000' stroke-width='8'/><line x1='640' y1='480' x2='700' y2='600' stroke='#000000' stroke-width='8'/></svg>\\\"\\n    }\\n  ]\\n}\\n\\nRÈGLES SVG STRICTES :\\n1) Dimensions : viewBox='0 0 1280 720' width='1280' height='720'.\\n2) Fond : Toujours un <rect width='1280' height='720' fill='#ffffff'/> au début.\\n3) Style graphique : Stickman 2D minimaliste (Alan Becker style), contours noirs stroke='#000000' stroke-width='6' ou '8'.\\n4) Dessine les personnages stickman et les éléments de décor (maison, voiture, étoiles, lit, ordinateur, arbres, etc.) adaptés spécifiquement à ce qui se passe dans la scène.\\n5) Utilise des guillemets simples (') dans le code SVG.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Génère une histoire originale et émouvante. Retourne uniquement le JSON.\"\n    }\n  ],\n  \"temperature\": 0.7\n}\n",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
         224,
-        256
+        368
       ],
       "id": "00f3eef4-aedd-43c6-ae3d-4d50094fa082",
       "name": "HTTP Request",
@@ -60,7 +60,7 @@
       "typeVersion": 2,
       "position": [
         448,
-        256
+        368
       ],
       "id": "fccb510c-03f0-4f03-91f9-ab1eaa802f11",
       "name": "Code in JavaScript"
@@ -80,7 +80,7 @@
       "typeVersion": 4.4,
       "position": [
         672,
-        256
+        368
       ],
       "id": "cfc0a921-3c7d-4153-8f12-0d5a6d38243c",
       "name": "HTTP Request1",
@@ -103,7 +103,7 @@
       "typeVersion": 1,
       "position": [
         896,
-        256
+        368
       ],
       "id": "53193e61-7d15-4964-88d8-75bc8362feef",
       "name": "Upload an asset from file data",
@@ -122,7 +122,7 @@
       "typeVersion": 3,
       "position": [
         1344,
-        256
+        368
       ],
       "id": "ee3a7062-1cc5-455f-aa10-b4a9f6b471ad",
       "name": "Loop Over Items"
@@ -135,7 +135,7 @@
       "typeVersion": 2,
       "position": [
         1120,
-        256
+        368
       ],
       "id": "862444e6-36ba-431f-83bf-154f93a0a0df",
       "name": "Code in JavaScript1"
@@ -173,8 +173,8 @@
       "type": "n8n-nodes-cloudinary.cloudinary",
       "typeVersion": 1,
       "position": [
-        2144,
-        256
+        2016,
+        368
       ],
       "id": "f84d9795-7818-40a6-91d5-229ab838804e",
       "name": "Upload an asset from file data1",
@@ -187,26 +187,26 @@
     },
     {
       "parameters": {
-        "jsCode": "// Récupère l'URL de l'image depuis Cloudinary\nconst imageUrl = $('Upload an asset from file data1').first().json.secure_url;\n\n// Récupère les données de la scène depuis l'entrée de la boucle\nconst sceneData = $('Loop Over Items').first().json;\n\n// Retourne la scène mise à jour avec l'URL de l'image\nreturn {\n  json: {\n    ...sceneData,\n    image_url: imageUrl\n  }\n};\n"
+        "jsCode": "// Récupère l'URL de l'image depuis Cloudinary\nconst rawUrl = $('Upload an asset from file data1').first().json.secure_url;\n\n// Remplace .svg par .png pour que Cloudinary convertisse le SVG en image PNG acceptée par json2video\nconst imageUrl = rawUrl ? rawUrl.replace(/\\.svg$/, '.png') : '';\n\n// Récupère les données de la scène depuis l'entrée de la boucle\nconst sceneData = $('Loop Over Items').first().json;\n\n// Retourne la scène mise à jour avec l'URL de l'image convertie en PNG\nreturn {\n  json: {\n    ...sceneData,\n    image_url: imageUrl\n  }\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2368,
-        368
+        2240,
+        448
       ],
       "id": "b33cd1cf-a479-44f4-8691-1a0d6509280f",
       "name": "Code in JavaScript2"
     },
     {
       "parameters": {
-        "jsCode": "// Récupère toutes les scènes traitées par la boucle\nconst scenes = $input.all().map(item => item.json);\n\n// URL audio de la voix-off\nconst audioUrl = scenes[0].audio_url;\n\n// Construction des scènes pour JSON2Video (5 images différentes)\nconst json2videoScenes = scenes.map(scene => {\n  return {\n    duration: scene.duration,\n    elements: [\n      {\n        type: \"image\",\n        src: scene.image_url,\n        resize: \"cover\"\n      }\n    ]\n  };\n});\n\n// JSON final pour JSON2Video\nconst json2videoPayload = {\n  resolution: \"full-hd\",\n  quality: \"medium\",\n  scenes: json2videoScenes,\n  elements: [\n    {\n      type: \"audio\",\n      src: audioUrl\n    }\n  ]\n};\n\nreturn { json: json2videoPayload };\n"
+        "jsCode": "// Récupère toutes les scènes traitées par la boucle\nconst scenes = $input.all().map(item => item.json);\n\n// URL audio de la voix-off\nconst audioUrl = scenes[0].audio_url;\n\n// Construction des scènes pour JSON2Video (max 5 secondes par scène)\nconst json2videoScenes = scenes.map(scene => {\n  // Si scene.duration est supérieure à 8 secondes (ex: 20 ou 30), on la ramène à 5s\n  const actualDuration = (scene.duration && scene.duration <= 8) ? scene.duration : 5;\n\n  return {\n    duration: actualDuration,\n    elements: [\n      {\n        type: \"image\",\n        src: scene.image_url,\n        resize: \"cover\"\n      }\n    ]\n  };\n});\n\n// JSON final pour JSON2Video\nconst json2videoPayload = {\n  resolution: \"full-hd\",\n  quality: \"medium\",\n  scenes: json2videoScenes,\n  elements: [\n    {\n      type: \"audio\",\n      src: audioUrl\n    }\n  ]\n};\n\nreturn { json: json2videoPayload };\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         1568,
-        -48
+        176
       ],
       "id": "4b93ba9e-9915-465c-8feb-c1eefe4283fd",
       "name": "Code in JavaScript3"
@@ -240,8 +240,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1856,
-        -48
+        1792,
+        176
       ],
       "id": "7581410a-a604-48ec-9fb3-859d6096a5ed",
       "name": "HTTP Request9"
@@ -253,8 +253,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2144,
-        -48
+        2016,
+        176
       ],
       "id": "c09c7e93-2ff2-4897-b6f8-35a847845e07",
       "name": "Wait",
@@ -277,21 +277,21 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2368,
-        -48
+        2240,
+        176
       ],
       "id": "a8974182-14f4-4166-b833-1f89d52dad2a",
       "name": "HTTP Request3"
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\n\n// Force un prompt 100% en anglais et dépouillé\nlet promptText = item.image_prompt || 'stick figure walking';\npromptText = promptText.replace(/[^a-zA-Z0-9 ]/g, ' '); // Enlève caractères spéciaux\n\n// Style strict bonhomme allumette 2D\nconst finalPrompt = `simple stick figure drawing, 2d vector art, black ink line art, clean white background, minimalist cartoon, ${promptText}`;\nconst randomSeed = Math.floor(Math.random() * 999999);\n\nconst url = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?width=1280&height=720&model=turbo&seed=${randomSeed}&nologo=true`;\n\nreturn {\n  json: {\n    ...item,\n    pollinations_url: url\n  }\n};\n"
+        "jsCode": "const item = $input.item;\nconst scene = item.json.scene || 1;\n\n// Récupère le code SVG sur mesure généré par Groq pour cette scène\nlet svgCode = item.json.svg_code;\n\n// Si jamais Groq n'a pas mis de SVG, secours simple\nif (!svgCode || !svgCode.includes('<svg')) {\n  svgCode = `<svg viewBox='0 0 1280 720' width='1280' height='720' xmlns='http://www.w3.org/2000/svg'><rect width='1280' height='720' fill='#ffffff'/><circle cx='640' cy='300' r='45' fill='#ffffff' stroke='#000000' stroke-width='8'/><circle cx='625' cy='270' r='5' fill='#000000'/><circle cx='655' cy='270' r='5' fill='#000000'/><path d='M 625,295 Q 640,310 655,295' stroke='#000000' stroke-width='5' fill='none'/><line x1='640' y1='325' x2='640' y2='460' stroke='#000000' stroke-width='8'/><line x1='640' y1='370' x2='560' y2='330' stroke='#000000' stroke-width='8'/><line x1='640' y1='370' x2='720' y2='330' stroke='#000000' stroke-width='8'/><line x1='640' y1='460' x2='580' y2='600' stroke='#000000' stroke-width='8'/><line x1='640' y1='460' x2='700' y2='600' stroke='#000000' stroke-width='8'/></svg>`;\n}\n\n// Convertit le SVG en image binaire pour Cloudinary\nconst buffer = Buffer.from(svgCode, 'utf-8');\n\nreturn {\n  json: item.json,\n  binary: {\n    data: {\n      data: buffer.toString('base64'),\n      mimeType: 'image/svg+xml',\n      fileName: `scene_${scene}.svg`,\n      fileExtension: 'svg'\n    }\n  }\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
         1568,
-        256
+        368
       ],
       "id": "495f1019-ece1-47b0-b0bf-5d2b714abc51",
       "name": "Code in JavaScript4"
@@ -304,11 +304,24 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1840,
-        256
+        0,
+        -48
       ],
       "id": "2eff3845-d999-496d-b7f7-cc2d3f3b2284",
       "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item;\nconst scene = item.json.scene || 1;\nlet svgCode = item.json.svg_code || '';\n\n// Si le SVG est manquant ou incomplet, utiliser un SVG Stickman par défaut\nif (!svgCode.includes('<svg')) {\n  svgCode = `\n    <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1280 720\" width=\"1280\" height=\"720\">\n      <rect width=\"1280\" height=\"720\" fill=\"#ffffff\" />\n      <line x1=\"100\" y1=\"600\" x2=\"1180\" y2=\"600\" stroke=\"#000000\" stroke-width=\"6\" stroke-linecap=\"round\" />\n      <circle cx=\"640\" cy=\"300\" r=\"45\" fill=\"#ffffff\" stroke=\"#000000\" stroke-width=\"8\" />\n      <line x1=\"640\" y1=\"345\" x2=\"640\" y2=\"480\" stroke=\"#000000\" stroke-width=\"8\" stroke-linecap=\"round\" />\n      <line x1=\"640\" y1=\"390\" x2=\"570\" y2=\"440\" stroke=\"#000000\" stroke-width=\"8\" stroke-linecap=\"round\" />\n      <line x1=\"640\" y1=\"390\" x2=\"710\" y2=\"440\" stroke=\"#000000\" stroke-width=\"8\" stroke-linecap=\"round\" />\n      <line x1=\"640\" y1=\"480\" x2=\"580\" y2=\"600\" stroke=\"#000000\" stroke-width=\"8\" stroke-linecap=\"round\" />\n      <line x1=\"640\" y1=\"480\" x2=\"700\" y2=\"600\" stroke=\"#000000\" stroke-width=\"8\" stroke-linecap=\"round\" />\n    </svg>\n  `;\n}\n\n// Conversion du SVG en buffer binaire\nconst buffer = Buffer.from(svgCode, 'utf-8');\n\nreturn {\n  json: item.json,\n  binary: {\n    data: {\n      data: buffer.toString('base64'),\n      mimeType: 'image/svg+xml',\n      fileName: `scene_${scene}.svg`,\n      fileExtension: 'svg'\n    }\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        368
+      ],
+      "id": "9637b07f-55b2-4564-9312-abf7eb27552d",
+      "name": "Code in JavaScript5"
     }
   ],
   "connections": {
@@ -460,7 +473,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request4",
+            "node": "Code in JavaScript5",
             "type": "main",
             "index": 0
           }
@@ -468,6 +481,11 @@
       ]
     },
     "HTTP Request4": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript5": {
       "main": [
         [
           {
@@ -490,7 +508,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "f2c3e15c-c062-4926-a0e3-d0b0dccef429",
+  "versionId": "9f3b2bf0-cce8-4437-a743-4d138a426405",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

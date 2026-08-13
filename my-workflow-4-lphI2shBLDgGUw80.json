@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-13T14:02:55.799Z",
+  "updatedAt": "2026-08-13T14:51:30.342Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -19,10 +19,12 @@
     },
     {
       "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
         "tool": {
           "__rl": true,
+          "value": "list_pages",
           "mode": "list",
-          "value": ""
+          "cachedResultName": "list_pages"
         },
         "parameters": {
           "mappingMode": "defineBelow",
@@ -66,7 +68,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "5812f37c-100d-4967-983b-8a05cfa0705d",
+  "versionId": "636cc14f-5147-4f54-8f05-20bb66afaa1d",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

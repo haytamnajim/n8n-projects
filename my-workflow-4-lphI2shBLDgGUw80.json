@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-13T19:59:32.582Z",
+  "updatedAt": "2026-08-13T20:58:48.332Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -15,7 +15,7 @@
         0
       ],
       "id": "f874f394-0e16-4946-9142-aac4e3d02c00",
-      "name": "When clicking ‘Execute workflow’"
+      "name": "Démarrer le workflow"
     },
     {
       "parameters": {
@@ -43,7 +43,7 @@
         0
       ],
       "id": "41ca0fc9-682c-4aaf-a10e-0c2ca71ac38d",
-      "name": "MCP Client"
+      "name": "Récupérer les pages ouvertes"
     },
     {
       "parameters": {
@@ -92,7 +92,7 @@
         0
       ],
       "id": "31532a5d-dabc-456b-b2c0-a8279552df59",
-      "name": "MCP Client1"
+      "name": "Sélectionner Google Flow"
     },
     {
       "parameters": {
@@ -139,37 +139,339 @@
         0
       ],
       "id": "6887e904-8db0-4686-b5b1-23ccb796fa49",
-      "name": "MCP Client2"
+      "name": "Analyser la page Google Flow"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "click",
+          "mode": "list",
+          "cachedResultName": "click"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "uid": "5_31"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "uid",
+              "displayName": "uid",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "dblClick",
+              "displayName": "dblClick",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            },
+            {
+              "id": "includeSnapshot",
+              "displayName": "includeSnapshot",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "48a24319-382a-4a05-8b08-45d4993d5350",
+      "name": "Cliquer sur le champ de prompt"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2cdd57ac-3e31-4016-9b83-3139f2f0900f",
+              "name": "prompt",
+              "value": "A cinematic, hyper-realistic wide shot of a sprawling futuristic cyberpunk city at night during a heavy rainstorm. Towering skyscrapers with intricate futuristic architecture, glowing holographic billboards, and vibrant neon lights reflecting in the wet, puddly asphalt streets. Moody cinematic lighting, volumetric fog, intricate details, realistic camera perspective, 16:9 aspect ratio.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "ce0e8a1f-2c74-4482-b08b-cd06c5b0fde8",
+      "name": "Définir le prompt"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "fill",
+          "mode": "list",
+          "cachedResultName": "fill"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "uid": "5_31",
+            "value": "={{ $json.prompt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "uid",
+              "displayName": "uid",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "value",
+              "displayName": "value",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "includeSnapshot",
+              "displayName": "includeSnapshot",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "a0c9e5c1-20fd-4fb2-a7e7-c7569c0b07ea",
+      "name": "Remplir le champ de prompt"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "press_key",
+          "mode": "list",
+          "cachedResultName": "press_key"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key": "Backspace"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "key",
+              "displayName": "key",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "includeSnapshot",
+              "displayName": "includeSnapshot",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        1456,
+        0
+      ],
+      "id": "1e1fcca7-4119-4b19-8d5a-64574435c25f",
+      "name": "Vérifier la page après remplissage"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "click",
+          "mode": "list",
+          "cachedResultName": "click"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "uid": "5_31"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "uid",
+              "displayName": "uid",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "dblClick",
+              "displayName": "dblClick",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            },
+            {
+              "id": "includeSnapshot",
+              "displayName": "includeSnapshot",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        1664,
+        0
+      ],
+      "id": "cd776753-f2d8-454b-8203-accc10995b5d",
+      "name": "Cliquer sur Créer"
     }
   ],
   "connections": {
-    "When clicking ‘Execute workflow’": {
+    "Démarrer le workflow": {
       "main": [
         [
           {
-            "node": "MCP Client",
+            "node": "Récupérer les pages ouvertes",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MCP Client": {
+    "Récupérer les pages ouvertes": {
       "main": [
         [
           {
-            "node": "MCP Client1",
+            "node": "Sélectionner Google Flow",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "MCP Client1": {
+    "Sélectionner Google Flow": {
       "main": [
         [
           {
-            "node": "MCP Client2",
+            "node": "Analyser la page Google Flow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyser la page Google Flow": {
+      "main": [
+        [
+          {
+            "node": "Cliquer sur le champ de prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliquer sur le champ de prompt": {
+      "main": [
+        [
+          {
+            "node": "Définir le prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Définir le prompt": {
+      "main": [
+        [
+          {
+            "node": "Remplir le champ de prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remplir le champ de prompt": {
+      "main": [
+        [
+          {
+            "node": "Vérifier la page après remplissage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vérifier la page après remplissage": {
+      "main": [
+        [
+          {
+            "node": "Cliquer sur Créer",
             "type": "main",
             "index": 0
           }
@@ -186,7 +488,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "73aa36b9-8a37-41f3-9699-4cbd18722441",
+  "versionId": "954790a4-508b-44ff-841c-3a6726a99796",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-13T14:51:30.342Z",
+  "updatedAt": "2026-08-13T19:40:50.113Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -44,6 +44,55 @@
       ],
       "id": "41ca0fc9-682c-4aaf-a10e-0c2ca71ac38d",
       "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "select_page",
+          "mode": "list",
+          "cachedResultName": "select_page"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "pageId": 14
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "bringToFront",
+              "displayName": "bringToFront",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "31532a5d-dabc-456b-b2c0-a8279552df59",
+      "name": "MCP Client1"
     }
   ],
   "connections": {
@@ -52,6 +101,17 @@
         [
           {
             "node": "MCP Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "main": [
+        [
+          {
+            "node": "MCP Client1",
             "type": "main",
             "index": 0
           }
@@ -68,7 +128,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "636cc14f-5147-4f54-8f05-20bb66afaa1d",
+  "versionId": "2cb78d68-f575-49fd-896a-d6affbb2402b",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

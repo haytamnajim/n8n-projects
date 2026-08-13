@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-13T19:40:50.113Z",
+  "updatedAt": "2026-08-13T19:59:32.582Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -57,7 +57,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": 14
+            "pageId": 76
           },
           "matchingColumns": [],
           "schema": [
@@ -93,6 +93,53 @@
       ],
       "id": "31532a5d-dabc-456b-b2c0-a8279552df59",
       "name": "MCP Client1"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "take_snapshot",
+          "mode": "list",
+          "cachedResultName": "take_snapshot"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "verbose",
+              "displayName": "verbose",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            },
+            {
+              "id": "filePath",
+              "displayName": "filePath",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "6887e904-8db0-4686-b5b1-23ccb796fa49",
+      "name": "MCP Client2"
     }
   ],
   "connections": {
@@ -117,6 +164,17 @@
           }
         ]
       ]
+    },
+    "MCP Client1": {
+      "main": [
+        [
+          {
+            "node": "MCP Client2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -128,7 +186,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "2cb78d68-f575-49fd-896a-d6affbb2402b",
+  "versionId": "73aa36b9-8a37-41f3-9699-4cbd18722441",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

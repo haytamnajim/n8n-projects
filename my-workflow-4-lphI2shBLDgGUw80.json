@@ -1,0 +1,83 @@
+{
+  "updatedAt": "2026-08-13T14:02:55.799Z",
+  "createdAt": "2026-08-13T14:02:55.799Z",
+  "id": "lphI2shBLDgGUw80",
+  "name": "My workflow 4",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f874f394-0e16-4946-9142-aac4e3d02c00",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "tool": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "41ca0fc9-682c-4aaf-a10e-0c2ca71ac38d",
+      "name": "MCP Client"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "MCP Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "5812f37c-100d-4967-983b-8a05cfa0705d",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-08-13T14:02:55.811Z",
+      "createdAt": "2026-08-13T14:02:55.811Z",
+      "role": "workflow:owner",
+      "workflowId": "lphI2shBLDgGUw80",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}

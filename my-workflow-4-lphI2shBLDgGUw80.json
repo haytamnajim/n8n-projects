@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-14T15:00:42.915Z",
+  "updatedAt": "2026-08-14T15:14:31.564Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -235,7 +235,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+) textbox[^\\n]*multiline/)[1] }}",
-            "value": "="
+            "value": "={{ $('Définir le prompt').item.json.prompt }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -280,55 +280,6 @@
       ],
       "id": "a0c9e5c1-20fd-4fb2-a7e7-c7569c0b07ea",
       "name": "Remplir le champ de prompt"
-    },
-    {
-      "parameters": {
-        "endpointUrl": "http://host.docker.internal:8080/mcp",
-        "tool": {
-          "__rl": true,
-          "value": "press_key",
-          "mode": "list",
-          "cachedResultName": "press_key"
-        },
-        "parameters": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "key": "Backspace"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "key",
-              "displayName": "key",
-              "defaultMatch": false,
-              "required": true,
-              "display": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "includeSnapshot",
-              "displayName": "includeSnapshot",
-              "defaultMatch": false,
-              "required": false,
-              "display": true,
-              "type": "boolean",
-              "removed": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.mcpClient",
-      "typeVersion": 1.1,
-      "position": [
-        1664,
-        0
-      ],
-      "id": "1e1fcca7-4119-4b19-8d5a-64574435c25f",
-      "name": "Vérifier la page après remplissage"
     },
     {
       "parameters": {
@@ -382,7 +333,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1872,
+        2288,
         0
       ],
       "id": "cd776753-f2d8-454b-8203-accc10995b5d",
@@ -434,6 +385,102 @@
       ],
       "id": "d854f7a2-ce5d-4187-9afb-c990f9c0f472",
       "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "take_snapshot",
+          "mode": "list",
+          "cachedResultName": "take_snapshot"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "verbose",
+              "displayName": "verbose",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            },
+            {
+              "id": "filePath",
+              "displayName": "filePath",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        1872,
+        0
+      ],
+      "id": "4dcff43c-e7f5-415f-aced-6741ebf24d62",
+      "name": "Vérifier le bouton Créer"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "press_key",
+          "mode": "list",
+          "cachedResultName": "press_key"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key": "Space"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "key",
+              "displayName": "key",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "includeSnapshot",
+              "displayName": "includeSnapshot",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        1664,
+        0
+      ],
+      "id": "faedb553-12c3-4879-bbc4-0e63fa2e240c",
+      "name": "Déclencher la saisie du prompt"
     }
   ],
   "connections": {
@@ -453,6 +500,11 @@
         [
           {
             "node": "Sélectionner Google Flow",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Vérifier le bouton Créer",
             "type": "main",
             "index": 0
           }
@@ -507,18 +559,7 @@
       "main": [
         [
           {
-            "node": "Vérifier la page après remplissage",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Vérifier la page après remplissage": {
-      "main": [
-        [
-          {
-            "node": "Cliquer sur Créer",
+            "node": "Déclencher la saisie du prompt",
             "type": "main",
             "index": 0
           }
@@ -535,6 +576,22 @@
           }
         ]
       ]
+    },
+    "Vérifier le bouton Créer": {
+      "main": [
+        []
+      ]
+    },
+    "Déclencher la saisie du prompt": {
+      "main": [
+        [
+          {
+            "node": "Vérifier le bouton Créer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -546,7 +603,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "379671b3-68d3-453e-9757-9f4a53cc99a2",
+  "versionId": "cb9ed7d3-a830-4dc9-80ee-734803b0793e",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

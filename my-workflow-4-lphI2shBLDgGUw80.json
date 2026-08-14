@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-14T14:45:23.354Z",
+  "updatedAt": "2026-08-14T15:00:42.915Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -57,7 +57,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": 76
+            "pageId": 159
           },
           "matchingColumns": [],
           "schema": [
@@ -197,8 +197,7 @@
         0
       ],
       "id": "48a24319-382a-4a05-8b08-45d4993d5350",
-      "name": "Cliquer sur le champ de prompt",
-      "disabled": true
+      "name": "Cliquer sur le champ de prompt"
     },
     {
       "parameters": {
@@ -236,7 +235,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+) textbox[^\\n]*multiline/)[1] }}",
-            "value": "={{ $json.prompt }}"
+            "value": "="
           },
           "matchingColumns": [],
           "schema": [
@@ -547,7 +546,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "026b5cc9-dd6a-44db-97ca-afcb84597287",
+  "versionId": "379671b3-68d3-453e-9757-9f4a53cc99a2",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

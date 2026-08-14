@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-13T20:58:48.332Z",
+  "updatedAt": "2026-08-14T14:45:23.354Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -153,7 +153,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "5_31"
+            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+) textbox[^\\n]*multiline/)[1] }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -197,7 +197,8 @@
         0
       ],
       "id": "48a24319-382a-4a05-8b08-45d4993d5350",
-      "name": "Cliquer sur le champ de prompt"
+      "name": "Cliquer sur le champ de prompt",
+      "disabled": true
     },
     {
       "parameters": {
@@ -234,7 +235,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "5_31",
+            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+) textbox[^\\n]*multiline/)[1] }}",
             "value": "={{ $json.prompt }}"
           },
           "matchingColumns": [],
@@ -275,7 +276,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1248,
+        1456,
         0
       ],
       "id": "a0c9e5c1-20fd-4fb2-a7e7-c7569c0b07ea",
@@ -324,7 +325,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1456,
+        1664,
         0
       ],
       "id": "1e1fcca7-4119-4b19-8d5a-64574435c25f",
@@ -382,11 +383,58 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1664,
+        1872,
         0
       ],
       "id": "cd776753-f2d8-454b-8203-accc10995b5d",
       "name": "Cliquer sur Créer"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "take_snapshot",
+          "mode": "list",
+          "cachedResultName": "take_snapshot"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "verbose",
+              "displayName": "verbose",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            },
+            {
+              "id": "filePath",
+              "displayName": "filePath",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "d854f7a2-ce5d-4187-9afb-c990f9c0f472",
+      "name": "MCP Client"
     }
   ],
   "connections": {
@@ -449,7 +497,7 @@
       "main": [
         [
           {
-            "node": "Remplir le champ de prompt",
+            "node": "MCP Client",
             "type": "main",
             "index": 0
           }
@@ -477,6 +525,17 @@
           }
         ]
       ]
+    },
+    "MCP Client": {
+      "main": [
+        [
+          {
+            "node": "Remplir le champ de prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -488,7 +547,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "954790a4-508b-44ff-841c-3a6726a99796",
+  "versionId": "026b5cc9-dd6a-44db-97ca-afcb84597287",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

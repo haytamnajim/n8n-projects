@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T12:52:12.249Z",
+  "updatedAt": "2026-08-16T13:43:15.886Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -12,7 +12,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        0
+        -128
       ],
       "id": "f874f394-0e16-4946-9142-aac4e3d02c00",
       "name": "Démarrer le workflow"
@@ -39,8 +39,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        208,
-        0
+        224,
+        -128
       ],
       "id": "41ca0fc9-682c-4aaf-a10e-0c2ca71ac38d",
       "name": "Récupérer les pages ouvertes"
@@ -88,8 +88,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        416,
-        0
+        448,
+        -128
       ],
       "id": "31532a5d-dabc-456b-b2c0-a8279552df59",
       "name": "Sélectionner Google Flow"
@@ -135,8 +135,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        624,
-        0
+        672,
+        -128
       ],
       "id": "6887e904-8db0-4686-b5b1-23ccb796fa49",
       "name": "Analyser la page Google Flow"
@@ -153,7 +153,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "=1_40"
+            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+)\\s+textbox[^\\n]*multiline/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -193,8 +193,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        832,
-        0
+        896,
+        -128
       ],
       "id": "48a24319-382a-4a05-8b08-45d4993d5350",
       "name": "Cliquer sur le champ de prompt"
@@ -216,8 +216,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1040,
-        0
+        1120,
+        -128
       ],
       "id": "ce0e8a1f-2c74-4482-b08b-cd06c5b0fde8",
       "name": "Définir le prompt"
@@ -227,21 +227,20 @@
         "endpointUrl": "http://host.docker.internal:8080/mcp",
         "tool": {
           "__rl": true,
-          "value": "fill",
+          "value": "type_text",
           "mode": "list",
-          "cachedResultName": "fill"
+          "cachedResultName": "type_text"
         },
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+) textbox[^\\n]*multiline/)[1] }}",
-            "value": "={{ $('Définir le prompt').item.json.prompt }}"
+            "text": "={{ $('Définir le prompt').item.json.prompt }}"
           },
           "matchingColumns": [],
           "schema": [
             {
-              "id": "uid",
-              "displayName": "uid",
+              "id": "text",
+              "displayName": "text",
               "defaultMatch": false,
               "required": true,
               "display": true,
@@ -249,21 +248,12 @@
               "removed": false
             },
             {
-              "id": "value",
-              "displayName": "value",
-              "defaultMatch": false,
-              "required": true,
-              "display": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "includeSnapshot",
-              "displayName": "includeSnapshot",
+              "id": "submitKey",
+              "displayName": "submitKey",
               "defaultMatch": false,
               "required": false,
               "display": true,
-              "type": "boolean",
+              "type": "string",
               "removed": true
             }
           ],
@@ -275,8 +265,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1456,
-        0
+        1568,
+        -128
       ],
       "id": "a0c9e5c1-20fd-4fb2-a7e7-c7569c0b07ea",
       "name": "Remplir le champ de prompt"
@@ -293,7 +283,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "5_31"
+            "uid": "={{ $('Vérifier le bouton Créer').item.json.content[0].text.match(/uid=(\\S+)\\s+button \"arrow_forward Créer\"/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -333,8 +323,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2288,
-        0
+        2064,
+        -128
       ],
       "id": "cd776753-f2d8-454b-8203-accc10995b5d",
       "name": "Cliquer sur Créer"
@@ -380,8 +370,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1248,
-        0
+        1344,
+        -128
       ],
       "id": "d854f7a2-ce5d-4187-9afb-c990f9c0f472",
       "name": "MCP Client"
@@ -427,8 +417,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1872,
-        0
+        1808,
+        -128
       ],
       "id": "4dcff43c-e7f5-415f-aced-6741ebf24d62",
       "name": "Vérifier le bouton Créer"
@@ -438,33 +428,31 @@
         "endpointUrl": "http://host.docker.internal:8080/mcp",
         "tool": {
           "__rl": true,
-          "value": "press_key",
+          "value": "take_snapshot",
           "mode": "list",
-          "cachedResultName": "press_key"
+          "cachedResultName": "take_snapshot"
         },
         "parameters": {
           "mappingMode": "defineBelow",
-          "value": {
-            "key": "Space"
-          },
+          "value": {},
           "matchingColumns": [],
           "schema": [
             {
-              "id": "key",
-              "displayName": "key",
-              "defaultMatch": false,
-              "required": true,
-              "display": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "includeSnapshot",
-              "displayName": "includeSnapshot",
+              "id": "verbose",
+              "displayName": "verbose",
               "defaultMatch": false,
               "required": false,
               "display": true,
               "type": "boolean",
+              "removed": true
+            },
+            {
+              "id": "filePath",
+              "displayName": "filePath",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
               "removed": true
             }
           ],
@@ -476,11 +464,11 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1664,
-        0
+        2304,
+        -128
       ],
-      "id": "faedb553-12c3-4879-bbc4-0e63fa2e240c",
-      "name": "Déclencher la saisie du prompt"
+      "id": "5947f3e5-3527-4108-b0aa-9300f2b53dfe",
+      "name": "Snapshot après clic Créer"
     }
   ],
   "connections": {
@@ -500,11 +488,6 @@
         [
           {
             "node": "Sélectionner Google Flow",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Vérifier le bouton Créer",
             "type": "main",
             "index": 0
           }
@@ -559,7 +542,7 @@
       "main": [
         [
           {
-            "node": "Déclencher la saisie du prompt",
+            "node": "Vérifier le bouton Créer",
             "type": "main",
             "index": 0
           }
@@ -579,14 +562,20 @@
     },
     "Vérifier le bouton Créer": {
       "main": [
-        []
+        [
+          {
+            "node": "Cliquer sur Créer",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
-    "Déclencher la saisie du prompt": {
+    "Cliquer sur Créer": {
       "main": [
         [
           {
-            "node": "Vérifier le bouton Créer",
+            "node": "Snapshot après clic Créer",
             "type": "main",
             "index": 0
           }
@@ -603,7 +592,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "1173f332-e23b-44c2-92c5-b714fc0fa5a0",
+  "versionId": "c81c77d1-41b8-4cfc-b315-1dfa3900d04d",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

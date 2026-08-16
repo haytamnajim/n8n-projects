@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T13:43:15.886Z",
+  "updatedAt": "2026-08-16T14:45:16.402Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -39,7 +39,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        224,
+        672,
         -128
       ],
       "id": "41ca0fc9-682c-4aaf-a10e-0c2ca71ac38d",
@@ -88,7 +88,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        448,
+        896,
         -128
       ],
       "id": "31532a5d-dabc-456b-b2c0-a8279552df59",
@@ -135,7 +135,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        672,
+        1120,
         -128
       ],
       "id": "6887e904-8db0-4686-b5b1-23ccb796fa49",
@@ -193,7 +193,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        896,
+        1344,
         -128
       ],
       "id": "48a24319-382a-4a05-8b08-45d4993d5350",
@@ -216,7 +216,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1120,
+        1568,
         -128
       ],
       "id": "ce0e8a1f-2c74-4482-b08b-cd06c5b0fde8",
@@ -265,7 +265,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1568,
+        2016,
         -128
       ],
       "id": "a0c9e5c1-20fd-4fb2-a7e7-c7569c0b07ea",
@@ -323,7 +323,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2064,
+        2464,
         -128
       ],
       "id": "cd776753-f2d8-454b-8203-accc10995b5d",
@@ -370,7 +370,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1344,
+        1792,
         -128
       ],
       "id": "d854f7a2-ce5d-4187-9afb-c990f9c0f472",
@@ -417,7 +417,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1808,
+        2240,
         -128
       ],
       "id": "4dcff43c-e7f5-415f-aced-6741ebf24d62",
@@ -464,11 +464,48 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2304,
+        2688,
         -128
       ],
       "id": "5947f3e5-3527-4108-b0aa-9300f2b53dfe",
       "name": "Snapshot après clic Créer"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9b9c175f-61a2-4230-8f57-dacbc350e6ce",
+              "name": "prompts",
+              "value": "[\"Minimalist black and white hand-drawn stickman illustration, character packing a backpack and holding a map, standing at the door of a small house, sunny morning, thick black outlines, simple round head, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character walking into a dense forest holding a compass, tall simple tree shapes, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character carefully crossing a wobbly wooden bridge over a stream, arms out for balance, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character scratching his head looking confused, holding a torn map, surrounded by trees, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character looking up worried at dark storm clouds gathering, first raindrops falling, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character shivering, taking shelter under a large tree in heavy rain, arms wrapped around knees, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character discovering an old abandoned wooden cabin in the forest, rain stopping, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character inside the cabin, pointing at an old mysterious map pinned on the wall, candle light, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character sitting by a small campfire outside the cabin at night, stars in the sky, thoughtful expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character standing up determined at sunrise, picking up his backpack, warm morning light, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character climbing a steep rocky hill, gripping rocks, effort on his face, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character standing at the top of the hill, looking out over a wide valley, spotting a distant lighthouse, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character sliding down a rocky slope, arms flailing, slightly off balance, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character carefully hopping across stepping stones over a river, focused expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character crouching, meeting a small friendly fox in a clearing, curious expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character following the fox through an open meadow, walking side by side, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character pointing excitedly at smoke rising from a distant village, hopeful expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character walking toward a small village, relief on his face, simple houses in the background, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character arriving at the village edge, simple stickman villagers waving happily, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character sitting peacefully in front of his home at sunset, completed map beside him, content smiling expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -128
+      ],
+      "id": "180b42bf-c31b-4c56-84c3-fb5685c08bd9",
+      "name": "Liste des 20 prompts"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "prompts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        448,
+        -128
+      ],
+      "id": "8c3b5606-0533-4e45-a80b-8bb1fd0963b5",
+      "name": "Éclater les prompts"
     }
   ],
   "connections": {
@@ -476,7 +513,7 @@
       "main": [
         [
           {
-            "node": "Récupérer les pages ouvertes",
+            "node": "Liste des 20 prompts",
             "type": "main",
             "index": 0
           }
@@ -581,6 +618,28 @@
           }
         ]
       ]
+    },
+    "Liste des 20 prompts": {
+      "main": [
+        [
+          {
+            "node": "Éclater les prompts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Éclater les prompts": {
+      "main": [
+        [
+          {
+            "node": "Récupérer les pages ouvertes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -592,7 +651,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "c81c77d1-41b8-4cfc-b315-1dfa3900d04d",
+  "versionId": "517158ab-e188-4b2b-90dc-bdc411deb074",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T14:45:16.402Z",
+  "updatedAt": "2026-08-16T17:41:32.922Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -57,7 +57,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": 35
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -651,7 +651,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "517158ab-e188-4b2b-90dc-bdc411deb074",
+  "versionId": "561c3d1b-6012-430e-b800-099d70966cbb",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

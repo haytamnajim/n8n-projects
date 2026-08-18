@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T17:41:32.922Z",
+  "updatedAt": "2026-08-18T15:49:10.528Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -506,6 +506,20 @@
       ],
       "id": "8c3b5606-0533-4e45-a80b-8bb1fd0963b5",
       "name": "Éclater les prompts"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2896,
+        -128
+      ],
+      "id": "c4958fa0-d66c-42ca-a270-fd8d035340a6",
+      "name": "Wait",
+      "webhookId": "c389904b-d71c-4d31-ad78-f12c3b9172be"
     }
   ],
   "connections": {
@@ -640,6 +654,17 @@
           }
         ]
       ]
+    },
+    "Snapshot après clic Créer": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -651,7 +676,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "561c3d1b-6012-430e-b800-099d70966cbb",
+  "versionId": "b21135fe-b7b7-4328-a212-75e897b738f5",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

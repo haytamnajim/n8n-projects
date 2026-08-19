@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T16:29:16.556Z",
+  "updatedAt": "2026-08-19T17:57:36.264Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -682,7 +682,13 @@
     "Loop Over Items": {
       "main": [
         [],
-        []
+        [
+          {
+            "node": "Récupérer les pages ouvertes",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Wait": {
@@ -706,7 +712,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "4354abae-fec0-425f-86c9-21f7085532a7",
+  "versionId": "13c311fe-a55f-46c7-bd12-2cda317ee36a",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

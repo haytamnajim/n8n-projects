@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-18T15:49:10.528Z",
+  "updatedAt": "2026-08-18T16:29:16.556Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -39,7 +39,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        672,
+        880,
         -128
       ],
       "id": "41ca0fc9-682c-4aaf-a10e-0c2ca71ac38d",
@@ -88,7 +88,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        896,
+        1104,
         -128
       ],
       "id": "31532a5d-dabc-456b-b2c0-a8279552df59",
@@ -135,7 +135,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1120,
+        1328,
         -128
       ],
       "id": "6887e904-8db0-4686-b5b1-23ccb796fa49",
@@ -193,7 +193,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1344,
+        1552,
         -128
       ],
       "id": "48a24319-382a-4a05-8b08-45d4993d5350",
@@ -216,7 +216,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1568,
+        1776,
         -128
       ],
       "id": "ce0e8a1f-2c74-4482-b08b-cd06c5b0fde8",
@@ -265,7 +265,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2016,
+        2224,
         -128
       ],
       "id": "a0c9e5c1-20fd-4fb2-a7e7-c7569c0b07ea",
@@ -323,7 +323,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2464,
+        2672,
         -128
       ],
       "id": "cd776753-f2d8-454b-8203-accc10995b5d",
@@ -370,7 +370,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1792,
+        2000,
         -128
       ],
       "id": "d854f7a2-ce5d-4187-9afb-c990f9c0f472",
@@ -417,7 +417,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2240,
+        2448,
         -128
       ],
       "id": "4dcff43c-e7f5-415f-aced-6741ebf24d62",
@@ -464,7 +464,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2688,
+        2896,
         -128
       ],
       "id": "5947f3e5-3527-4108-b0aa-9300f2b53dfe",
@@ -514,12 +514,25 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        2896,
+        3104,
         -128
       ],
       "id": "c4958fa0-d66c-42ca-a270-fd8d035340a6",
       "name": "Wait",
       "webhookId": "c389904b-d71c-4d31-ad78-f12c3b9172be"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        656,
+        -128
+      ],
+      "id": "e0cd8149-2b42-4d85-bcfa-82bfd7c86514",
+      "name": "Loop Over Items"
     }
   ],
   "connections": {
@@ -648,7 +661,7 @@
       "main": [
         [
           {
-            "node": "Récupérer les pages ouvertes",
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -665,6 +678,23 @@
           }
         ]
       ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -676,7 +706,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "b21135fe-b7b7-4328-a212-75e897b738f5",
+  "versionId": "4354abae-fec0-425f-86c9-21f7085532a7",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

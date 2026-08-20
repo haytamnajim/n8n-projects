@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-19T17:57:36.264Z",
+  "updatedAt": "2026-08-20T10:30:39.712Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -533,6 +533,53 @@
       ],
       "id": "e0cd8149-2b42-4d85-bcfa-82bfd7c86514",
       "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "take_snapshot",
+          "mode": "list",
+          "cachedResultName": "take_snapshot"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "verbose",
+              "displayName": "verbose",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": true
+            },
+            {
+              "id": "filePath",
+              "displayName": "filePath",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        2208,
+        192
+      ],
+      "id": "83320999-792f-413d-80c0-db7e83773463",
+      "name": "Snapshot galerie images"
     }
   ],
   "connections": {
@@ -712,7 +759,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "13c311fe-a55f-46c7-bd12-2cda317ee36a",
+  "versionId": "bb88e93b-9e44-4e49-b85c-239667c72c20",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

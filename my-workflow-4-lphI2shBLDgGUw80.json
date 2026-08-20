@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-20T10:30:39.712Z",
+  "updatedAt": "2026-08-20T10:59:53.223Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -539,18 +539,56 @@
         "endpointUrl": "http://host.docker.internal:8080/mcp",
         "tool": {
           "__rl": true,
-          "value": "take_snapshot",
+          "value": "navigate_page",
           "mode": "list",
-          "cachedResultName": "take_snapshot"
+          "cachedResultName": "navigate_page"
         },
         "parameters": {
           "mappingMode": "defineBelow",
-          "value": {},
+          "value": {
+            "url": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/url=\"(https:\\/\\/labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow\\/project\\/[a-f0-9-]+)/)?.[1] }}"
+          },
           "matchingColumns": [],
           "schema": [
             {
-              "id": "verbose",
-              "displayName": "verbose",
+              "id": "type",
+              "displayName": "type",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "url",
+                  "value": "url"
+                },
+                {
+                  "name": "back",
+                  "value": "back"
+                },
+                {
+                  "name": "forward",
+                  "value": "forward"
+                },
+                {
+                  "name": "reload",
+                  "value": "reload"
+                }
+              ],
+              "removed": true
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "ignoreCache",
+              "displayName": "ignoreCache",
               "defaultMatch": false,
               "required": false,
               "display": true,
@@ -558,8 +596,104 @@
               "removed": true
             },
             {
+              "id": "handleBeforeUnload",
+              "displayName": "handleBeforeUnload",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "accept",
+                  "value": "accept"
+                },
+                {
+                  "name": "dismiss",
+                  "value": "dismiss"
+                }
+              ],
+              "removed": true
+            },
+            {
+              "id": "initScript",
+              "displayName": "initScript",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "timeout",
+              "displayName": "timeout",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "number",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        -352
+      ],
+      "id": "83a1bc9b-8e71-451d-aea1-3a9521a0818d",
+      "name": "Aller sur la galerie du projet"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "evaluate_script",
+          "mode": "list",
+          "cachedResultName": "evaluate_script"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "function": "() => { const results = []; document.querySelectorAll('img').forEach(img => { if (img.src && img.src.startsWith('http') && img.naturalWidth > 100) { results.push({ type: 'img', src: img.src, alt: img.alt || '' }); } }); document.querySelectorAll('[style*=\"background-image\"]').forEach(el => { const style = el.getAttribute('style') || ''; const match = style.match(/background-image:\\s*url\\([\"']?(https?:\\/\\/[^\"')]+)[\"']?\\)/); if (match) { results.push({ type: 'background', src: match[1] }); } }); return results; }"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "function",
+              "displayName": "function",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "args",
+              "displayName": "args",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "array",
+              "defaultValue": "[\n  \"string\"\n]",
+              "removed": true
+            },
+            {
               "id": "filePath",
               "displayName": "filePath",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "dialogAction",
+              "displayName": "dialogAction",
               "defaultMatch": false,
               "required": false,
               "display": true,
@@ -575,11 +709,11 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2208,
-        192
+        1104,
+        -352
       ],
       "id": "83320999-792f-413d-80c0-db7e83773463",
-      "name": "Snapshot galerie images"
+      "name": "Extraire URLs images galerie"
     }
   ],
   "connections": {
@@ -728,7 +862,13 @@
     },
     "Loop Over Items": {
       "main": [
-        [],
+        [
+          {
+            "node": "Aller sur la galerie du projet",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Récupérer les pages ouvertes",
@@ -748,6 +888,17 @@
           }
         ]
       ]
+    },
+    "Aller sur la galerie du projet": {
+      "main": [
+        [
+          {
+            "node": "Extraire URLs images galerie",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -759,7 +910,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "bb88e93b-9e44-4e49-b85c-239667c72c20",
+  "versionId": "be5d5bf7-0b35-47ed-984b-edd4231a39ec",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

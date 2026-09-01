@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-20T10:59:53.223Z",
+  "updatedAt": "2026-08-28T11:32:12.602Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -105,9 +105,20 @@
         },
         "parameters": {
           "mappingMode": "defineBelow",
-          "value": {},
+          "value": {
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+          },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "verbose",
               "displayName": "verbose",
@@ -153,10 +164,20 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+)\\s+textbox[^\\n]*multiline/)?.[1] ?? '' }}"
+            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+)\\s+textbox[^\\n]*multiline/)?.[1] ?? '' }}",
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "uid",
               "displayName": "uid",
@@ -206,7 +227,7 @@
             {
               "id": "2cdd57ac-3e31-4016-9b83-3139f2f0900f",
               "name": "prompt",
-              "value": "A cinematic, hyper-realistic wide shot of a sprawling futuristic cyberpunk city at night during a heavy rainstorm. Towering skyscrapers with intricate futuristic architecture, glowing holographic billboards, and vibrant neon lights reflecting in the wet, puddly asphalt streets. Moody cinematic lighting, volumetric fog, intricate details, realistic camera perspective, 16:9 aspect ratio.",
+              "value": "={{ $('Éclater les prompts').item.json.prompts }}",
               "type": "string"
             }
           ]
@@ -234,10 +255,20 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "text": "={{ $('Définir le prompt').item.json.prompt }}"
+            "text": "={{ $('Définir le prompt').item.json.prompt }}",
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "text",
               "displayName": "text",
@@ -283,10 +314,20 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "={{ $('Vérifier le bouton Créer').item.json.content[0].text.match(/uid=(\\S+)\\s+button \"arrow_forward Créer\"/)?.[1] ?? '' }}"
+            "uid": "={{ $('Vérifier le bouton Créer').item.json.content[0].text.match(/uid=(\\S+)\\s+button \"arrow_forward Créer\"/)?.[1] ?? '' }}",
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "uid",
               "displayName": "uid",
@@ -340,9 +381,20 @@
         },
         "parameters": {
           "mappingMode": "defineBelow",
-          "value": {},
+          "value": {
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+          },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "verbose",
               "displayName": "verbose",
@@ -387,9 +439,20 @@
         },
         "parameters": {
           "mappingMode": "defineBelow",
-          "value": {},
+          "value": {
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+          },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "verbose",
               "displayName": "verbose",
@@ -434,9 +497,20 @@
         },
         "parameters": {
           "mappingMode": "defineBelow",
-          "value": {},
+          "value": {
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+          },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "verbose",
               "displayName": "verbose",
@@ -477,7 +551,7 @@
             {
               "id": "9b9c175f-61a2-4230-8f57-dacbc350e6ce",
               "name": "prompts",
-              "value": "[\"Minimalist black and white hand-drawn stickman illustration, character packing a backpack and holding a map, standing at the door of a small house, sunny morning, thick black outlines, simple round head, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character walking into a dense forest holding a compass, tall simple tree shapes, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character carefully crossing a wobbly wooden bridge over a stream, arms out for balance, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character scratching his head looking confused, holding a torn map, surrounded by trees, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character looking up worried at dark storm clouds gathering, first raindrops falling, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character shivering, taking shelter under a large tree in heavy rain, arms wrapped around knees, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character discovering an old abandoned wooden cabin in the forest, rain stopping, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character inside the cabin, pointing at an old mysterious map pinned on the wall, candle light, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character sitting by a small campfire outside the cabin at night, stars in the sky, thoughtful expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character standing up determined at sunrise, picking up his backpack, warm morning light, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character climbing a steep rocky hill, gripping rocks, effort on his face, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character standing at the top of the hill, looking out over a wide valley, spotting a distant lighthouse, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character sliding down a rocky slope, arms flailing, slightly off balance, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character carefully hopping across stepping stones over a river, focused expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character crouching, meeting a small friendly fox in a clearing, curious expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character following the fox through an open meadow, walking side by side, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character pointing excitedly at smoke rising from a distant village, hopeful expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character walking toward a small village, relief on his face, simple houses in the background, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character arriving at the village edge, simple stickman villagers waving happily, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\", \"Minimalist black and white hand-drawn stickman illustration, character sitting peacefully in front of his home at sunset, completed map beside him, content smiling expression, thick black outlines, subtle grey shading, white background, 16:9 aspect ratio.\"]",
+              "value": "[\"A minimalist black and white hand-drawn Stickman illustration, a simple Stickman character wearing a small backpack standing in front of his small house, holding a map and preparing for an adventure, sunny morning, thick black outlines, subtle gray shading, cinematic composition, 16:9 aspect ratio.\", \"A minimalist black and white hand-drawn Stickman illustration, the same Stickman character wearing the same small backpack walking through a dense forest while holding a compass, tall trees surrounding him, adventurous atmosphere, thick black outlines, subtle gray shading, cinematic composition, 16:9 aspect ratio.\", \"A minimalist black and white hand-drawn Stickman illustration, the same Stickman character wearing the same small backpack discovering an old abandoned wooden cabin deep in the forest, standing in front of the mysterious cabin and looking surprised, adventurous mystery atmosphere, thick black outlines, subtle gray shading, cinematic composition, 16:9 aspect ratio.\", \"A minimalist black and white hand-drawn Stickman illustration, the same Stickman character wearing the same small backpack meeting a small friendly fox in a forest clearing, the Stickman crouching and looking at the fox with curiosity, warm emotional moment, thick black outlines, subtle gray shading, cinematic composition, 16:9 aspect ratio.\", \"A minimalist black and white hand-drawn Stickman illustration, the same Stickman character wearing the same small backpack returning home at sunset after his adventure, standing in front of his small house and looking at the sunset, peaceful ending, thick black outlines, subtle gray shading, cinematic composition, 16:9 aspect ratio.\"]",
               "type": "array"
             }
           ]
@@ -546,10 +620,20 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "url": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/url=\"(https:\\/\\/labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow\\/project\\/[a-f0-9-]+)/)?.[1] }}"
+            "url": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/url=\"(https:\\/\\/labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow\\/project\\/[a-f0-9-]+)/)?.[1] }}",
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "type",
               "displayName": "type",
@@ -659,10 +743,20 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "function": "() => { const results = []; document.querySelectorAll('img').forEach(img => { if (img.src && img.src.startsWith('http') && img.naturalWidth > 100) { results.push({ type: 'img', src: img.src, alt: img.alt || '' }); } }); document.querySelectorAll('[style*=\"background-image\"]').forEach(el => { const style = el.getAttribute('style') || ''; const match = style.match(/background-image:\\s*url\\([\"']?(https?:\\/\\/[^\"')]+)[\"']?\\)/); if (match) { results.push({ type: 'background', src: match[1] }); } }); return results; }"
+            "function": "() => { const results = []; document.querySelectorAll('img').forEach(img => { if (img.src && img.src.includes('getMediaUrlRedirect')) { results.push({ type: 'img', src: img.src, alt: img.alt || '' }); } }); return results; }",
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
             {
               "id": "function",
               "displayName": "function",
@@ -699,6 +793,15 @@
               "display": true,
               "type": "string",
               "removed": true
+            },
+            {
+              "id": "waitForStableDom",
+              "displayName": "waitForStableDom",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -709,11 +812,219 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1104,
+        1312,
         -352
       ],
       "id": "83320999-792f-413d-80c0-db7e83773463",
       "name": "Extraire URLs images galerie"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\nconst urlsSet = new Set();\n\nfor (const item of allItems) {\n  const contentArray = item.json.content;\n  if (!Array.isArray(contentArray) || !contentArray[0] || !contentArray[0].text) continue;\n\n  const text = contentArray[0].text;\n  const match = text.match(/```json\\n([\\s\\S]*?)\\n```/);\n  if (!match) continue;\n\n  try {\n    const imagesArray = JSON.parse(match[1]);\n    if (Array.isArray(imagesArray)) {\n      imagesArray.forEach(img => {\n        if (img.src) urlsSet.add(img.src);\n      });\n    }\n  } catch (e) {\n    continue;\n  }\n}\n\nconst uniqueUrls = Array.from(urlsSet);\n\n// ⚠️ On force toujours au moins un item en sortie\nif (uniqueUrls.length === 0) {\n  return [{ json: { empty: true, message: \"Aucune image trouvée dans la galerie\" } }];\n}\n\nreturn uniqueUrls.map((url, index) => ({\n  json: { index: index + 1, url: url }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        -352
+      ],
+      "id": "3bcba21c-6b3b-425b-bae5-3fba830d0517",
+      "name": "Nettoyer liste URLs images",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          },
+          "sendCredentialsOnCrossOriginRedirect": false
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        816,
+        -672
+      ],
+      "id": "9a8d4169-abc6-446d-8510-540e2a938513",
+      "name": "Télécharger les images Google Flow"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1088,
+        -352
+      ],
+      "id": "c30b2ed3-8691-4b47-98c0-faae77b780cc",
+      "name": "Wait1",
+      "webhookId": "bae05268-e4b6-4a60-b0a8-4a53ab6f8135"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://host.docker.internal:8080/mcp",
+        "tool": {
+          "__rl": true,
+          "value": "evaluate_script",
+          "mode": "list",
+          "cachedResultName": "evaluate_script"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "function": "={{ '(async () => { const response = await fetch(\"' + $json.url + '\"); const blob = await response.blob(); return await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(blob); }); })' }}",
+            "pageId": 0
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "pageId",
+              "displayName": "pageId",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "function",
+              "displayName": "function",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "args",
+              "displayName": "args",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "array",
+              "defaultValue": "[\n  \"string\"\n]",
+              "removed": true
+            },
+            {
+              "id": "filePath",
+              "displayName": "filePath",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "dialogAction",
+              "displayName": "dialogAction",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            },
+            {
+              "id": "waitForStableDom",
+              "displayName": "waitForStableDom",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "boolean",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        1728,
+        -352
+      ],
+      "id": "adccc858-30bb-48fb-ad5d-10210c1a9c80",
+      "name": "Télécharger image en base64",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map((item, index) => {\n  const text = item.json?.content?.[0]?.text || '';\n\n  if (!text) {\n    throw new Error(`Aucun texte trouvé pour l'item ${index + 1}`);\n  }\n\n  // Rechercher l'image Base64 dans la réponse\n  const match = text.match(\n    /data:image\\/([a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=\\r\\n]+)/\n  );\n\n  if (!match) {\n    throw new Error(\n      `Aucune image Base64 trouvée dans l'item ${index + 1}`\n    );\n  }\n\n  const extension = match[1].split('+')[0];\n  const mimeType = `image/${match[1]}`;\n  const base64 = match[2].replace(/\\s/g, '');\n\n  return {\n    json: {\n      index: index + 1,\n      mimeType: mimeType,\n      extension: extension,\n      fileName: `google-flow-${index + 1}.${extension}`,\n    },\n\n    binary: {\n      data: {\n        data: base64,\n        mimeType: mimeType,\n        fileName: `google-flow-${index + 1}.${extension}`,\n      },\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        -352
+      ],
+      "id": "c9bddcfa-b57b-425c-b17c-3906900c61b1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "uploadFile",
+        "additionalFieldsFile": {}
+      },
+      "type": "n8n-nodes-cloudinary.cloudinary",
+      "typeVersion": 1,
+      "position": [
+        2144,
+        -352
+      ],
+      "id": "f1b70d4b-04fa-42e3-a6d2-a4ad8e5a1ad5",
+      "name": "Upload vers Cloudinary",
+      "credentials": {
+        "cloudinaryApi": {
+          "id": "uY0FNvmMra92ViBI",
+          "name": "Cloudinary account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key",
+              "value": "sk_37c3c1bd7e6022d092c4034b81024c1995e18e79d5c83f42"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $json.narrations }}\",\n  \"model_id\": \"eleven_multilingual_v2\"\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2352,
+        -352
+      ],
+      "id": "a19016f3-a0d5-428e-9aaa-353f1c3a7363",
+      "name": "Générer narration audio"
     }
   ],
   "connections": {
@@ -893,7 +1204,73 @@
       "main": [
         [
           {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire URLs images galerie": {
+      "main": [
+        [
+          {
+            "node": "Nettoyer liste URLs images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nettoyer liste URLs images": {
+      "main": [
+        [
+          {
+            "node": "Télécharger image en base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
             "node": "Extraire URLs images galerie",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Télécharger image en base64": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Upload vers Cloudinary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload vers Cloudinary": {
+      "main": [
+        [
+          {
+            "node": "Générer narration audio",
             "type": "main",
             "index": 0
           }
@@ -907,10 +1284,12 @@
     "availableInMCP": false
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "be5d5bf7-0b35-47ed-984b-edd4231a39ec",
+  "versionId": "b0451402-5676-4c08-85ad-3762571d1482",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

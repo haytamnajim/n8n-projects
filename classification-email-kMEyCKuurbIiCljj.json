@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-10T11:02:56.460Z",
+  "updatedAt": "2026-08-22T10:17:28.341Z",
   "createdAt": "2026-01-22T10:04:31.383Z",
   "id": "kMEyCKuurbIiCljj",
   "name": "classification-email",
@@ -359,14 +359,14 @@
     {
       "parameters": {
         "content": "🤖 OBJECTIF : GÉNÉRATION DE RÉPONSE\n\nAnalyse du contenu par l'agent IA.\nRédaction d'une réponse personnalisée et polie.\nCréation d'un brouillon (Draft) sans envoyer pour garder le contrôle.",
-        "height": 304,
+        "height": 336,
         "width": 528,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         464,
-        -112
+        -144
       ],
       "typeVersion": 1,
       "id": "56698f11-4cf5-42d5-8380-7324f95c8363",
@@ -578,7 +578,8 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "binaryMode": "separate"
   },
   "staticData": null,
   "meta": {
@@ -586,7 +587,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "8370158d-2bb0-4888-9626-582cbe302436",
+  "versionId": "40bf656f-8531-4e5a-8276-bb02903b00df",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

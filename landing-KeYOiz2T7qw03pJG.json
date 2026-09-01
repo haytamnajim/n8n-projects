@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-08-08T14:24:36.375Z",
+  "updatedAt": "2026-08-22T14:59:38.000Z",
   "createdAt": "2026-08-08T12:15:19.189Z",
   "id": "KeYOiz2T7qw03pJG",
   "name": "Landing",
   "active": false,
-  "isArchived": false,
+  "isArchived": true,
   "nodes": [
     {
       "parameters": {},
@@ -7268,7 +7268,7 @@
       }
     ]
   },
-  "versionId": "7854798f-099d-42d5-91b2-986896b9f6b0",
+  "versionId": "8eca30a0-aa10-4f75-b8e5-736cbc0b6153",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

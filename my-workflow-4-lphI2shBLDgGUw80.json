@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-28T11:32:12.602Z",
+  "updatedAt": "2026-09-02T09:54:35.842Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -995,36 +995,20 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "xi-api-key",
-              "value": "sk_37c3c1bd7e6022d092c4034b81024c1995e18e79d5c83f42"
-            }
-          ]
-        },
+        "url": "http://localhost:7860/tts/generate",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"text\": \"{{ $json.narrations }}\",\n  \"model_id\": \"eleven_multilingual_v2\"\n}",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "file"
-            }
-          }
-        }
+        "jsonBody": "={\n  \"text\": \"{{ $json.mon_texte_a_lire }}\", \n  \"voice\": \"ff_siwis\",\n  \"output_format\": \"mp3\"\n}\n",
+        "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2352,
+        2336,
         -352
       ],
-      "id": "a19016f3-a0d5-428e-9aaa-353f1c3a7363",
-      "name": "Générer narration audio"
+      "id": "761c7117-5ec7-4e6f-ba0a-ff5e04489c2d",
+      "name": "Générer Audio KokoroTTS"
     }
   ],
   "connections": {
@@ -1270,7 +1254,7 @@
       "main": [
         [
           {
-            "node": "Générer narration audio",
+            "node": "Générer Audio KokoroTTS",
             "type": "main",
             "index": 0
           }
@@ -1289,7 +1273,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "b0451402-5676-4c08-85ad-3762571d1482",
+  "versionId": "34283db4-06e5-4178-9638-e17466bd5591",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

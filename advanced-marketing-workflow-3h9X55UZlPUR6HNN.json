@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-05T10:32:20.035Z",
+  "updatedAt": "2026-09-03T10:18:34.134Z",
   "createdAt": "2026-05-05T19:16:45.721Z",
   "id": "3h9X55UZlPUR6HNN",
   "name": "Advanced Marketing workflow",
@@ -61,10 +61,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 1,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
                 },
                 "combinator": "and",
                 "conditions": [
@@ -83,10 +83,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 1,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
                 },
                 "combinator": "and",
                 "conditions": [
@@ -106,10 +106,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 1,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
                 },
                 "combinator": "and",
                 "conditions": [
@@ -129,10 +129,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 1,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
                 },
                 "combinator": "and",
                 "conditions": [
@@ -152,10 +152,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 1,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
                 },
                 "combinator": "and",
                 "conditions": [
@@ -1002,7 +1002,7 @@
     {
       "parameters": {
         "content": "",
-        "height": 272,
+        "height": 256,
         "width": 272,
         "color": 3
       },
@@ -1431,7 +1431,8 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "binaryMode": "separate"
   },
   "staticData": null,
   "meta": {
@@ -1439,7 +1440,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "8891638d-d3d5-4dc4-91d4-a798afd8df69",
+  "versionId": "bc4a74b3-8945-487a-a4b8-4416ac731532",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

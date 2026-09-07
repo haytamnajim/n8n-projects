@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T10:39:19.497Z",
+  "updatedAt": "2026-09-07T11:39:15.067Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -57,7 +57,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -106,7 +106,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -164,8 +164,8 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+)\\s+textbox[^\\n]*multiline/)?.[1] ?? '' }}",
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "uid": "={{ $('Analyser la page Google Flow').item.json.content[0].text.match(/uid=(\\S+)\\s+generic focusable focused/)?.[1] ?? '' }}",
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -256,7 +256,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "text": "={{ $('Définir le prompt').item.json.prompt }}",
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -314,8 +314,8 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "={{ $('Vérifier le bouton Créer').item.json.content[0].text.match(/uid=(\\S+)\\s+button \"arrow_forward Créer\"/)?.[1] ?? '' }}",
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "uid": "={{ $('Vérifier le bouton Créer').item.json.content[0].text.match(/uid=(\\S+)\\s+button \"Lancer la génération\"/)?.[1] ?? '' }}",
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -382,7 +382,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -440,7 +440,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -498,7 +498,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
+            "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -856,8 +856,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        816,
-        -672
+        0,
+        -560
       ],
       "id": "9a8d4169-abc6-446d-8510-540e2a938513",
       "name": "Télécharger les images Google Flow"
@@ -1306,7 +1306,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "41350805-54e8-4ba0-b992-b165f27b592b",
+  "versionId": "0911be98-964b-406f-9110-ce18c33b1ef2",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

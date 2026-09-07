@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-02T10:30:14.059Z",
+  "updatedAt": "2026-09-07T10:39:19.497Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -1001,24 +1001,6 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "http://host.docker.internal:7860/tts/generate",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"text\": \"{{ $json.narration }}\",\n  \"voice\": \"ff_siwis\",\n  \"output_format\": \"mp3\"\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        2544,
-        -352
-      ],
-      "id": "761c7117-5ec7-4e6f-ba0a-ff5e04489c2d",
-      "name": "Générer Audio KokoroTTS"
-    },
-    {
-      "parameters": {
         "jsCode": "const narrationsSource = $('Liste des 20 prompts').first().json.narrations;\n\nreturn $input.all().map((item) => {\n  const sceneIndex = (item.json.scene || item.json.index || 1) - 1;\n  return {\n    json: {\n      ...item.json,\n      narration: narrationsSource[sceneIndex] || narrationsSource[narrationsSource.length - 1]\n    },\n    binary: item.binary\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
@@ -1029,6 +1011,26 @@
       ],
       "id": "fc69efe5-85c4-441b-a273-c53ddf651e94",
       "name": "Associer narration à l'image"
+    },
+    {
+      "parameters": {
+        "url": "{{ 'https://api.streamelements.com/kappa/v2/speech?voice=Mathieu&text=' + encodeURIComponent($json.narration) }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2544,
+        -352
+      ],
+      "id": "761c7117-5ec7-4e6f-ba0a-ff5e04489c2d",
+      "name": "Générer narration StreamElements"
     }
   ],
   "connections": {
@@ -1285,7 +1287,7 @@
       "main": [
         [
           {
-            "node": "Générer Audio KokoroTTS",
+            "node": "Générer narration StreamElements",
             "type": "main",
             "index": 0
           }
@@ -1304,7 +1306,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "151aa5ea-7207-4d4a-a772-4e673f25b5eb",
+  "versionId": "41350805-54e8-4ba0-b992-b165f27b592b",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

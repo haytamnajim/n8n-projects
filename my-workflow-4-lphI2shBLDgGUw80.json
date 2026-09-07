@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T11:39:15.067Z",
+  "updatedAt": "2026-09-07T13:10:42.422Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -368,7 +368,8 @@
         -128
       ],
       "id": "cd776753-f2d8-454b-8203-accc10995b5d",
-      "name": "Cliquer sur Créer"
+      "name": "Cliquer sur Créer",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1306,7 +1307,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "0911be98-964b-406f-9110-ce18c33b1ef2",
+  "versionId": "767bca98-71d2-44d2-a520-346c5cf158b0",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

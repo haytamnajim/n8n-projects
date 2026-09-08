@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T21:42:14.219Z",
+  "updatedAt": "2026-09-08T09:57:13.675Z",
   "createdAt": "2025-12-18T10:30:42.122Z",
   "id": "28DkTSZDE90zimst",
   "name": "GITHUB WORKFLOW",
@@ -224,7 +224,7 @@
     {
       "parameters": {
         "content": "## Trigger\nYou can change it to [\"Schedule\" trigger](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.scheduletrigger/) to make backups on regular basis.",
-        "height": 340,
+        "height": 372,
         "width": 198
       },
       "id": "b847f61c-9826-4030-b765-bcb80350ee55",
@@ -233,14 +233,14 @@
       "typeVersion": 1,
       "position": [
         32,
-        320
+        288
       ]
     },
     {
       "parameters": {
         "content": "## Set and format date/time\nThose nodes are responsible for setting a current date and time in format `dd-MM-yyyy/H:mm`. Date and time are used to compose commit messages in GitHub, for example: `backup-12-07-2023/14:18`.",
-        "height": 339.42690909090965,
-        "width": 585.4045090909088,
+        "height": 355,
+        "width": 585,
         "color": 3
       },
       "id": "23e473a5-dd48-42fc-9ad3-f2722ab338ee",
@@ -249,14 +249,14 @@
       "typeVersion": 1,
       "position": [
         240,
-        320
+        304
       ]
     },
     {
       "parameters": {
         "content": "## Make a list of existing files\nReturn a list of existing files (backups) in GitHub repository. Data returned by those nodes is used by \"IF\" node (later in workflow) to check whether the backup files should be created or updated.",
-        "height": 339.42690909090965,
-        "width": 389.89265454545443,
+        "height": 387,
+        "width": 390,
         "color": 5
       },
       "id": "c47539c4-244b-4d96-900a-cc9707513f1d",
@@ -265,14 +265,14 @@
       "typeVersion": 1,
       "position": [
         832,
-        320
+        272
       ]
     },
     {
       "parameters": {
         "content": "## Retrieve workflows\nGet all workflows form your n8n instance. Remember that **your credentials need to point to the instance that you want to backup.**",
-        "height": 339.42690909090965,
-        "width": 384.14708363636373
+        "height": 355,
+        "width": 384
       },
       "id": "551edfdc-0290-4e65-a364-bbbf0ba661e7",
       "name": "Sticky Note3",
@@ -280,14 +280,14 @@
       "typeVersion": 1,
       "position": [
         1232,
-        320
+        304
       ]
     },
     {
       "parameters": {
         "content": "## Upload backup\nSplit JSON files into batches of 1, check if they were uploaded to repository before. If yes (true), upload the new version of the file. Otherwise (false) create the file in repository.",
-        "height": 731.633426614796,
-        "width": 703.8733020263451,
+        "height": 764,
+        "width": 704,
         "color": 6
       },
       "id": "7062e13a-42b0-428b-92d3-b9affe3ec8a1",
@@ -296,7 +296,7 @@
       "typeVersion": 1,
       "position": [
         1632,
-        80
+        48
       ]
     },
     {
@@ -498,7 +498,8 @@
     }
   },
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Schedule Trigger": {
@@ -515,7 +516,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "bab11e91-53ac-4e66-b957-7d3a4b6c5989",
+  "versionId": "141e2e33-ef92-4e08-a895-e6f7f7ae6fe5",
   "activeVersionId": "bab11e91-53ac-4e66-b957-7d3a4b6c5989",
   "triggerCount": 1,
   "shared": [

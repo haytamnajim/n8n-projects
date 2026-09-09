@@ -1,22 +1,11 @@
 {
-  "updatedAt": "2026-03-01T18:06:46.390Z",
+  "updatedAt": "2026-09-09T13:01:03.787Z",
   "createdAt": "2026-03-01T17:13:23.245Z",
   "id": "rRLxaPVG8mDVc2vX",
   "name": "LinkedIn Job Outreach Complete Automation",
   "active": false,
   "isArchived": false,
   "nodes": [
-    {
-      "parameters": {},
-      "name": "Start",
-      "type": "n8n-nodes-base.start",
-      "typeVersion": 1,
-      "position": [
-        -704,
-        688
-      ],
-      "id": "bf1a17c5-f655-41f3-9909-1a4886a58b3d"
-    },
     {
       "parameters": {
         "jsCode": "// Set input parameters for the workflow\nreturn {\n  company_domain: '{{ $json.company_domain || \"tesla.com\" }}',\n  spreadsheet_id: '{{ $json.spreadsheet_id }}',\n  search_keywords: '{{ $json.search_keywords || \"Software Engineer\" }}'\n};"
@@ -25,7 +14,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -480,
+        -592,
         688
       ],
       "id": "08085223-997e-462e-b507-cec71042bceb"
@@ -38,7 +27,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -32,
+        -144,
         688
       ],
       "id": "48c3a178-ad92-4a4d-b787-9f9ef8fdd0a0"
@@ -51,7 +40,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        192,
+        64,
         688
       ],
       "id": "bea3c30d-5c47-41a4-bf83-de3cbdae8e76"
@@ -64,8 +53,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        416,
-        688
+        288,
+        960
       ],
       "id": "9c56d530-a86b-44e9-b4fc-5f03c1eccb4c"
     },
@@ -91,8 +80,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        640,
-        688
+        528,
+        960
       ],
       "id": "7ea4ac7b-53e5-4595-b444-749d021c27fc",
       "executeOnce": true,
@@ -112,8 +101,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        864,
-        688
+        720,
+        960
       ],
       "id": "104619a8-d551-4f96-a6e5-3cc5d282719b"
     },
@@ -125,8 +114,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1088,
-        688
+        944,
+        960
       ],
       "id": "b5123686-d84b-4aa7-a231-e25906b59ad5"
     },
@@ -302,8 +291,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        1312,
-        688
+        1168,
+        960
       ],
       "id": "6f7cc799-78db-4a95-aaaf-0d48082ee782",
       "credentials": {
@@ -326,7 +315,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1536,
+        480,
         688
       ],
       "id": "c51c2c1b-96b9-4a3b-8e9d-3a681887cb24",
@@ -345,7 +334,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1760,
+        688,
         688
       ],
       "id": "afb9e877-df83-43a1-a835-079113861e85"
@@ -358,7 +347,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1984,
+        912,
         688
       ],
       "id": "17aa1292-f24d-4097-a2e9-9809f3362c8d"
@@ -367,6 +356,10 @@
       "parameters": {
         "conditions": {
           "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1,
             "nodeOutputs": {
               "output": [
                 {
@@ -376,7 +369,8 @@
                 }
               ]
             }
-          }
+          },
+          "combinator": "and"
         },
         "options": {}
       },
@@ -384,7 +378,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        2208,
+        1136,
         688
       ],
       "alwaysOutputData": true,
@@ -398,8 +392,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2432,
-        624
+        1520,
+        480
       ],
       "id": "c955159f-1eff-4edb-8ea9-c9657e0023b2"
     },
@@ -416,8 +410,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        2656,
-        624
+        1744,
+        480
       ],
       "id": "a78e32f2-76bf-4065-9ad8-e4a8870a8f7a",
       "continueOnFail": true
@@ -430,8 +424,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2880,
-        688
+        1456,
+        992
       ],
       "id": "97dfc9f0-0b6b-406e-a4d0-7a2f830595a1"
     },
@@ -439,6 +433,10 @@
       "parameters": {
         "conditions": {
           "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1,
             "nodeOutputs": {
               "output": [
                 {
@@ -448,7 +446,8 @@
                 }
               ]
             }
-          }
+          },
+          "combinator": "and"
         },
         "options": {}
       },
@@ -456,8 +455,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        3104,
-        688
+        1728,
+        992
       ],
       "alwaysOutputData": true,
       "id": "a334acfa-b805-4db5-89a7-12a72920fa1a"
@@ -471,15 +470,15 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        3328,
-        592
+        2064,
+        736
       ],
       "id": "52b7f5b5-5888-4934-bf9f-9238b826ab62",
       "webhookId": "6ec058be-a259-46e7-bd88-e28d02eeae72",
       "credentials": {
         "gmailOAuth2": {
-          "id": null,
-          "name": "gmail_connection"
+          "id": "KnqoKGMk9hg1aD3H",
+          "name": "Gmail account"
         }
       },
       "continueOnFail": true
@@ -494,8 +493,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        3552,
-        592
+        2288,
+        736
       ],
       "id": "c22d7f47-6af0-42f7-90e7-057f1cf8161f",
       "credentials": {
@@ -515,8 +514,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        3328,
-        784
+        2048,
+        1008
       ],
       "id": "b371b894-7fb2-45a8-aa5f-e4c899cde53e",
       "credentials": {
@@ -536,8 +535,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [
-        3776,
-        592
+        2544,
+        736
       ],
       "id": "daff66b1-6489-4c5f-b4ab-ae450767b135",
       "credentials": {
@@ -568,25 +567,120 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -256,
+        -368,
         688
       ],
       "id": "1dd0ff91-004a-4fb4-b073-d0489767ae38",
       "name": "HTTP Request"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -816,
+        688
+      ],
+      "id": "72c3579b-ead1-4466-bdb1-bc6d6017b062",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "# 1️⃣ SCRAPING\n### Récupération des offres d'emploi\n\nCette section démarre le workflow manuellement, définit les paramètres de recherche \n(mots-clés, localisation, filtres), puis interroge une API externe (Apify/LinkedIn) \npour récupérer la liste brute des offres disponibles.\n\nLes données reçues sont ensuite parsées (nettoyage du JSON) et filtrées pour ne \ngarder que les offres publiées durant la dernière semaine, afin d'éviter de traiter \ndes annonces obsolètes.",
+        "height": 496,
+        "width": 1088,
+        "color": "#1D610F"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -880,
+        368
+      ],
+      "typeVersion": 1,
+      "id": "19d09c1f-2d04-47ca-b688-3943db7cfdef",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# 2️⃣ DÉDUPLICATION\n### Nettoyage et sauvegarde des données\n\nAvant tout traitement, cette section retire les offres trop anciennes puis récupère \nla liste des offres déjà enregistrées dans Google Sheets afin de les comparer.\n\nUn filtre élimine les doublons pour ne conserver que les offres réellement nouvelles. \nCes dernières sont ensuite formatées selon la structure attendue par Google Sheets \net sauvegardées dans la feuille de suivi, servant de base de données centrale \npour tout le workflow.",
+        "height": 1024,
+        "width": 1168
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        224,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "9363e442-cdb1-42bd-9857-ab0987c9efe9",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# 3️⃣ ENRICHISSEMENT\n### Recherche et analyse des contacts RH\n\nInterroge l'API Apollo pour trouver les contacts RH de l'entreprise, \nles analyse/personnalise via IA, puis vérifie si un profil LinkedIn \nexiste pour orienter vers la bonne branche d'outreach.",
+        "height": 400,
+        "width": 1040,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        256,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "8ab98a6f-a7d3-47fe-b068-3ef80be2c463",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# 4️⃣ OUTREACH LINKEDIN\n### Message personnalisé via IA\n\nBranche activée lorsqu'un profil LinkedIn a été identifié pour le contact.\n\nUn message d'accroche est généré automatiquement par IA, personnalisé selon \nl'offre d'emploi et le profil du recruteur, puis envoyé directement via une \nrequête HTTP vers l'API LinkedIn du contact ciblé.",
+        "height": 480,
+        "width": 800,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1408,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "64cc3144-d92d-4061-b2ce-163fb6796f1e",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# 5️⃣ OUTREACH EMAIL\n### Candidature par email\n\nBranche activée en l'absence de LinkedIn. Rédige un email personnalisé, \nvérifie si l'adresse existe : envoi automatique si oui ✅, sinon flag \n\"email manquant\" ❌ pour relance manuelle.",
+        "height": 464,
+        "width": 800,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1408,
+        704
+      ],
+      "typeVersion": 1,
+      "id": "b2d13777-5ec7-4a68-96e1-0aac8bef8dc9",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# 6️⃣ TRACKING\n### Suivi et reporting\n\nDernière étape du workflow : une fois la candidature envoyée (email ou LinkedIn), \nle statut de l'offre est mis à jour à \"Applied\" dans la feuille de suivi.\n\nEn parallèle, une feuille d'analytics dédiée est alimentée pour permettre de \nsuivre des indicateurs clés : nombre de candidatures envoyées, taux de réponse, \nefficacité des canaux (LinkedIn vs email), etc.",
+        "height": 496,
+        "width": 656,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2224,
+        416
+      ],
+      "typeVersion": 1,
+      "id": "c8039db0-d986-44e9-8908-c89e967cc9e7",
+      "name": "Sticky Note5"
     }
   ],
   "connections": {
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "Setup Input Variables",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Setup Input Variables": {
       "main": [
         [
@@ -809,11 +903,23 @@
           }
         ]
       ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Setup Input Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "binaryMode": "separate"
   },
   "staticData": null,
   "meta": {
@@ -821,7 +927,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "fdbed376-fe95-416f-af44-d14fa2100b53",
+  "versionId": "6ee923f2-9beb-49c7-a7db-4024ffbefea4",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-07T13:10:42.422Z",
+  "updatedAt": "2026-09-21T11:39:14.535Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "My workflow 4",
@@ -841,30 +841,6 @@
     },
     {
       "parameters": {
-        "url": "={{ $json.url }}",
-        "options": {
-          "redirect": {
-            "redirect": {}
-          },
-          "response": {
-            "response": {
-              "responseFormat": "file"
-            }
-          },
-          "sendCredentialsOnCrossOriginRedirect": false
-        }
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        0,
-        -560
-      ],
-      "id": "9a8d4169-abc6-446d-8510-540e2a938513",
-      "name": "Télécharger les images Google Flow"
-    },
-    {
-      "parameters": {
         "amount": 10
       },
       "type": "n8n-nodes-base.wait",
@@ -1307,7 +1283,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "767bca98-71d2-44d2-a520-346c5cf158b0",
+  "versionId": "14cd98e1-2f81-4ac1-81d1-ad74ccd0af06",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

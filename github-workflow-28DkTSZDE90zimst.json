@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-08T09:57:13.675Z",
+  "updatedAt": "2026-09-23T10:02:57.906Z",
   "createdAt": "2025-12-18T10:30:42.122Z",
   "id": "28DkTSZDE90zimst",
   "name": "GITHUB WORKFLOW",
@@ -8,6 +8,9 @@
   "nodes": [
     {
       "parameters": {
+        "operation": "subtractFromDate",
+        "magnitude": "={{$now}}",
+        "duration": 1,
         "options": {}
       },
       "id": "bd7069dd-3301-44a0-9567-750a4b54bb83",
@@ -516,7 +519,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "141e2e33-ef92-4e08-a895-e6f7f7ae6fe5",
+  "versionId": "cff97b2d-c570-4945-b729-5f9c30769ed1",
   "activeVersionId": "bab11e91-53ac-4e66-b957-7d3a4b6c5989",
   "triggerCount": 1,
   "shared": [

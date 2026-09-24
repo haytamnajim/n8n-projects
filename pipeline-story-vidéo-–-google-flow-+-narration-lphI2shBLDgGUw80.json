@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T13:00:06.490Z",
+  "updatedAt": "2026-09-23T13:00:47.429Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -819,7 +819,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1520,
+        1312,
         -352
       ],
       "id": "83320999-792f-413d-80c0-db7e83773463",
@@ -832,7 +832,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1728,
+        1520,
         -352
       ],
       "id": "3bcba21c-6b3b-425b-bae5-3fba830d0517",
@@ -936,7 +936,7 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        1936,
+        1728,
         -352
       ],
       "id": "adccc858-30bb-48fb-ad5d-10210c1a9c80",
@@ -950,7 +950,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2144,
+        1936,
         -352
       ],
       "id": "c9bddcfa-b57b-425c-b17c-3906900c61b1",
@@ -964,7 +964,7 @@
       "type": "n8n-nodes-cloudinary.cloudinary",
       "typeVersion": 1,
       "position": [
-        2352,
+        2144,
         -352
       ],
       "id": "f1b70d4b-04fa-42e3-a6d2-a4ad8e5a1ad5",
@@ -983,7 +983,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2560,
+        2352,
         -352
       ],
       "id": "fc69efe5-85c4-441b-a273-c53ddf651e94",
@@ -1003,7 +1003,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2752,
+        2544,
         -352
       ],
       "id": "761c7117-5ec7-4e6f-ba0a-ff5e04489c2d",
@@ -1308,7 +1308,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "9d9ddf51-fc83-44bb-a70a-2e802ea31e8e",
+  "versionId": "b10a80eb-8043-41de-9c38-8aa3ce2a89f0",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

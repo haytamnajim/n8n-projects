@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-24T10:51:42.468Z",
+  "updatedAt": "2026-09-24T10:54:41.438Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -12,7 +12,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        -112
+        -160
       ],
       "id": "f874f394-0e16-4946-9142-aac4e3d02c00",
       "name": "Démarrer le workflow"
@@ -40,7 +40,7 @@
       "typeVersion": 1.1,
       "position": [
         896,
-        -112
+        -160
       ],
       "id": "41ca0fc9-682c-4aaf-a10e-0c2ca71ac38d",
       "name": "Récupérer les pages ouvertes"
@@ -89,7 +89,7 @@
       "typeVersion": 1.1,
       "position": [
         1120,
-        -112
+        -160
       ],
       "id": "31532a5d-dabc-456b-b2c0-a8279552df59",
       "name": "Sélectionner Google Flow"
@@ -147,7 +147,7 @@
       "typeVersion": 1.1,
       "position": [
         1568,
-        -112
+        -160
       ],
       "id": "6887e904-8db0-4686-b5b1-23ccb796fa49",
       "name": "Analyser la page Google Flow"
@@ -214,8 +214,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2240,
-        -112
+        1792,
+        -160
       ],
       "id": "48a24319-382a-4a05-8b08-45d4993d5350",
       "name": "Cliquer sur le champ de prompt"
@@ -237,8 +237,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2464,
-        -112
+        2016,
+        -160
       ],
       "id": "ce0e8a1f-2c74-4482-b08b-cd06c5b0fde8",
       "name": "Définir le prompt"
@@ -296,8 +296,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2912,
-        -112
+        2464,
+        -160
       ],
       "id": "a0c9e5c1-20fd-4fb2-a7e7-c7569c0b07ea",
       "name": "Remplir le champ de prompt"
@@ -364,8 +364,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        3360,
-        -112
+        2912,
+        -160
       ],
       "id": "cd776753-f2d8-454b-8203-accc10995b5d",
       "name": "Cliquer sur Créer",
@@ -423,8 +423,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        2688,
-        -112
+        2240,
+        -160
       ],
       "id": "d854f7a2-ce5d-4187-9afb-c990f9c0f472",
       "name": "MCP Client"
@@ -481,8 +481,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        3136,
-        -112
+        2688,
+        -160
       ],
       "id": "4dcff43c-e7f5-415f-aced-6741ebf24d62",
       "name": "Vérifier le bouton Créer"
@@ -539,8 +539,8 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClient",
       "typeVersion": 1.1,
       "position": [
-        3584,
-        -112
+        3136,
+        -160
       ],
       "id": "5947f3e5-3527-4108-b0aa-9300f2b53dfe",
       "name": "Snapshot après clic Créer"
@@ -569,7 +569,7 @@
       "typeVersion": 3.4,
       "position": [
         224,
-        -112
+        -160
       ],
       "id": "180b42bf-c31b-4c56-84c3-fb5685c08bd9",
       "name": "Liste des 20 prompts"
@@ -583,7 +583,7 @@
       "typeVersion": 1,
       "position": [
         448,
-        -112
+        -160
       ],
       "id": "8c3b5606-0533-4e45-a80b-8bb1fd0963b5",
       "name": "Éclater les prompts"
@@ -595,8 +595,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        3808,
-        -32
+        3360,
+        -80
       ],
       "id": "c4958fa0-d66c-42ca-a270-fd8d035340a6",
       "name": "Wait",
@@ -610,7 +610,7 @@
       "typeVersion": 3,
       "position": [
         672,
-        -112
+        -160
       ],
       "id": "e0cd8149-2b42-4d85-bcfa-82bfd7c86514",
       "name": "Loop Over Items"
@@ -1017,56 +1017,11 @@
       "typeVersion": 1.1,
       "position": [
         1344,
-        -112
+        -160
       ],
       "id": "881541ee-bfe5-42a0-b38c-ffdd925e71ca",
       "name": "Attendre chargement page Flow",
       "webhookId": "aed83186-37f5-4dfa-8bca-64d40a8b4fd5"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "da5e083f-dc4a-4fb7-874f-dab6c480d0a3",
-              "leftValue": "={{ $json.content[0].text }}",
-              "rightValue": "Chargement",
-              "operator": {
-                "type": "string",
-                "operation": "notContains"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        1792,
-        -112
-      ],
-      "id": "ff3e4718-2e14-4a79-95be-62f4da5b5aa8",
-      "name": "Page Flow prête ?"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        2240,
-        16
-      ],
-      "id": "51b80630-ad89-4eac-9103-92c66bfbe694",
-      "name": "Réessayer attente Flow",
-      "webhookId": "7fca23e7-7894-478f-b718-042e02f3c580"
     }
   ],
   "connections": {
@@ -1107,7 +1062,7 @@
       "main": [
         [
           {
-            "node": "Page Flow prête ?",
+            "node": "Cliquer sur le champ de prompt",
             "type": "main",
             "index": 0
           }
@@ -1340,35 +1295,6 @@
           }
         ]
       ]
-    },
-    "Page Flow prête ?": {
-      "main": [
-        [
-          {
-            "node": "Cliquer sur le champ de prompt",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Réessayer attente Flow",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Réessayer attente Flow": {
-      "main": [
-        [
-          {
-            "node": "Analyser la page Google Flow",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "settings": {
@@ -1382,7 +1308,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "87eff538-0d88-4f55-b8d7-7b3a39fffe90",
+  "versionId": "17a943b7-cc16-442b-92a1-0e0d79c4037b",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

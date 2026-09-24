@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T13:00:47.429Z",
+  "updatedAt": "2026-09-24T10:26:56.357Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -164,7 +164,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "={{ (() => {\n  const text = $('Analyser la page Google Flow').item.json.content[0].text;\n  const lines = text.split('\\n');\n  // Recherche stricte sur la phrase complète pour éviter l'élément 1_16\n  const target = lines.find(l => l.includes('Que voulez-vous'));\n  const match = target?.match(/uid=([^\\s\\]]+)/);\n  return match ? match[1] : '1_30';\n})() }}",
+            "uid": "={{ (() => {\n  const text = $('Analyser la page Google Flow').item.json.content[0].text;\n  const lines = text.split('\\n');\n  const target = lines.find(l => l.includes('generic focusable focused'));\n  const match = target?.match(/uid=([^\\s\\]]+)/);\n  return match ? match[1] : '';\n})() }}",
             "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
@@ -1308,7 +1308,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "b10a80eb-8043-41de-9c38-8aa3ce2a89f0",
+  "versionId": "36d8eb44-faaa-4d3c-a6c6-28cde0ebb51e",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

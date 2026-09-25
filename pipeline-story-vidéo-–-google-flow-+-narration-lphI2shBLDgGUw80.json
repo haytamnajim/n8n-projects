@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-25T11:52:54.350Z",
+  "updatedAt": "2026-09-25T11:54:22.273Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -285,7 +285,7 @@
               "required": false,
               "display": true,
               "type": "string",
-              "removed": true
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -1307,7 +1307,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "b68300e5-fb39-4149-b8fb-10eb688edb90",
+  "versionId": "466a8d6a-c919-4d4b-a80c-5801d9e837b4",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

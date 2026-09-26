@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-26T11:36:48.903Z",
+  "updatedAt": "2026-09-26T11:38:36.618Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -164,7 +164,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "uid": "={{ '1_28' }}",
+            "uid": "={{ (() => {\n  const text = $('Analyser la page Google Flow').item.json.content[0].text;\n  const lines = text.split('\\n');\n\n  const index = lines.findIndex(line =>\n    line.includes('StaticText \"Que voulez-vous créer')\n  );\n\n  if (index === -1) return '';\n\n  const nextLine = lines\n    .slice(index + 1, index + 4)\n    .find(line => /uid=([^\\s]+)/.test(line));\n\n  return nextLine?.match(/uid=([^\\s]+)/)?.[1] ?? '';\n})() }}",
             "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*flow\\.google\\.com\\/project\\/[a-f0-9-]+[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
@@ -1307,7 +1307,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "140352f8-52ef-42ba-9ae3-eb52cec54562",
+  "versionId": "f81e7282-ebc0-4631-b553-6e311a343eca",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

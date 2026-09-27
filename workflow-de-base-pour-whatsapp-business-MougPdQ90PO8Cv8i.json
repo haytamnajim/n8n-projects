@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-05T10:59:51.019Z",
+  "updatedAt": "2026-09-27T09:41:10.619Z",
   "createdAt": "2026-05-05T19:15:41.093Z",
   "id": "MougPdQ90PO8Cv8i",
   "name": "Workflow de base pour WhatsApp Business",
@@ -84,7 +84,7 @@
       "type": "n8n-nodes-base.whatsApp",
       "position": [
         0,
-        736
+        768
       ],
       "typeVersion": 1,
       "webhookId": "44a0a162-1605-46e6-b918-344e60db4b3e",
@@ -151,7 +151,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "position": [
         160,
-        736
+        768
       ],
       "typeVersion": 4.2,
       "credentials": {
@@ -248,10 +248,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 2,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
                 },
                 "combinator": "and",
                 "conditions": [
@@ -272,10 +272,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 2,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
                 },
                 "combinator": "and",
                 "conditions": [
@@ -297,10 +297,10 @@
             {
               "conditions": {
                 "options": {
-                  "version": 2,
-                  "leftValue": "",
                   "caseSensitive": true,
-                  "typeValidation": "strict"
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
                 },
                 "combinator": "and",
                 "conditions": [
@@ -344,7 +344,7 @@
       "type": "n8n-nodes-base.wait",
       "position": [
         0,
-        1184
+        1200
       ],
       "webhookId": "99b49c83-d956-46d2-b8d3-d65622121ad9",
       "typeVersion": 1.1
@@ -390,8 +390,8 @@
       "name": "Image Explainer",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "position": [
-        672,
-        736
+        688,
+        768
       ],
       "typeVersion": 1.4
     },
@@ -517,8 +517,8 @@
       "name": "Google Gemini Chat Model1",
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "position": [
-        608,
-        928
+        560,
+        896
       ],
       "typeVersion": 1,
       "credentials": {
@@ -588,7 +588,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "position": [
         688,
-        1184
+        1200
       ],
       "typeVersion": 1.4
     },
@@ -675,7 +675,7 @@
     {
       "parameters": {
         "content": "Analyse des images\n\nLes images reçues via WhatsApp sont téléchargées puis analysées à l'aide de Google Gemini.\n\nLe modèle peut reconnaître les objets, décrire la scène, détecter du texte et extraire les informations utiles qui seront transmises à l'agent IA.",
-        "height": 288,
+        "height": 320,
         "width": 1024,
         "color": 3
       },
@@ -691,14 +691,14 @@
     {
       "parameters": {
         "content": "Traitement des messages texte\n\nLes messages texte sont extraits puis, si nécessaire, résumés afin de réduire leur longueur tout en conservant les informations essentielles.\n\nCette optimisation améliore les performances de l'agent IA et limite la consommation de tokens.\n",
-        "height": 272,
+        "height": 288,
         "width": 1024,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -48,
-        1056
+        1040
       ],
       "typeVersion": 1,
       "id": "6a447f84-2391-44a3-b958-4e1ce83461d2",
@@ -707,14 +707,14 @@
     {
       "parameters": {
         "content": "Préparation du message utilisateur\n\nToutes les branches du workflow convergent vers cette étape.\n\nQuel que soit le type de message reçu, les informations sont normalisées afin de produire un message unique et structuré qui sera transmis à l'agent IA.",
-        "height": 416,
+        "height": 464,
         "width": 304,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1024,
-        304
+        256
       ],
       "typeVersion": 1,
       "id": "0fa1edf6-de63-494e-b510-f9e8564832db",
@@ -739,14 +739,14 @@
     {
       "parameters": {
         "content": "Envoi de la réponse\n\nLa réponse générée par l'agent IA est automatiquement envoyée à l'utilisateur via WhatsApp.\n\nCette dernière étape termine le workflow en offrant une expérience conversationnelle fluide et entièrement automatisée.",
-        "height": 368,
+        "height": 416,
         "width": 352,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1776,
-        320
+        272
       ],
       "typeVersion": 1,
       "id": "bc73db33-c7f2-4a5d-9880-846f6a687b86",
@@ -1031,7 +1031,8 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "binaryMode": "separate"
   },
   "staticData": null,
   "meta": {
@@ -1039,7 +1040,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "aaa56da4-af98-4a71-a0cd-2601d76c4e56",
+  "versionId": "6bb5d809-8c08-4809-acbf-8e3a664f53e7",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

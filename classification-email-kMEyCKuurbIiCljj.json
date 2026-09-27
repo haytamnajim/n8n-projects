@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-22T10:17:28.341Z",
+  "updatedAt": "2026-09-27T09:47:17.818Z",
   "createdAt": "2026-01-22T10:04:31.383Z",
   "id": "kMEyCKuurbIiCljj",
   "name": "classification-email",
@@ -328,13 +328,13 @@
     {
       "parameters": {
         "content": "🎯 OBJECTIF : CAPTURE & ANALYSE\n\nDétection automatique des nouveaux emails.\nUtilisation de l'IA (Groq) pour classifier l'intention.\nIdentification du type de demande (Facture, Support, Priorité).",
-        "height": 368,
-        "width": 496
+        "height": 400,
+        "width": 528
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -336,
-        -112
+        -368,
+        -144
       ],
       "typeVersion": 1,
       "id": "158b5024-1adf-4d97-8e3b-bce85ec9785c",
@@ -343,14 +343,14 @@
     {
       "parameters": {
         "content": "🏷️ OBJECTIF : ORGANISATION GMAIL\n\nApplication automatique des labels dans votre boîte Gmail.\nPermet un suivi visuel direct sans ouvrir n8n.\nTri automatique par catégories.",
-        "height": 1120,
+        "height": 1152,
         "width": 272,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         176,
-        -560
+        -592
       ],
       "typeVersion": 1,
       "id": "8b2caa17-bfe9-406f-a419-c382ad03e90d",
@@ -359,14 +359,14 @@
     {
       "parameters": {
         "content": "🤖 OBJECTIF : GÉNÉRATION DE RÉPONSE\n\nAnalyse du contenu par l'agent IA.\nRédaction d'une réponse personnalisée et polie.\nCréation d'un brouillon (Draft) sans envoyer pour garder le contrôle.",
-        "height": 336,
+        "height": 352,
         "width": 528,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         464,
-        -144
+        -160
       ],
       "typeVersion": 1,
       "id": "56698f11-4cf5-42d5-8380-7324f95c8363",
@@ -389,14 +389,14 @@
     {
       "parameters": {
         "content": "🛡️ OBJECTIF : CONTRÔLE HUMAIN (HITL)\n\nAlerte Telegram pour validation.\nChoix : [Approuver] ou [Décliner].\nEnvoi final du mail uniquement après feu vert.",
-        "height": 304,
+        "height": 336,
         "width": 400,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         1008,
-        -112
+        -144
       ],
       "typeVersion": 1,
       "id": "97f7bf53-64c3-4ab2-84b9-c67f8748aeb1",
@@ -587,7 +587,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "40bf656f-8531-4e5a-8276-bb02903b00df",
+  "versionId": "b58c4def-62cb-4a43-a385-41dde8ff49f2",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

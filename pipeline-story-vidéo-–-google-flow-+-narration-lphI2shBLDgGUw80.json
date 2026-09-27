@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T22:06:37.989Z",
+  "updatedAt": "2026-09-27T22:30:07.395Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -826,7 +826,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const allItems = $input.all();\nconst urlsSet = new Set();\n\nfor (const item of allItems) {\n  const contentArray = item.json.content;\n  if (!Array.isArray(contentArray) || !contentArray[0] || !contentArray[0].text) continue;\n\n  const text = contentArray[0].text;\n  const match = text.match(/```json\\n([\\s\\S]*?)\\n```/);\n  if (!match) continue;\n\n  try {\n    const imagesArray = JSON.parse(match[1]);\n    if (Array.isArray(imagesArray)) {\n      imagesArray.forEach(img => {\n        if (img.src) urlsSet.add(img.src);\n      });\n    }\n  } catch (e) {\n    continue;\n  }\n}\n\nconst uniqueUrls = Array.from(urlsSet);\n\n// ⚠️ On force toujours au moins un item en sortie\nif (uniqueUrls.length === 0) {\n  return [{ json: { empty: true, message: \"Aucune image trouvée dans la galerie\" } }];\n}\n\nreturn uniqueUrls.map((url, index) => ({\n  json: { index: index + 1, url: url }\n}));"
+        "jsCode": "const items = $input.all();\n\nreturn items.map((item, index) => ({\n  json: {\n    index,\n    text: item.json.content?.[0]?.text ?? '',\n  }\n}));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1323,7 +1323,7 @@
       }
     ]
   },
-  "versionId": "f2e977e5-801b-4712-ac92-ea460031c062",
+  "versionId": "9ef5d350-42e0-4c6c-bcba-10900e5622d3",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

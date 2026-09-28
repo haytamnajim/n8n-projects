@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T22:30:07.395Z",
+  "updatedAt": "2026-09-28T09:53:25.037Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -749,7 +749,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "function": "() => { const results = []; document.querySelectorAll('img').forEach(img => { if (img.src && img.src.includes('getMediaUrlRedirect')) { results.push({ type: 'img', src: img.src, alt: img.alt || '' }); } }); return results; }",
+            "function": "() => {   return {     pageUrl: window.location.href,     pageTitle: document.title,      imageCount: document.querySelectorAll('img').length,      images: [...document.querySelectorAll('img')].map((img, index) => ({       index,       src: img.currentSrc || img.src || '',       alt: img.alt || '',       width: img.naturalWidth || img.width || 0,       height: img.naturalHeight || img.height || 0     }))   }; }",
             "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
@@ -1323,7 +1323,7 @@
       }
     ]
   },
-  "versionId": "9ef5d350-42e0-4c6c-bcba-10900e5622d3",
+  "versionId": "8ad22267-9917-49c2-8421-f7ebebd9e96f",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

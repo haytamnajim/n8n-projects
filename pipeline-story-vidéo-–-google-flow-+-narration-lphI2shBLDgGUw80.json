@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T09:53:25.037Z",
+  "updatedAt": "2026-09-28T10:07:42.607Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -749,7 +749,7 @@
         "parameters": {
           "mappingMode": "defineBelow",
           "value": {
-            "function": "() => {   return {     pageUrl: window.location.href,     pageTitle: document.title,      imageCount: document.querySelectorAll('img').length,      images: [...document.querySelectorAll('img')].map((img, index) => ({       index,       src: img.currentSrc || img.src || '',       alt: img.alt || '',       width: img.naturalWidth || img.width || 0,       height: img.naturalHeight || img.height || 0     }))   }; }",
+            "function": "() => {   const results = [];    document.querySelectorAll('img').forEach((img, index) => {     const src = img.currentSrc || img.src || '';     const width = img.naturalWidth || img.width || 0;     const height = img.naturalHeight || img.height || 0;      if (       src &&       src.includes('flow.google.com/asb/') &&       width >= 500 &&       height >= 300     ) {       results.push({         type: 'img',         index: index,         src: src,         alt: img.alt || '',         width: width,         height: height       });     }   });    return results; }",
             "pageId": "={{ $('Récupérer les pages ouvertes').item.json.content[0].text.match(/(\\d+): [^\\n]*labs\\.google\\/fx\\/[a-z]{2}\\/tools\\/flow[^\\n]*/)?.[1] ?? '' }}"
           },
           "matchingColumns": [],
@@ -1323,7 +1323,7 @@
       }
     ]
   },
-  "versionId": "8ad22267-9917-49c2-8421-f7ebebd9e96f",
+  "versionId": "a67a7779-be0b-4807-ac31-18b19d7265a3",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

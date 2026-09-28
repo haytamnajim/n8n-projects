@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T10:54:55.207Z",
+  "updatedAt": "2026-09-28T19:55:14.101Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -977,7 +977,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const narrationsSource = $('Liste des 20 prompts').first().json.narrations;\n\nreturn $input.all().map((item) => {\n  const sceneIndex = (item.json.scene || item.json.index || 1) - 1;\n  return {\n    json: {\n      ...item.json,\n      narration: narrationsSource[sceneIndex] || narrationsSource[narrationsSource.length - 1]\n    },\n    binary: item.binary\n  };\n});"
+        "jsCode": "const narrationsSource = $('Liste des 20 prompts').first().json.narrations;\n\nreturn $input.all().map((item, index) => {\n  return {\n    json: {\n      ...item.json,\n      narration:\n        narrationsSource[index] ||\n        narrationsSource[narrationsSource.length - 1]\n    },\n    binary: item.binary\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1307,7 +1307,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "743b7f1c-4351-4dec-b6e2-75dfe83de898",
+  "versionId": "eb63b8d5-d9b3-48e6-82e7-8f29cf9d3bb2",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

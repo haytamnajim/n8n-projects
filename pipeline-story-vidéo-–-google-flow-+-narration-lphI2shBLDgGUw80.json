@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T10:16:10.358Z",
+  "updatedAt": "2026-09-28T10:54:55.207Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -826,7 +826,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $input.all();\n\nreturn items.map((item, index) => ({\n  json: {\n    index,\n    text: item.json.content?.[0]?.text ?? '',\n  }\n}));"
+        "jsCode": "const uniqueUrls = new Set();\nconst output = [];\n\nfor (const item of $input.all()) {\n  const text =\n    item.json?.content?.find(c => c?.type === 'text')?.text ||\n    item.json?.text ||\n    '';\n\n  if (!text) {\n    continue;\n  }\n\n  // Récupérer le JSON contenu dans ```json ... ```\n  const match = text.match(/```json\\s*([\\s\\S]*?)\\s*```/i);\n\n  if (!match) {\n    continue;\n  }\n\n  let images;\n\n  try {\n    images = JSON.parse(match[1]);\n  } catch (error) {\n    continue;\n  }\n\n  if (!Array.isArray(images)) {\n    continue;\n  }\n\n  for (const image of images) {\n    const url = image?.src || '';\n\n    if (\n      url.startsWith('https://flow.google.com/asb/') &&\n      !uniqueUrls.has(url)\n    ) {\n      uniqueUrls.add(url);\n\n      output.push({\n        json: {\n          url: url,\n          type: image.type || 'img',\n          imageIndex: image.index ?? null,\n          alt: image.alt || '',\n          width: image.width ?? null,\n          height: image.height ?? null\n        }\n      });\n    }\n  }\n}\n\nreturn output;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -944,7 +944,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const text = $input.first().json.content?.[0]?.text ?? '';\n\nreturn {\n  json: {\n    textStart: text.substring(0, 1000),\n    hasDataUri: text.includes('data:'),\n    hasImageData: text.includes('data:image/'),\n    hasHtmlData: text.includes('data:text/html')\n  }\n};"
+        "jsCode": "const output = [];\n\nfor (const item of $input.all()) {\n  const text =\n    item.json?.content?.find(c => c?.type === 'text')?.text ||\n    item.json?.text ||\n    '';\n\n  const match = text.match(\n    /data:(image\\/[a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=\\r\\n]+)/\n  );\n\n  if (!match) {\n    continue;\n  }\n\n  const mimeType = match[1];\n  const base64 = match[2].replace(/\\s/g, '');\n\n  const extension =\n    mimeType === 'image/webp' ? 'webp' :\n    mimeType === 'image/png' ? 'png' :\n    mimeType === 'image/jpeg' ? 'jpg' :\n    'bin';\n\n  const buffer = Buffer.from(base64, 'base64');\n\n  const binaryData = await this.helpers.prepareBinaryData(\n    buffer,\n    `flow-image-${item.index ?? 0}.${extension}`,\n    mimeType\n  );\n\n  output.push({\n    json: {\n      mimeType,\n      base64Length: base64.length\n    },\n    binary: {\n      data: binaryData\n    }\n  });\n}\n\nreturn output;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1307,7 +1307,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "c8ef8e13-c91d-4f0b-8044-9e29013a1db8",
+  "versionId": "743b7f1c-4351-4dec-b6e2-75dfe83de898",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

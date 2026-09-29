@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-29T12:08:53.876Z",
+  "updatedAt": "2026-09-29T12:47:24.741Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -1049,6 +1049,17 @@
       ],
       "id": "761c7117-5ec7-4e6f-ba0a-ff5e04489c2d",
       "name": "Générer narration avec Kokoro"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3104,
+        -352
+      ],
+      "id": "aae443c5-2620-4407-a6ab-135b236748e5",
+      "name": "Merge"
     }
   ],
   "connections": {
@@ -1333,6 +1344,17 @@
           }
         ]
       ]
+    },
+    "Upload an asset from file data": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1346,7 +1368,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "015d566b-a185-40c0-bb41-123740477683",
+  "versionId": "8da7a152-787e-4ff9-8154-d1bc5c6e6528",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

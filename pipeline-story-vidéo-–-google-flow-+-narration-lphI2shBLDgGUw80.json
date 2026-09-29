@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-29T11:24:09.640Z",
+  "updatedAt": "2026-09-29T11:26:10.084Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -1032,7 +1032,7 @@
         "jsonHeaders": "={\n  \"Content-Type\": \"application/json\"\n}",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": \"{{$json.narration}}\",\n  \"voice\": \"ff_siwis\",\n  \"response_format\": \"mp3\",\n  \"speed\": 1.0\n}",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"input\": \"{{$json.narration}}\",\n  \"voice\": \"ff_siwis\",\n  \"response_format\": \"mp3\"\n}",
         "options": {
           "response": {
             "response": {
@@ -1346,7 +1346,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "a2160ff5-f65b-4547-913e-899b7578ae39",
+  "versionId": "cc2ad3ca-a0ab-4282-a2b5-ec9381100af6",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T19:55:14.101Z",
+  "updatedAt": "2026-09-28T22:38:53.336Z",
   "createdAt": "2026-08-13T14:02:55.799Z",
   "id": "lphI2shBLDgGUw80",
   "name": "Pipeline Story Vidéo – Google Flow + Narration",
@@ -990,7 +990,49 @@
     },
     {
       "parameters": {
-        "url": "{{ 'https://api.streamelements.com/kappa/v2/speech?voice=Mathieu&text=' + encodeURIComponent($json.narration) }}",
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        -160
+      ],
+      "id": "881541ee-bfe5-42a0-b38c-ffdd925e71ca",
+      "name": "Attendre chargement page Flow",
+      "webhookId": "aed83186-37f5-4dfa-8bca-64d40a8b4fd5"
+    },
+    {
+      "parameters": {
+        "operation": "uploadFile",
+        "resource_type_file": "video",
+        "additionalFieldsFile": {}
+      },
+      "type": "n8n-nodes-cloudinary.cloudinary",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        -352
+      ],
+      "id": "caa7bb7f-a5c5-4a22-b8d3-30c7b2aec34f",
+      "name": "Upload an asset from file data",
+      "credentials": {
+        "cloudinaryApi": {
+          "id": "uY0FNvmMra92ViBI",
+          "name": "Cloudinary account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8880/v1/audio/speech",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={\n  \"Content-Type\": \"application/json\"\n}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"kokoro\",\n  \"voice\": \"ff_siwis\",\n  \"input\": \"={{$json.narration}}\",\n  \"response_format\": \"mp3\",\n  \"speed\": 1.0,\n  \"stream\": false\n}",
         "options": {
           "response": {
             "response": {
@@ -1006,21 +1048,7 @@
         -352
       ],
       "id": "761c7117-5ec7-4e6f-ba0a-ff5e04489c2d",
-      "name": "Générer narration StreamElements"
-    },
-    {
-      "parameters": {
-        "amount": 15
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        1344,
-        -160
-      ],
-      "id": "881541ee-bfe5-42a0-b38c-ffdd925e71ca",
-      "name": "Attendre chargement page Flow",
-      "webhookId": "aed83186-37f5-4dfa-8bca-64d40a8b4fd5"
+      "name": "Générer narration avec Kokoro"
     }
   ],
   "connections": {
@@ -1277,7 +1305,7 @@
       "main": [
         [
           {
-            "node": "Générer narration StreamElements",
+            "node": "Générer narration avec Kokoro",
             "type": "main",
             "index": 0
           }
@@ -1289,6 +1317,17 @@
         [
           {
             "node": "Analyser la page Google Flow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Générer narration avec Kokoro": {
+      "main": [
+        [
+          {
+            "node": "Upload an asset from file data",
             "type": "main",
             "index": 0
           }
@@ -1307,7 +1346,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "eb63b8d5-d9b3-48e6-82e7-8f29cf9d3bb2",
+  "versionId": "28ce5028-aad8-4257-ab3e-81eb8b27d53c",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

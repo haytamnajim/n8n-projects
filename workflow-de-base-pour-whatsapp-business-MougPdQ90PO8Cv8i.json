@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T20:56:45.618Z",
+  "updatedAt": "2026-10-03T16:43:12.000Z",
   "createdAt": "2026-05-05T19:15:41.093Z",
   "id": "MougPdQ90PO8Cv8i",
   "name": "Workflow de base pour WhatsApp Business",
@@ -1045,7 +1045,7 @@
   "nodeGroups": [],
   "pinData": {},
   "versionId": "270dbb09-2a3d-4ac5-9066-61f7e8224e0c",
-  "activeVersionId": "a51260f9-36fe-4c28-83cb-d2b529c7b05c",
+  "activeVersionId": "270dbb09-2a3d-4ac5-9066-61f7e8224e0c",
   "triggerCount": 1,
   "shared": [
     {
@@ -1057,9 +1057,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-10-02T11:41:44.000Z",
-    "createdAt": "2026-10-01T22:36:04.785Z",
-    "versionId": "a51260f9-36fe-4c28-83cb-d2b529c7b05c",
+    "updatedAt": "2026-10-03T16:43:44.000Z",
+    "createdAt": "2026-10-02T20:56:45.698Z",
+    "versionId": "270dbb09-2a3d-4ac5-9066-61f7e8224e0c",
     "workflowId": "MougPdQ90PO8Cv8i",
     "nodes": [
       {
@@ -1067,7 +1067,11 @@
           "updates": [
             "messages"
           ],
-          "options": {}
+          "options": {
+            "messageStatusUpdates": [
+              "all"
+            ]
+          }
         },
         "id": "0508c00a-7bda-411f-8c43-d74e289d5f99",
         "name": "WhatsApp Trigger",
@@ -1080,8 +1084,8 @@
         "typeVersion": 1,
         "credentials": {
           "whatsAppTriggerApi": {
-            "id": "WyySs3vHPBXKt4kq",
-            "name": "WhatsApp OAuth account"
+            "id": "h8rVka2Z0lvGfICk",
+            "name": "WhatsApp OAuth account 2"
           }
         }
       },
@@ -2087,7 +2091,7 @@
     },
     "nodeGroups": [],
     "authors": "HAITAM NAJIM",
-    "name": "Version a51260f9",
+    "name": "Version 270dbb09",
     "description": "",
     "autosaved": true
   },

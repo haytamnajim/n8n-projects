@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-13T14:49:26.735Z",
+  "updatedAt": "2026-10-13T16:37:35.613Z",
   "createdAt": "2026-10-13T12:52:24.677Z",
   "id": "QDRRboAuR5ao5pTQ",
   "name": "My workflow 4",
@@ -160,25 +160,25 @@
               "id": "d990cbd6-a408-4ec4-a889-41be698918d9",
               "name": "message_type",
               "type": "string",
-              "value": "={{ $('Split Out Message Parts').item.json.type }}"
+              "value": "={{ $('Webhook').item.json.body.data.type }}"
             },
             {
               "id": "23b785c3-f38e-4706-80b7-51f333bba3bd",
               "name": "message_text",
               "type": "string",
-              "value": "={{ $json.text }}"
+              "value": "={{ $('Webhook').item.json.body.data.body }}"
             },
             {
               "id": "6e83f9a7-cf75-4182-b2d2-3151e8af76b9",
               "name": "from",
               "type": "string",
-              "value": "={{ $('WhatsApp Trigger').item.json.messages[0].from }}"
+              "value": "={{ $('Webhook').item.json.body.data.from }}"
             },
             {
               "id": "da4b602a-28ca-4b0d-a747-c3d3698c3731",
               "name": "message_caption",
               "type": "string",
-              "value": "={{ $('Redirect Message Types').item.json.video && $('Redirect Message Types').item.json.video.caption || '' }}\n{{ $('Redirect Message Types').item.json.image && $('Redirect Message Types').item.json.image.caption || ''}}\n{{ $('Redirect Message Types').item.json.audio && $('Redirect Message Types').item.json.audio.caption || ''}}"
+              "value": "={{ $('Webhook').item.json.body.data.caption || '' }}"
             }
           ]
         },
@@ -192,20 +192,6 @@
         528
       ],
       "typeVersion": 3.4
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "messages",
-        "options": {}
-      },
-      "id": "8cb8efe4-4c2d-46a7-af22-76b236701ce7",
-      "name": "Split Out Message Parts",
-      "type": "n8n-nodes-base.splitOut",
-      "position": [
-        -560,
-        560
-      ],
-      "typeVersion": 1
     },
     {
       "parameters": {},
@@ -230,7 +216,6 @@
                   "typeValidation": "strict",
                   "version": 2
                 },
-                "combinator": "and",
                 "conditions": [
                   {
                     "operator": {
@@ -238,10 +223,12 @@
                       "operation": "true",
                       "singleValue": true
                     },
-                    "leftValue": "={{ $json.type == 'audio' && Boolean($json.audio) }}",
-                    "rightValue": "audio"
+                    "leftValue": "={{ $json.body.data.type === 'ptt' || $json.body.data.type === 'audio' }}",
+                    "rightValue": "audio",
+                    "id": "81102178-c563-421b-b4a0-08b6c3963557"
                   }
-                ]
+                ],
+                "combinator": "and"
               },
               "renameOutput": true,
               "outputKey": "Audio Message"
@@ -254,7 +241,6 @@
                   "typeValidation": "strict",
                   "version": 2
                 },
-                "combinator": "and",
                 "conditions": [
                   {
                     "id": "82aa5ff4-c9b6-4187-a27e-c7c5d9bfdda0",
@@ -263,10 +249,11 @@
                       "operation": "true",
                       "singleValue": true
                     },
-                    "leftValue": "={{ $json.type == 'video' && Boolean($json.video) }}",
+                    "leftValue": "={{ $json.body.data.type === 'video' }}",
                     "rightValue": ""
                   }
-                ]
+                ],
+                "combinator": "and"
               },
               "renameOutput": true,
               "outputKey": "Video Message"
@@ -279,7 +266,6 @@
                   "typeValidation": "strict",
                   "version": 2
                 },
-                "combinator": "and",
                 "conditions": [
                   {
                     "id": "05b30af4-967b-4824-abdc-84a8292ac0e5",
@@ -288,10 +274,11 @@
                       "operation": "true",
                       "singleValue": true
                     },
-                    "leftValue": "={{ $json.type == 'image' && Boolean($json.image) }}",
+                    "leftValue": "={{ $json.body.data.type === 'image' }}",
                     "rightValue": ""
                   }
-                ]
+                ],
+                "combinator": "and"
               },
               "renameOutput": true,
               "outputKey": "Image Message"
@@ -686,8 +673,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -864,
-        688
+        -800,
+        560
       ],
       "id": "4aaad24b-342a-44e0-ad05-055768f8e5da",
       "name": "Webhook",
@@ -777,17 +764,6 @@
         [
           {
             "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Out Message Parts": {
-      "main": [
-        [
-          {
-            "node": "Redirect Message Types",
             "type": "main",
             "index": 0
           }
@@ -951,7 +927,7 @@
       "main": [
         [
           {
-            "node": "Split Out Message Parts",
+            "node": "Redirect Message Types",
             "type": "main",
             "index": 0
           }
@@ -968,7 +944,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "b87c4b0c-464c-4d9b-beda-facac3a2b2f6",
+  "versionId": "b3f0b4eb-6b7f-4699-8295-a714c16a432f",
   "activeVersionId": "b87c4b0c-464c-4d9b-beda-facac3a2b2f6",
   "triggerCount": 1,
   "shared": [

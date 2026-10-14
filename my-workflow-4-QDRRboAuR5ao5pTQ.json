@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-14T13:55:51.382Z",
+  "updatedAt": "2026-10-14T14:15:06.262Z",
   "createdAt": "2026-10-13T12:52:24.677Z",
   "id": "QDRRboAuR5ao5pTQ",
   "name": "My workflow 4",
@@ -305,8 +305,8 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "c30ed961-83c9-4db9-8fb4-a54a797887e5",
-  "activeVersionId": "c30ed961-83c9-4db9-8fb4-a54a797887e5",
+  "versionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
+  "activeVersionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
   "triggerCount": 1,
   "shared": [
     {
@@ -318,9 +318,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-10-14T13:56:16.000Z",
-    "createdAt": "2026-10-14T13:55:51.385Z",
-    "versionId": "c30ed961-83c9-4db9-8fb4-a54a797887e5",
+    "updatedAt": "2026-10-14T14:15:09.000Z",
+    "createdAt": "2026-10-14T14:15:06.263Z",
+    "versionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
     "workflowId": "QDRRboAuR5ao5pTQ",
     "nodes": [
       {
@@ -489,17 +489,13 @@
       {
         "parameters": {
           "method": "POST",
-          "url": "http://host.docker.internal:2785/api/sessions/my-bot/messages/send-text",
+          "url": "http://host.docker.internal:2785/api/sessions/afcb4bfa-7e07-42e3-8553-93b0455fa9f4/messages/send-text",
           "sendHeaders": true,
           "headerParameters": {
             "parameters": [
               {
                 "name": "X-Api-Key",
                 "value": "owa_k1_46ad589e023ab74055ba440741b53549891593e9d7fb3c350b0d84ef63038e51"
-              },
-              {
-                "name": "Content-Type",
-                "value": "application/json"
               }
             ]
           },
@@ -617,7 +613,7 @@
     },
     "nodeGroups": [],
     "authors": "HAITAM NAJIM",
-    "name": "Version c30ed961",
+    "name": "Version befc73d2",
     "description": "",
     "autosaved": true
   },

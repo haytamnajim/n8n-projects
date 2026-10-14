@@ -172,7 +172,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://host.docker.internal:2785/api/sessions/my-bot/messages/send-text",
+        "url": "http://host.docker.internal:2785/api/sessions/afcb4bfa-7e07-42e3-8553-93b0455fa9f4/messages/send-text",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [

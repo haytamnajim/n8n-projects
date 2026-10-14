@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-14T13:46:45.374Z",
+  "updatedAt": "2026-10-14T13:55:51.382Z",
   "createdAt": "2026-10-13T12:52:24.677Z",
   "id": "QDRRboAuR5ao5pTQ",
   "name": "My workflow 4",
@@ -179,16 +179,22 @@
             {
               "name": "X-Api-Key",
               "value": "owa_k1_46ad589e023ab74055ba440741b53549891593e9d7fb3c350b0d84ef63038e51"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
             }
           ]
         },
         "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"chatId\": \"={{ $('Webhook').item.json.body.data.from }}\",\n  \"text\": \"={{ $json.output }}\"\n}",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chatId",
+              "value": "={{ $('Webhook').item.json.body.data.from }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -202,21 +208,20 @@
     },
     {
       "parameters": {
-        "model": "allam-2-7b",
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-      "typeVersion": 1,
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
       "position": [
-        1328,
-        768
+        1296,
+        752
       ],
-      "id": "337ced42-0e8e-42eb-bbf1-ce6c77e033d5",
-      "name": "Groq Chat Model",
+      "id": "7735103a-83ce-4e37-b1f9-711d678eb01c",
+      "name": "Google Gemini Chat Model",
       "credentials": {
-        "groqApi": {
-          "id": "NV2G0Pzzp9SCJQEe",
-          "name": "Groq account"
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
         }
       }
     }
@@ -277,7 +282,7 @@
         ]
       ]
     },
-    "Groq Chat Model": {
+    "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
@@ -300,8 +305,8 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "3d92368e-7140-489e-b0d1-264fbc7c8d8d",
-  "activeVersionId": "3d92368e-7140-489e-b0d1-264fbc7c8d8d",
+  "versionId": "c30ed961-83c9-4db9-8fb4-a54a797887e5",
+  "activeVersionId": "c30ed961-83c9-4db9-8fb4-a54a797887e5",
   "triggerCount": 1,
   "shared": [
     {
@@ -313,9 +318,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-10-14T13:46:48.000Z",
-    "createdAt": "2026-10-14T13:46:45.377Z",
-    "versionId": "3d92368e-7140-489e-b0d1-264fbc7c8d8d",
+    "updatedAt": "2026-10-14T13:56:16.000Z",
+    "createdAt": "2026-10-14T13:55:51.385Z",
+    "versionId": "c30ed961-83c9-4db9-8fb4-a54a797887e5",
     "workflowId": "QDRRboAuR5ao5pTQ",
     "nodes": [
       {
@@ -499,8 +504,18 @@
             ]
           },
           "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={\n  \"chatId\": \"={{ $('Webhook').item.json.body.data.from }}\",\n  \"text\": \"={{ $json.output }}\"\n}",
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "chatId",
+                "value": "={{ $('Webhook').item.json.body.data.from }}"
+              },
+              {
+                "name": "text",
+                "value": "={{ $json.output }}"
+              }
+            ]
+          },
           "options": {}
         },
         "type": "n8n-nodes-base.httpRequest",
@@ -514,21 +529,20 @@
       },
       {
         "parameters": {
-          "model": "allam-2-7b",
           "options": {}
         },
-        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-        "typeVersion": 1,
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
         "position": [
-          1328,
-          768
+          1296,
+          752
         ],
-        "id": "337ced42-0e8e-42eb-bbf1-ce6c77e033d5",
-        "name": "Groq Chat Model",
+        "id": "7735103a-83ce-4e37-b1f9-711d678eb01c",
+        "name": "Google Gemini Chat Model",
         "credentials": {
-          "groqApi": {
-            "id": "NV2G0Pzzp9SCJQEe",
-            "name": "Groq account"
+          "googlePalmApi": {
+            "id": "LxG8UkEyW5ofJq1B",
+            "name": "Google Gemini(PaLM) Api account 2"
           }
         }
       }
@@ -589,7 +603,7 @@
           ]
         ]
       },
-      "Groq Chat Model": {
+      "Google Gemini Chat Model": {
         "ai_languageModel": [
           [
             {
@@ -603,7 +617,7 @@
     },
     "nodeGroups": [],
     "authors": "HAITAM NAJIM",
-    "name": "Version 3d92368e",
+    "name": "Version c30ed961",
     "description": "",
     "autosaved": true
   },

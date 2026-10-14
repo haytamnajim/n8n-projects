@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-13T17:05:25.371Z",
+  "updatedAt": "2026-10-14T13:37:48.379Z",
   "createdAt": "2026-10-13T12:52:24.677Z",
   "id": "QDRRboAuR5ao5pTQ",
   "name": "My workflow 4",
@@ -95,9 +95,9 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=The user sent the following message\nmessage type: {{ $json.message_type }}\nmessage text or description:\n```{{ $json.message_text }}```\n{{ $json.message_caption ? `message caption: ${$json.message_caption.trim()}` : '' }}",
+        "text": "=={{ $json.message_text || $json.body?.data?.body || 'Bonjour' }}",
         "options": {
-          "systemMessage": "You are a general knowledge assistant made available to the public via whatsapp. Help answer the user's query succiently and factually."
+          "systemMessage": "Tu es l'assistant virtuel officiel de Haitam Najim sur WhatsApp.\n\nTes consignes :\n\nSois toujours poli, chaleureux, concis et professionnel.\nRéponds dans la langue utilisée par la personne (Français, Arabe / Darija, ou Anglais).\nTu es capable de tenir une vraie conversation, répondre à ses questions et comprendre le contexte.\nSi la personne souhaite contacter Haitam en personne ou pour une demande urgente, invite-la gentiment à laisser son nom, son numéro et le motif de son message, en lui assurant que Haitam prendra connaissance du message dès qu'il sera disponible.\nN'invente pas d'informations personnelles sur Haitam. Garde des réponses courtes adaptées au format WhatsApp."
         }
       },
       "id": "99141328-fc22-475c-bb10-a2167ccc6933",
@@ -808,7 +808,7 @@
   "meta": null,
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "21846e62-53c5-4114-97ff-cc1146720a33",
+  "versionId": "5d6c6d4b-6a8f-4875-83a0-a36332750f20",
   "activeVersionId": "b87c4b0c-464c-4d9b-beda-facac3a2b2f6",
   "triggerCount": 1,
   "shared": [

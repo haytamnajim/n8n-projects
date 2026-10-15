@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-15T16:06:08.892Z",
+  "updatedAt": "2026-10-15T16:13:53.324Z",
   "createdAt": "2026-01-22T10:04:31.383Z",
   "id": "kMEyCKuurbIiCljj",
   "name": "classification-email",
@@ -203,31 +203,11 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        480,
+        496,
         16
       ],
       "id": "44082574-c2e3-4ec8-864d-b5a3943c2364",
       "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "model": "groq/compound-mini",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-      "typeVersion": 1,
-      "position": [
-        496,
-        240
-      ],
-      "id": "67cd36e1-c9df-47c1-8542-81bf63c702c3",
-      "name": "Groq Chat Model",
-      "credentials": {
-        "groqApi": {
-          "id": "NV2G0Pzzp9SCJQEe",
-          "name": "Groq account"
-        }
-      }
     },
     {
       "parameters": {
@@ -307,26 +287,6 @@
     },
     {
       "parameters": {
-        "model": "allam-2-7b",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-      "typeVersion": 1,
-      "position": [
-        -32,
-        336
-      ],
-      "id": "c7231fc7-f022-4459-a4f5-6cb0a1ac3d77",
-      "name": "Groq Chat Model1",
-      "credentials": {
-        "groqApi": {
-          "id": "NV2G0Pzzp9SCJQEe",
-          "name": "Groq account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "content": "🎯 OBJECTIF : CAPTURE & ANALYSE\n\nDétection automatique des nouveaux emails.\nUtilisation de l'IA (Groq) pour classifier l'intention.\nIdentification du type de demande (Facture, Support, Priorité).",
         "height": 400,
         "width": 528
@@ -380,8 +340,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.3,
       "position": [
-        640,
-        240
+        656,
+        272
       ],
       "id": "b4433c3e-1ae2-4414-ae99-7b407b01c7a6",
       "name": "Simple Memory"
@@ -401,6 +361,44 @@
       "typeVersion": 1,
       "id": "97f7bf53-64c3-4ab2-84b9-c67f8748aeb1",
       "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        304
+      ],
+      "id": "6ef3a913-2a9b-4ff3-b426-28dbab41963b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        272
+      ],
+      "id": "ce3c2bd4-3cc2-4080-8a67-88c63d03491a",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
     }
   ],
   "connections": {
@@ -460,17 +458,6 @@
           {
             "node": "AI Agent",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Groq Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -553,7 +540,18 @@
         ]
       ]
     },
-    "Groq Chat Model1": {
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
@@ -564,12 +562,12 @@
         ]
       ]
     },
-    "Simple Memory": {
-      "ai_memory": [
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
         [
           {
             "node": "AI Agent",
-            "type": "ai_memory",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -587,7 +585,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "8a3e7840-883d-4e4b-9e0a-aa8ac0b1f38c",
+  "versionId": "33749ead-7d93-4f20-b1a9-f5a3e690833f",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

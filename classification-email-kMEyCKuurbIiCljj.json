@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T09:47:17.818Z",
+  "updatedAt": "2026-10-15T16:06:08.892Z",
   "createdAt": "2026-01-22T10:04:31.383Z",
   "id": "kMEyCKuurbIiCljj",
   "name": "classification-email",
@@ -307,7 +307,7 @@
     },
     {
       "parameters": {
-        "model": "llama-3.3-70b-versatile",
+        "model": "allam-2-7b",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
@@ -587,7 +587,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "b58c4def-62cb-4a43-a385-41dde8ff49f2",
+  "versionId": "8a3e7840-883d-4e4b-9e0a-aa8ac0b1f38c",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

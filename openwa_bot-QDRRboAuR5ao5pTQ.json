@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-15T16:04:43.070Z",
+  "updatedAt": "2026-10-15T21:56:35.026Z",
   "createdAt": "2026-10-13T12:52:24.677Z",
   "id": "QDRRboAuR5ao5pTQ",
   "name": "OpenWA_Bot",
@@ -208,6 +208,7 @@
     },
     {
       "parameters": {
+        "modelName": "models/gemini-3.8-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -305,8 +306,8 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
-  "activeVersionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
+  "versionId": "4d1a3ed7-ba3d-48e3-b8ff-288fef7be9c0",
+  "activeVersionId": "4d1a3ed7-ba3d-48e3-b8ff-288fef7be9c0",
   "triggerCount": 1,
   "shared": [
     {
@@ -318,9 +319,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-10-14T14:15:09.000Z",
-    "createdAt": "2026-10-14T14:15:06.263Z",
-    "versionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
+    "updatedAt": "2026-10-15T21:56:40.000Z",
+    "createdAt": "2026-10-15T21:56:35.117Z",
+    "versionId": "4d1a3ed7-ba3d-48e3-b8ff-288fef7be9c0",
     "workflowId": "QDRRboAuR5ao5pTQ",
     "nodes": [
       {
@@ -525,6 +526,7 @@
       },
       {
         "parameters": {
+          "modelName": "models/gemini-3.8-flash",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -613,7 +615,7 @@
     },
     "nodeGroups": [],
     "authors": "HAITAM NAJIM",
-    "name": "Version befc73d2",
+    "name": "Version 4d1a3ed7",
     "description": "",
     "autosaved": true
   },

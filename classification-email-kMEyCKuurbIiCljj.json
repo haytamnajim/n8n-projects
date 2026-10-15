@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-15T16:13:53.324Z",
+  "updatedAt": "2026-10-15T22:03:50.042Z",
   "createdAt": "2026-01-22T10:04:31.383Z",
   "id": "kMEyCKuurbIiCljj",
   "name": "classification-email",
@@ -364,6 +364,7 @@
     },
     {
       "parameters": {
+        "modelName": "models/gemini-omni-flash-preview",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -585,7 +586,7 @@
   },
   "nodeGroups": [],
   "pinData": {},
-  "versionId": "33749ead-7d93-4f20-b1a9-f5a3e690833f",
+  "versionId": "0cb98ff7-0e10-4c2e-8d8c-a334d5764e6e",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [

@@ -1,0 +1,621 @@
+{
+  "updatedAt": "2026-10-15T16:04:43.070Z",
+  "createdAt": "2026-10-13T12:52:24.677Z",
+  "id": "QDRRboAuR5ao5pTQ",
+  "name": "OpenWA_Bot",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=whatsapp-tutorial-{{ $json.from }}"
+      },
+      "id": "cd1d6ecd-a2ab-4999-801a-62f912074561",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        1488,
+        768
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d990cbd6-a408-4ec4-a889-41be698918d9",
+              "name": "message_type",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.data.type }}"
+            },
+            {
+              "id": "23b785c3-f38e-4706-80b7-51f333bba3bd",
+              "name": "message_text",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.data.body }}"
+            },
+            {
+              "id": "6e83f9a7-cf75-4182-b2d2-3151e8af76b9",
+              "name": "from",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.data.from }}"
+            },
+            {
+              "id": "da4b602a-28ca-4b0d-a747-c3d3698c3731",
+              "name": "message_caption",
+              "type": "string",
+              "value": "={{ $('Webhook').item.json.body.data.caption || '' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "088256e4-a727-46df-b03f-560c8809bd73",
+      "name": "Get User's Message",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1072,
+        528
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {},
+      "id": "b7e2bd1d-946e-4df8-b821-76ed035a487a",
+      "name": "Wikipedia",
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "position": [
+        1648,
+        768
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=={{ $json.message_text || $json.body?.data?.body || 'Bonjour' }}",
+        "options": {
+          "systemMessage": "Tu es l'assistant virtuel officiel de Haitam Najim sur WhatsApp.\n\nTes consignes :\n\nSois toujours poli, chaleureux, concis et professionnel.\nRéponds dans la langue utilisée par la personne (Français, Arabe / Darija, ou Anglais).\nTu es capable de tenir une vraie conversation, répondre à ses questions et comprendre le contexte.\nSi la personne souhaite contacter Haitam en personne ou pour une demande urgente, invite-la gentiment à laisser son nom, son numéro et le motif de son message, en lui assurant que Haitam prendra connaissance du message dès qu'il sera disponible.\nN'invente pas d'informations personnelles sur Haitam. Garde des réponses courtes adaptées au format WhatsApp."
+        }
+      },
+      "id": "99141328-fc22-475c-bb10-a2167ccc6933",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1424,
+        528
+      ],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "content": "Réception du message WhatsApp\n\n\nCette première étape reçoit les messages envoyés par les utilisateurs via WhatsApp.\n\nLe workflow déclenche automatiquement son exécution lorsqu'un nouveau message est reçu. Ensuite, les différentes informations du message (texte, image, audio, vidéo, métadonnées...) sont extraites afin de faciliter leur traitement dans les étapes suivantes.",
+        "height": 464,
+        "width": 448,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        528,
+        208
+      ],
+      "typeVersion": 1,
+      "id": "01518b11-76d1-46fe-bd27-e5b097dc7da2",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Préparation du message utilisateur\n\nToutes les branches du workflow convergent vers cette étape.\n\nQuel que soit le type de message reçu, les informations sont normalisées afin de produire un message unique et structuré qui sera transmis à l'agent IA.",
+        "height": 464,
+        "width": 304,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1024,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "72d402b0-4ae2-43ee-9e6d-877c65eac635",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "Génération de la réponse avec l'IA\n\nL'agent IA reçoit le message préparé ainsi que le contexte de la conversation.\n\nGrâce au modèle Google Gemini, à la mémoire conversationnelle et aux outils disponibles, il comprend la demande de l'utilisateur et génère une réponse pertinente, précise et adaptée au contexte.",
+        "height": 560,
+        "width": 384,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1360,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "d081989f-d724-4d60-be9d-447a62283f79",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "Envoi de la réponse\n\nLa réponse générée par l'agent IA est automatiquement envoyée à l'utilisateur via WhatsApp.\n\nCette dernière étape termine le workflow en offrant une expérience conversationnelle fluide et entièrement automatisée.",
+        "height": 432,
+        "width": 352,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1776,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "9b6d3acd-9de0-47f8-b02a-20959d7772b5",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "5d233573-b0bf-4212-9110-6132f88b5523",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        528
+      ],
+      "id": "4aaad24b-342a-44e0-ad05-055768f8e5da",
+      "name": "Webhook",
+      "webhookId": "5d233573-b0bf-4212-9110-6132f88b5523"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:2785/api/sessions/afcb4bfa-7e07-42e3-8553-93b0455fa9f4/messages/send-text",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Api-Key",
+              "value": "owa_k1_46ad589e023ab74055ba440741b53549891593e9d7fb3c350b0d84ef63038e51"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chatId",
+              "value": "={{ $('Webhook').item.json.body.data.from }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1824,
+        528
+      ],
+      "id": "51eae216-e6be-4baf-b720-f3937dba8b53",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1296,
+        752
+      ],
+      "id": "7735103a-83ce-4e37-b1f9-711d678eb01c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "LxG8UkEyW5ofJq1B",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get User's Message": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get User's Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
+  "activeVersionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-10-13T12:52:24.695Z",
+      "createdAt": "2026-10-13T12:52:24.695Z",
+      "role": "workflow:owner",
+      "workflowId": "QDRRboAuR5ao5pTQ",
+      "projectId": "lCqcgfePm2KDotZq"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-10-14T14:15:09.000Z",
+    "createdAt": "2026-10-14T14:15:06.263Z",
+    "versionId": "befc73d2-003b-4a1f-8743-26f89ea0bb6d",
+    "workflowId": "QDRRboAuR5ao5pTQ",
+    "nodes": [
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "=whatsapp-tutorial-{{ $json.from }}"
+        },
+        "id": "cd1d6ecd-a2ab-4999-801a-62f912074561",
+        "name": "Window Buffer Memory",
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "position": [
+          1488,
+          768
+        ],
+        "typeVersion": 1.2
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "d990cbd6-a408-4ec4-a889-41be698918d9",
+                "name": "message_type",
+                "type": "string",
+                "value": "={{ $('Webhook').item.json.body.data.type }}"
+              },
+              {
+                "id": "23b785c3-f38e-4706-80b7-51f333bba3bd",
+                "name": "message_text",
+                "type": "string",
+                "value": "={{ $('Webhook').item.json.body.data.body }}"
+              },
+              {
+                "id": "6e83f9a7-cf75-4182-b2d2-3151e8af76b9",
+                "name": "from",
+                "type": "string",
+                "value": "={{ $('Webhook').item.json.body.data.from }}"
+              },
+              {
+                "id": "da4b602a-28ca-4b0d-a747-c3d3698c3731",
+                "name": "message_caption",
+                "type": "string",
+                "value": "={{ $('Webhook').item.json.body.data.caption || '' }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "088256e4-a727-46df-b03f-560c8809bd73",
+        "name": "Get User's Message",
+        "type": "n8n-nodes-base.set",
+        "position": [
+          1072,
+          528
+        ],
+        "typeVersion": 3.4
+      },
+      {
+        "parameters": {},
+        "id": "b7e2bd1d-946e-4df8-b821-76ed035a487a",
+        "name": "Wikipedia",
+        "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+        "position": [
+          1648,
+          768
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=={{ $json.message_text || $json.body?.data?.body || 'Bonjour' }}",
+          "options": {
+            "systemMessage": "Tu es l'assistant virtuel officiel de Haitam Najim sur WhatsApp.\n\nTes consignes :\n\nSois toujours poli, chaleureux, concis et professionnel.\nRéponds dans la langue utilisée par la personne (Français, Arabe / Darija, ou Anglais).\nTu es capable de tenir une vraie conversation, répondre à ses questions et comprendre le contexte.\nSi la personne souhaite contacter Haitam en personne ou pour une demande urgente, invite-la gentiment à laisser son nom, son numéro et le motif de son message, en lui assurant que Haitam prendra connaissance du message dès qu'il sera disponible.\nN'invente pas d'informations personnelles sur Haitam. Garde des réponses courtes adaptées au format WhatsApp."
+          }
+        },
+        "id": "99141328-fc22-475c-bb10-a2167ccc6933",
+        "name": "AI Agent",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "position": [
+          1424,
+          528
+        ],
+        "typeVersion": 1.6
+      },
+      {
+        "parameters": {
+          "content": "Réception du message WhatsApp\n\n\nCette première étape reçoit les messages envoyés par les utilisateurs via WhatsApp.\n\nLe workflow déclenche automatiquement son exécution lorsqu'un nouveau message est reçu. Ensuite, les différentes informations du message (texte, image, audio, vidéo, métadonnées...) sont extraites afin de faciliter leur traitement dans les étapes suivantes.",
+          "height": 464,
+          "width": 448,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          528,
+          208
+        ],
+        "typeVersion": 1,
+        "id": "01518b11-76d1-46fe-bd27-e5b097dc7da2",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "Préparation du message utilisateur\n\nToutes les branches du workflow convergent vers cette étape.\n\nQuel que soit le type de message reçu, les informations sont normalisées afin de produire un message unique et structuré qui sera transmis à l'agent IA.",
+          "height": 464,
+          "width": 304,
+          "color": 6
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1024,
+          240
+        ],
+        "typeVersion": 1,
+        "id": "72d402b0-4ae2-43ee-9e6d-877c65eac635",
+        "name": "Sticky Note6"
+      },
+      {
+        "parameters": {
+          "content": "Génération de la réponse avec l'IA\n\nL'agent IA reçoit le message préparé ainsi que le contexte de la conversation.\n\nGrâce au modèle Google Gemini, à la mémoire conversationnelle et aux outils disponibles, il comprend la demande de l'utilisateur et génère une réponse pertinente, précise et adaptée au contexte.",
+          "height": 560,
+          "width": 384,
+          "color": 7
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1360,
+          144
+        ],
+        "typeVersion": 1,
+        "id": "d081989f-d724-4d60-be9d-447a62283f79",
+        "name": "Sticky Note7"
+      },
+      {
+        "parameters": {
+          "content": "Envoi de la réponse\n\nLa réponse générée par l'agent IA est automatiquement envoyée à l'utilisateur via WhatsApp.\n\nCette dernière étape termine le workflow en offrant une expérience conversationnelle fluide et entièrement automatisée.",
+          "height": 432,
+          "width": 352,
+          "color": 4
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1776,
+          256
+        ],
+        "typeVersion": 1,
+        "id": "9b6d3acd-9de0-47f8-b02a-20959d7772b5",
+        "name": "Sticky Note8"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "5d233573-b0bf-4212-9110-6132f88b5523",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          560,
+          528
+        ],
+        "id": "4aaad24b-342a-44e0-ad05-055768f8e5da",
+        "name": "Webhook",
+        "webhookId": "5d233573-b0bf-4212-9110-6132f88b5523"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://host.docker.internal:2785/api/sessions/afcb4bfa-7e07-42e3-8553-93b0455fa9f4/messages/send-text",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "X-Api-Key",
+                "value": "owa_k1_46ad589e023ab74055ba440741b53549891593e9d7fb3c350b0d84ef63038e51"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "chatId",
+                "value": "={{ $('Webhook').item.json.body.data.from }}"
+              },
+              {
+                "name": "text",
+                "value": "={{ $json.output }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          1824,
+          528
+        ],
+        "id": "51eae216-e6be-4baf-b720-f3937dba8b53",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          1296,
+          752
+        ],
+        "id": "7735103a-83ce-4e37-b1f9-711d678eb01c",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "LxG8UkEyW5ofJq1B",
+            "name": "Google Gemini(PaLM) Api account 2"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Window Buffer Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get User's Message": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wikipedia": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get User's Message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "HAITAM NAJIM",
+    "name": "Version befc73d2",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
